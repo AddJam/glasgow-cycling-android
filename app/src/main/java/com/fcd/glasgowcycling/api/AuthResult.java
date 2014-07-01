@@ -13,7 +13,7 @@ public class AuthResult {
         return userToken;
     }
 
-    public void setUser_token(String userToken) {
+    public void setUserToken(String userToken) {
         this.userToken = userToken;
     }
 
