@@ -1,4 +1,6 @@
-package com.fcd.glasgowcycling.api;
+package com.fcd.glasgowcycling.api.http;
+
+import com.fcd.glasgowcycling.api.AuthResult;
 
 import java.util.HashMap;
 

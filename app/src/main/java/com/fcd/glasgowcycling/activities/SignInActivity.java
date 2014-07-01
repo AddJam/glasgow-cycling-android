@@ -1,6 +1,5 @@
 package com.fcd.glasgowcycling.activities;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -11,18 +10,13 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.fcd.glasgowcycling.R;
+import com.fcd.glasgowcycling.api.http.ApiClient;
 import com.fcd.glasgowcycling.api.AuthResult;
-import com.fcd.glasgowcycling.api.GoCyclingApiInterface;
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.internal.bind.DateTypeAdapter;
+import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 
 import retrofit.Callback;
-import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
-import retrofit.converter.GsonConverter;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 
@@ -47,16 +41,7 @@ public class SignInActivity extends RoboActivity {
         emailField.setText("chris.sloey@gmail.com");
         passwordField.setText("password");
 
-
-        Gson gson = new GsonBuilder()
-                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-                .create();
-
-        final RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint("http://10.0.2.2:3000")
-                .setConverter(new GsonConverter(gson))
-                .build();
-        final GoCyclingApiInterface cyclingService = restAdapter.create(GoCyclingApiInterface.class);
+        final GoCyclingApiInterface cyclingService = ApiClient.getClient();
 
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
