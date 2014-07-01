@@ -11,7 +11,13 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.fcd.glasgowcycling.R;
+import com.fcd.glasgowcycling.api.AuthResult;
+import com.fcd.glasgowcycling.api.GoCyclingApiInterface;
 
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 
@@ -33,10 +39,31 @@ public class SignInActivity extends RoboActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
+        emailField.setText("chris.sloey@gmail.com");
+        passwordField.setText("password");
+
+        final RestAdapter restAdapter = new RestAdapter.Builder()
+                .setEndpoint("http://10.0.2.2:3000")
+                .build();
+        final GoCyclingApiInterface cyclingService = restAdapter.create(GoCyclingApiInterface.class);
+
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Sign In clicked");
+                String email = emailField.getText().toString();
+                String password = passwordField.getText().toString();
+                cyclingService.signin(email, password, new Callback<AuthResult>() {
+                    @Override
+                    public void success(AuthResult authResult, Response response) {
+                        Log.d(TAG, "Logged in! auth token is " + authResult.getUserToken());
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        Log.d(TAG, "Failed to login");
+                    }
+                });
             }
         });
     }

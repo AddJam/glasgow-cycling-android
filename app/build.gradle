@@ -25,4 +25,5 @@ dependencies {
     compile 'com.google.android.gms:play-services:4.2.42'
     compile 'com.android.support:appcompat-v7:19.+'
     compile 'org.roboguice:roboguice:2.0'
+    compile 'com.squareup.retrofit:retrofit:1.6.0'
 }
