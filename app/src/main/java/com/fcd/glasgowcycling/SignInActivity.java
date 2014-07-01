@@ -4,14 +4,27 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
+
 import com.fcd.glasgowcycling.R;
 
-public class SignInActivity extends Activity {
+import roboguice.activity.RoboActivity;
+import roboguice.inject.InjectView;
+
+public class SignInActivity extends RoboActivity {
+
+    @InjectView(R.id.email)
+    AutoCompleteTextView emailField;
+
+    @InjectView(R.id.password)
+    EditText passwordField;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+        emailField.setText("yo");
     }
 
 
