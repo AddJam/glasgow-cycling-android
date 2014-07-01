@@ -1,4 +1,4 @@
-package com.fcd.glasgowcycling;
+package com.fcd.glasgowcycling.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -6,19 +6,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import com.fcd.glasgowcycling.R;
 
-public class SignInActivity extends Activity {
+public class UserOverviewActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_in);
+        setContentView(R.layout.activity_user_overview);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.sign_in, menu);
+        getMenuInflater().inflate(R.menu.user_overview, menu);
         return true;
     }
 
