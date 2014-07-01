@@ -1,5 +1,6 @@
 package com.fcd.glasgowcycling.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -53,6 +54,7 @@ public class SignInActivity extends RoboActivity {
                     @Override
                     public void success(AuthResult authResult, Response response) {
                         Log.d(TAG, "Logged in! auth token is " + authResult.getUserToken());
+                        startActivity(new Intent(getApplicationContext(), UserOverviewActivity.class));
                     }
 
                     @Override

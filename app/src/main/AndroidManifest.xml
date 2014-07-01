@@ -10,13 +10,16 @@
         <activity
             android:name=".activities.SignInActivity"
             android:label="@string/title_activity_sign_in"
-            android:windowSoftInputMode="adjustResize|stateVisible"
-            >
+            android:windowSoftInputMode="adjustResize|stateVisible" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.UserOverviewActivity"
+            android:label="@string/title_activity_user_overview" >
         </activity>
     </application>
 
