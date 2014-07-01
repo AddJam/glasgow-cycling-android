@@ -55,6 +55,7 @@ public class SignInActivity extends RoboActivity {
                     public void success(AuthResult authResult, Response response) {
                         Log.d(TAG, "Logged in! auth token is " + authResult.getUserToken());
                         startActivity(new Intent(getApplicationContext(), UserOverviewActivity.class));
+                        finish();
                     }
 
                     @Override
