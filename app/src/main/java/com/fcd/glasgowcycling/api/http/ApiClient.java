@@ -16,10 +16,12 @@ public class ApiClient {
         Gson gson = new GsonBuilder()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                 .create();
+
         final RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint("http://10.0.2.2:3000")
                 .setConverter(new GsonConverter(gson))
                 .build();
+
         return restAdapter.create(GoCyclingApiInterface.class);
     }
 }

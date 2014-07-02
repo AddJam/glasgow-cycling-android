@@ -42,29 +42,8 @@ public class SignInActivity extends RoboActivity {
         emailField.setText("chris.sloey@gmail.com");
         passwordField.setText("password");
 
-        final GoCyclingApiInterface cyclingService = ApiClient.getClient();
 
-        signInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "Sign In clicked");
-                String email = emailField.getText().toString();
-                String password = passwordField.getText().toString();
-                cyclingService.signin(email, password, new Callback<AuthResult>() {
-                    @Override
-                    public void success(AuthResult authResult, Response response) {
-                        Log.d(TAG, "Logged in! auth token is " + authResult.getUserToken());
-                        startActivity(new Intent(getApplicationContext(), UserOverviewActivity.class));
-                        finish();
-                    }
-
-                    @Override
-                    public void failure(RetrofitError error) {
-                        Log.d(TAG, "Failed to login");
-                    }
-                });
-            }
-        });
+        signInButton.setOnClickListener(new SignInListener());
     }
 
 
@@ -85,5 +64,29 @@ public class SignInActivity extends RoboActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private class SignInListener implements View.OnClickListener {
+        final GoCyclingApiInterface cyclingService = ApiClient.getClient();
+
+        @Override
+        public void onClick(View v) {
+            Log.d(TAG, "Sign In clicked");
+            String email = emailField.getText().toString();
+            String password = passwordField.getText().toString();
+            cyclingService.signin(email, password, new Callback<AuthResult>() {
+                @Override
+                public void success(AuthResult authResult, Response response) {
+                    Log.d(TAG, "Logged in! auth token is " + authResult.getUserToken());
+                    startActivity(new Intent(getApplicationContext(), UserOverviewActivity.class));
+                    finish();
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Log.d(TAG, "Failed to login");
+                }
+            });
+        }
     }
 }
