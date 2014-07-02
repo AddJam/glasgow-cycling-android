@@ -11,10 +11,11 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.fcd.glasgowcycling.CyclingApplication;
 import com.fcd.glasgowcycling.R;
-import com.fcd.glasgowcycling.api.http.ApiClient;
 import com.fcd.glasgowcycling.api.AuthResult;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -27,21 +28,22 @@ public class SignInActivity extends Activity {
     private static final String TAG = "SignInActivity";
 
     @InjectView(R.id.email) AutoCompleteTextView emailField;
-
     @InjectView(R.id.password) EditText passwordField;
-
     @InjectView(R.id.email_sign_in_button) Button signInButton;
+
+    @Inject GoCyclingApiInterface cyclingService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
         ButterKnife.inject(this);
+        ((CyclingApplication) getApplication()).inject(this);
 
         emailField.setText("chris.sloey@gmail.com");
         passwordField.setText("password");
 
-        signInButton.setOnClickListener(new SignInListener());
+        signInButton.setOnClickListener(new SignInListener(cyclingService));
     }
 
 
@@ -65,7 +67,12 @@ public class SignInActivity extends Activity {
     }
 
     private class SignInListener implements View.OnClickListener {
-        final GoCyclingApiInterface cyclingService = ApiClient.getClient();
+
+        private GoCyclingApiInterface cyclingService;
+
+        public SignInListener(GoCyclingApiInterface cyclingService) {
+            this.cyclingService = cyclingService;
+        }
 
         @Override
         public void onClick(View v) {
