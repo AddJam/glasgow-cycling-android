@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.fcd.glasgowcycling.CyclingApplication;
 import com.fcd.glasgowcycling.R;
@@ -31,6 +32,7 @@ public class SignInActivity extends Activity {
     @InjectView(R.id.password) EditText passwordField;
     @InjectView(R.id.sign_in_button) Button signInButton;
     @InjectView(R.id.sign_up_button) Button signupButton;
+    @InjectView(R.id.signin_image) ImageView signinImageView;
 
     @Inject GoCyclingApiInterface cyclingService;
 
