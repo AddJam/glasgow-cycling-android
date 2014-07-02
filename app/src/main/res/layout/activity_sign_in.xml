@@ -19,6 +19,13 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/prompt_email"
+                android:textStyle="bold"
+                android:layout_marginTop="5dp"/>
+
             <AutoCompleteTextView
                 android:id="@+id/email"
                 android:layout_width="match_parent"
@@ -27,6 +34,13 @@
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
                 android:singleLine="true"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/prompt_password"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"/>                />
 
             <EditText
                 android:id="@+id/password"
