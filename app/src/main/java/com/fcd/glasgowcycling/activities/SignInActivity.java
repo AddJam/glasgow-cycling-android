@@ -1,5 +1,6 @@
 package com.fcd.glasgowcycling.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,61 +11,41 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.fcd.glasgowcycling.CyclingApplication;
 import com.fcd.glasgowcycling.R;
-import com.fcd.glasgowcycling.api.http.ApiClient;
 import com.fcd.glasgowcycling.api.AuthResult;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
+import javax.inject.Inject;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
-import roboguice.activity.RoboActivity;
-import roboguice.inject.InjectView;
 
-public class SignInActivity extends RoboActivity {
+public class SignInActivity extends Activity {
 
     private static final String TAG = "SignInActivity";
 
-    @InjectView(R.id.email)
-    AutoCompleteTextView emailField;
+    @InjectView(R.id.email) AutoCompleteTextView emailField;
+    @InjectView(R.id.password) EditText passwordField;
+    @InjectView(R.id.sign_in_button) Button signInButton;
+    @InjectView(R.id.sign_up_button) Button signupButton;
 
-    @InjectView(R.id.password)
-    EditText passwordField;
-
-    @InjectView(R.id.email_sign_in_button)
-    Button signInButton;
+    @Inject GoCyclingApiInterface cyclingService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+        ButterKnife.inject(this);
+        ((CyclingApplication) getApplication()).inject(this);
 
         emailField.setText("chris.sloey@gmail.com");
         passwordField.setText("password");
 
-        final GoCyclingApiInterface cyclingService = ApiClient.getClient();
-
-        signInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "Sign In clicked");
-                String email = emailField.getText().toString();
-                String password = passwordField.getText().toString();
-                cyclingService.signin(email, password, new Callback<AuthResult>() {
-                    @Override
-                    public void success(AuthResult authResult, Response response) {
-                        Log.d(TAG, "Logged in! auth token is " + authResult.getUserToken());
-                        startActivity(new Intent(getApplicationContext(), UserOverviewActivity.class));
-                        finish();
-                    }
-
-                    @Override
-                    public void failure(RetrofitError error) {
-                        Log.d(TAG, "Failed to login");
-                    }
-                });
-            }
-        });
+        signInButton.setOnClickListener(new SignInListener(cyclingService));
+        //signUpButton.setOnClickListener(new SignUpListener()); Have to do this
     }
 
 
@@ -85,5 +66,34 @@ public class SignInActivity extends RoboActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private class SignInListener implements View.OnClickListener {
+
+        private GoCyclingApiInterface cyclingService;
+
+        public SignInListener(GoCyclingApiInterface cyclingService) {
+            this.cyclingService = cyclingService;
+        }
+
+        @Override
+        public void onClick(View v) {
+            Log.d(TAG, "Sign In clicked");
+            String email = emailField.getText().toString();
+            String password = passwordField.getText().toString();
+            cyclingService.signin(email, password, new Callback<AuthResult>() {
+                @Override
+                public void success(AuthResult authResult, Response response) {
+                    Log.d(TAG, "Logged in! auth token is " + authResult.getUserToken());
+                    startActivity(new Intent(getApplicationContext(), UserOverviewActivity.class));
+                    finish();
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Log.d(TAG, "Failed to login");
+                }
+            });
+        }
     }
 }
