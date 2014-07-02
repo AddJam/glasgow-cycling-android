@@ -1,5 +1,6 @@
 package com.fcd.glasgowcycling.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,33 +16,30 @@ import com.fcd.glasgowcycling.api.http.ApiClient;
 import com.fcd.glasgowcycling.api.AuthResult;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
-import roboguice.activity.RoboActivity;
-import roboguice.inject.InjectView;
 
-public class SignInActivity extends RoboActivity {
+public class SignInActivity extends Activity {
 
     private static final String TAG = "SignInActivity";
 
-    @InjectView(R.id.email)
-    AutoCompleteTextView emailField;
+    @InjectView(R.id.email) AutoCompleteTextView emailField;
 
-    @InjectView(R.id.password)
-    EditText passwordField;
+    @InjectView(R.id.password) EditText passwordField;
 
-    @InjectView(R.id.email_sign_in_button)
-    Button signInButton;
+    @InjectView(R.id.email_sign_in_button) Button signInButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+        ButterKnife.inject(this);
 
         emailField.setText("chris.sloey@gmail.com");
         passwordField.setText("password");
-
 
         signInButton.setOnClickListener(new SignInListener());
     }
