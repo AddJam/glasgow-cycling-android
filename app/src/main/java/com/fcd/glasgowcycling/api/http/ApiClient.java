@@ -18,7 +18,8 @@ public class ApiClient {
                 .create();
 
         final RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint("http://10.0.2.2:3000")
+//                .setEndpoint("http://10.0.2.2:3000") // Localhost (for simulator)
+                .setEndpoint("http://172.20.10.8:3000") // Tethered IP (device)
                 .setConverter(new GsonConverter(gson))
                 .build();
 
