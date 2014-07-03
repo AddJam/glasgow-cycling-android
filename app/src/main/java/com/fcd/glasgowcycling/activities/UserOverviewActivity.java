@@ -15,6 +15,8 @@ import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgowcycling.models.Month;
 import com.fcd.glasgowcycling.models.User;
 
+import javax.inject.Inject;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import retrofit.Callback;
@@ -22,8 +24,7 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class UserOverviewActivity extends Activity {
-
-    private GoCyclingApiInterface cyclingService;
+    @Inject private GoCyclingApiInterface cyclingService;
     private static final String TAG = "OverviewActivity";
 
     @InjectView(R.id.username) TextView username;
@@ -36,6 +37,7 @@ public class UserOverviewActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_overview);
         ((CyclingApplication) getApplication()).inject(this);
+        ButterKnife.inject(this);
 
         getDetails();
     }
@@ -61,12 +63,10 @@ public class UserOverviewActivity extends Activity {
     }
 
     private void getDetails(){
-
         cyclingService.details(new Callback<User>() {
             @Override
             public void success(User user, Response response) {
                 Log.d(TAG, "retreived user details for " + user.getUserID());
-                startActivity(new Intent(getApplicationContext(), UserOverviewActivity.class));
                 populateFields(user);
             }
 
@@ -78,7 +78,6 @@ public class UserOverviewActivity extends Activity {
     }
 
     private void populateFields(User user){
-        ButterKnife.inject(this);
         Month month = user.getMonth();
 
         username.setText(user.getFirstName() + "" + user.getLastName());

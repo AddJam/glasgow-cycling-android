@@ -1,6 +1,7 @@
 package com.fcd.glasgowcycling.api.http;
 
 import com.fcd.glasgowcycling.activities.SignInActivity;
+import com.fcd.glasgowcycling.activities.UserOverviewActivity;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -14,7 +15,8 @@ import retrofit.converter.GsonConverter;
  * Created by chrissloey on 01/07/2014.
  */
 @Module(complete=false, library = true, injects = {
-        SignInActivity.class
+        SignInActivity.class,
+        UserOverviewActivity.class
 })
 public class ApiClientModule {
 
