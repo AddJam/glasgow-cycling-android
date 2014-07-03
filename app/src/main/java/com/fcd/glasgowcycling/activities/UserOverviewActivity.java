@@ -1,17 +1,43 @@
 package com.fcd.glasgowcycling.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+
+import com.fcd.glasgowcycling.CyclingApplication;
 import com.fcd.glasgowcycling.R;
+import com.fcd.glasgowcycling.api.AuthResult;
+import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
+import com.fcd.glasgowcycling.models.Month;
+import com.fcd.glasgowcycling.models.User;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class UserOverviewActivity extends Activity {
+
+    private GoCyclingApiInterface cyclingService;
+    private static final String TAG = "OverviewActivity";
+
+    @InjectView(R.id.username) TextView username;
+    @InjectView(R.id.distance_stat) TextView distanceStat;
+    @InjectView(R.id.time_stat) TextView timeStat;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_overview);
+        ((CyclingApplication) getApplication()).inject(this);
+
+        getDetails();
     }
 
 
@@ -32,5 +58,31 @@ public class UserOverviewActivity extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void getDetails(){
+
+        cyclingService.details(new Callback<User>() {
+            @Override
+            public void success(User user, Response response) {
+                Log.d(TAG, "retreived user details for " + user.getUserID());
+                startActivity(new Intent(getApplicationContext(), UserOverviewActivity.class));
+                populateFields(user);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.d(TAG, "Failed to login");
+            }
+        });
+    }
+
+    private void populateFields(User user){
+        ButterKnife.inject(this);
+        Month month = user.getMonth();
+
+        username.setText(user.getFirstName() + "" + user.getLastName());
+        distanceStat.setText(String.valueOf(month.getKm()));
+        timeStat.setText(month.getSeconds());
     }
 }

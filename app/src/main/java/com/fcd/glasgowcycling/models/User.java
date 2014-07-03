@@ -2,36 +2,49 @@ package com.fcd.glasgowcycling.models;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+import com.google.gson.annotations.Expose;
 
 @DatabaseTable(tableName = "User")
 public class User{
 
-    @DatabaseField(id = true)
+    @Expose @DatabaseField(id = true)
+    private String userID;
+
+    @Expose @DatabaseField
     private String firstName;
-    @DatabaseField
+
+    @Expose @DatabaseField
     private String lastName;
-    @DatabaseField
-    private String distanceStat;
-    @DatabaseField
-    private String timeStat;
-    @DatabaseField
+
+    @Expose
+    private Month month;
+
+    @Expose @DatabaseField
     private String email;
-    @DatabaseField
-    private String yearOfBirth;
+
+    @Expose @DatabaseField
+    private String gender;
 
     // Need this for ormlite
     public User() {
 
     }
 
-    public User(String firstName, String lastName, String distanceStat, String timeStat, String email, String yearOfBirth){
+    public User(String firstName, String lastName, Month month, String email, String gender){
 
         this.firstName = firstName;
         this.lastName = lastName;
-        this.distanceStat = distanceStat;
-        this.timeStat = timeStat;
+        this.month = month;
         this.email = email;
-        this.yearOfBirth = yearOfBirth;
+        this.gender = gender;
+    }
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
     }
 
     public String getFirstName() {
@@ -50,20 +63,12 @@ public class User{
         this.lastName = lastName;
     }
 
-    public String getDistanceStat() {
-        return distanceStat;
+    public Month getMonth() {
+        return month;
     }
 
-    public void setDistanceStat(String distanceStat) {
-        this.distanceStat = distanceStat;
-    }
-
-    public String getTimeStat() {
-        return timeStat;
-    }
-
-    public void setTimeStat(String timeStat) {
-        this.timeStat = timeStat;
+    public void setMonth(Month month) {
+        this.month = month;
     }
 
     public String getEmail() {
@@ -74,11 +79,11 @@ public class User{
         this.email = email;
     }
 
-    public String getYearOfBirth() {
-        return yearOfBirth;
+    public String getGender() {
+        return gender;
     }
 
-    public void setYearOfBirth(String yearOfBirth) {
-        this.yearOfBirth = yearOfBirth;
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 }

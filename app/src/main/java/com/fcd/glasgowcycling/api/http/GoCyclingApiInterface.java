@@ -17,6 +17,6 @@ public interface GoCyclingApiInterface {
     void signin(@Query("user[email") String email, @Query("user[password]") String password, Callback<AuthResult> callback);
 
     @GET("/details.json")
-    void details(@Query("user[email") String email, @Query("user[password]") String password, Callback<User> callback);
+    void details(Callback<User> callback);
 
 }

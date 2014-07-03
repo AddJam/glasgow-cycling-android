@@ -32,10 +32,10 @@
                 android:textSize="24dp"
                 android:textColor="@color/jcWhiteColor"
                 android:layout_marginTop="5dp"
+                android:layout_gravity="center"
                 android:gravity="center"
                 android:paddingBottom="50dp"
                 android:paddingTop="15dp"/>
-
 
             <LinearLayout
                android:id="@+id/form_view"
