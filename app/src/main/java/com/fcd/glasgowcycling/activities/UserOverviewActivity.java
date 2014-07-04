@@ -10,10 +10,11 @@ import android.widget.TextView;
 
 import com.fcd.glasgowcycling.CyclingApplication;
 import com.fcd.glasgowcycling.R;
-import com.fcd.glasgowcycling.api.AuthResult;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgowcycling.models.Month;
 import com.fcd.glasgowcycling.models.User;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
 
 import javax.inject.Inject;
 
@@ -24,13 +25,14 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class UserOverviewActivity extends Activity {
-    @Inject private GoCyclingApiInterface cyclingService;
+    @Inject GoCyclingApiInterface cyclingService;
     private static final String TAG = "OverviewActivity";
 
     @InjectView(R.id.username) TextView username;
     @InjectView(R.id.distance_stat) TextView distanceStat;
     @InjectView(R.id.time_stat) TextView timeStat;
-
+    @InjectView(R.id.map_background) MapView mapBackground;
+    GoogleMap map;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,12 @@ public class UserOverviewActivity extends Activity {
         ((CyclingApplication) getApplication()).inject(this);
         ButterKnife.inject(this);
 
+        mapBackground.onCreate(savedInstanceState);
+
+//        mapBackground.getLocationOnScreen();
+        map = mapBackground.getMap();
+        map.getUiSettings().setMyLocationButtonEnabled(false);
+        map.setMyLocationEnabled(true);
         getDetails();
     }
 
@@ -72,7 +80,7 @@ public class UserOverviewActivity extends Activity {
 
             @Override
             public void failure(RetrofitError error) {
-                Log.d(TAG, "Failed to login");
+                Log.d(TAG, "Failed to get user details");
             }
         });
     }

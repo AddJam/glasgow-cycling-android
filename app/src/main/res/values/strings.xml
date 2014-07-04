@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">Glasgow Cycling</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_resetpassword">Reset Password</string>
-    <string name="action_changepassword">Change Password</string>
-    <string name="action_accountsettings">Account Settings</string>
     <string name="sign_in_title">Welcome to Glasgow Cycling</string>
-    <string name="title_activity_sign_in">Welcome to Glasgow Cycling</string>
-    <string name="title_activity_user_overview">UserOverviewActivity</string>
-
 </resources>

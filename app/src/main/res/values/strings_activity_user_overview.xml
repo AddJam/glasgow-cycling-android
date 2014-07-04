@@ -1,11 +1,13 @@
 <resources>
-        <string name="title_activity_overview">Overview</string>
+    <string name="title_activity_user_overview">Overview</string>
 
     <!-- Strings related to user overview -->
     <string name="user_label">username</string>
     <string name="distance_stat">0.0</string>
     <string name="time_stat">0.0</string>
-    <string name="action_my_rotues">My Routes</string>
-    <string name="action_nearby_routes">Nearby Routes</string>
-    <string name="action_cycle_map">Glasgow Cycle Map</string>
+    <string name="my_rotues_button">My Routes</string>
+    <string name="nearby_routes_button">Nearby Routes</string>
+    <string name="cycle_map_button">Glasgow Cycle Map</string>
+    <string name="action_changepassword">Change Password</string>
+    <string name="action_accountsettings">Account Settings</string>
 </resources>
