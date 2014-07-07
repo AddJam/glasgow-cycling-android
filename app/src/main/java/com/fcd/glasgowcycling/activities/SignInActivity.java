@@ -87,7 +87,9 @@ public class SignInActivity extends AccountAuthenticatorActivity {
         String accountPassword = intent.getStringExtra(PARAM_USER_PASS);
         final Account account = new Account(accountName, intent.getStringExtra(AccountManager.KEY_ACCOUNT_TYPE));
         String refreshToken = intent.getStringExtra(CyclingAuthenticator.KEY_REFRESH_TOKEN);
-        if (getIntent().getBooleanExtra(ARG_IS_ADDING_NEW_ACCOUNT, false)) {
+        boolean addingAccount = getIntent().getBooleanExtra(ARG_IS_ADDING_NEW_ACCOUNT, false);
+        boolean accountExists = mAccountManager.getAccountsByType(ACCOUNT_TYPE).length > 0;
+        if (addingAccount || !accountExists) {
             String authToken = intent.getStringExtra(AccountManager.KEY_AUTHTOKEN);
             // Creating the account on the device and setting the auth token we got
             // (Not setting the auth token will cause another call to the server to authenticate the user)
