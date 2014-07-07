@@ -21,7 +21,7 @@ import javax.inject.Inject;
  */
 public class CyclingAuthenticator extends AbstractAccountAuthenticator {
     private Context mContext;
-    private final String KEY_REFRESH_TOKEN = "refresh_token";
+    public static final String KEY_REFRESH_TOKEN = "refresh_token";
 
     @Inject
     GoCyclingApiInterface cyclingService;

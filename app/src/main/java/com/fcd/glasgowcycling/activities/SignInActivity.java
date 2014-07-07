@@ -1,7 +1,10 @@
 package com.fcd.glasgowcycling.activities;
 
-import android.app.Activity;
+import android.accounts.Account;
+import android.accounts.AccountAuthenticatorActivity;
+import android.accounts.AccountManager;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -14,21 +17,21 @@ import android.widget.EditText;
 import com.fcd.glasgowcycling.CyclingApplication;
 import com.fcd.glasgowcycling.R;
 import com.fcd.glasgowcycling.api.AuthModel;
+import com.fcd.glasgowcycling.api.auth.CyclingAuthenticator;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
-public class SignInActivity extends Activity {
+public class SignInActivity extends AccountAuthenticatorActivity {
 
     private static final String TAG = "SignInActivity";
 
     // Bundle Args
     public static final String ARG_IS_ADDING_NEW_ACCOUNT = "ADDING_NEW_ACCOUNT";
+    public static final String PARAM_USER_PASS = "USER_PASSWORD";
+    public final String ACCOUNT_TYPE = "com.fcd.GlasgowCycling";
 
     // Views
     @InjectView(R.id.email) AutoCompleteTextView emailField;
@@ -36,7 +39,8 @@ public class SignInActivity extends Activity {
     @InjectView(R.id.email_sign_in_button) Button signInButton;
 
     // API
-    @Inject GoCyclingApiInterface cyclingService;
+    @Inject GoCyclingApiInterface sCyclingService;
+    AccountManager mAccountManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +52,9 @@ public class SignInActivity extends Activity {
         emailField.setText("chris.sloey@gmail.com");
         passwordField.setText("password");
 
-        signInButton.setOnClickListener(new SignInListener(cyclingService));
+        mAccountManager = AccountManager.get(this);
+
+        signInButton.setOnClickListener(new SignInListener(sCyclingService));
     }
 
 
@@ -71,6 +77,27 @@ public class SignInActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void finishLogin(Intent intent) {
+        String accountName = intent.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+        String accountPassword = intent.getStringExtra(PARAM_USER_PASS);
+        final Account account = new Account(accountName, intent.getStringExtra(AccountManager.KEY_ACCOUNT_TYPE));
+        String refreshToken = intent.getStringExtra(CyclingAuthenticator.KEY_REFRESH_TOKEN);
+        if (getIntent().getBooleanExtra(ARG_IS_ADDING_NEW_ACCOUNT, false)) {
+            String authToken = intent.getStringExtra(AccountManager.KEY_AUTHTOKEN);
+            // Creating the account on the device and setting the auth token we got
+            // (Not setting the auth token will cause another call to the server to authenticate the user)
+            mAccountManager.addAccountExplicitly(account, accountPassword, null);
+            mAccountManager.setAuthToken(account, AccountManager.KEY_AUTHTOKEN, authToken);
+            mAccountManager.setAuthToken(account, CyclingAuthenticator.KEY_REFRESH_TOKEN, refreshToken);
+        } else {
+            mAccountManager.setPassword(account, accountPassword);
+            mAccountManager.setAuthToken(account, CyclingAuthenticator.KEY_REFRESH_TOKEN, refreshToken);
+        }
+        setAccountAuthenticatorResult(intent.getExtras());
+        setResult(RESULT_OK, intent);
+        finish();
+    }
+
     private class SignInListener implements View.OnClickListener {
 
         private GoCyclingApiInterface cyclingService;
@@ -82,16 +109,34 @@ public class SignInActivity extends Activity {
         @Override
         public void onClick(View v) {
             Log.d(TAG, "Sign In clicked");
-            String email = emailField.getText().toString();
-            String password = passwordField.getText().toString();
-            AuthModel authModel = cyclingService.signin(email, password);
-            if (authModel) {
-                Log.d(TAG, "Logged in! auth token is " + authModel.getUserToken());
-                startActivity(new Intent(getApplicationContext(), UserOverviewActivity.class));
-                finish();
-            } else {
-                Log.d(TAG, "Login failed");
-            }
+            final String email = emailField.getText().toString();
+            final String password = passwordField.getText().toString();
+            new AsyncTask<Void, Void, Intent>() {
+                @Override
+                protected Intent doInBackground(Void... params) {
+                    AuthModel authModel = cyclingService.signin(email, password);
+                    if (authModel != null) {
+                        String authToken = authModel.getUserToken();
+                        String refreshToken = authModel.getRefreshToken();
+                        final Intent res = new Intent();
+                        res.putExtra(AccountManager.KEY_ACCOUNT_NAME, email);
+                        res.putExtra(AccountManager.KEY_ACCOUNT_TYPE, ACCOUNT_TYPE);
+                        res.putExtra(AccountManager.KEY_AUTHTOKEN, authToken);
+                        res.putExtra(CyclingAuthenticator.KEY_REFRESH_TOKEN, refreshToken);
+                        res.putExtra(PARAM_USER_PASS, password);
+                        return res;
+                    } else {
+                        Log.d(TAG, "Login failed");
+                        return null;
+                    }
+                }
+                @Override
+                protected void onPostExecute(Intent intent) {
+                    if (intent != null) {
+                        finishLogin(intent);
+                    }
+                }
+            }.execute();
         }
     }
 }
