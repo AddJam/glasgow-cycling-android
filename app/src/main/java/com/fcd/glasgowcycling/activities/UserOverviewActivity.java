@@ -2,6 +2,9 @@ package com.fcd.glasgowcycling.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -13,8 +16,13 @@ import com.fcd.glasgowcycling.R;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgowcycling.models.Month;
 import com.fcd.glasgowcycling.models.User;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
 
 import javax.inject.Inject;
 
@@ -31,8 +39,9 @@ public class UserOverviewActivity extends Activity {
     @InjectView(R.id.username) TextView username;
     @InjectView(R.id.distance_stat) TextView distanceStat;
     @InjectView(R.id.time_stat) TextView timeStat;
-    @InjectView(R.id.map_background) MapView mapBackground;
-    GoogleMap map;
+    private GoogleMap map;
+    private LatLng userLocation;
+    private LocationManager sLocationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +50,24 @@ public class UserOverviewActivity extends Activity {
         ((CyclingApplication) getApplication()).inject(this);
         ButterKnife.inject(this);
 
-        mapBackground.onCreate(savedInstanceState);
-
-//        mapBackground.getLocationOnScreen();
-        map = mapBackground.getMap();
+        map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
         map.getUiSettings().setMyLocationButtonEnabled(false);
+        map.getUiSettings().setZoomControlsEnabled(false);
+        map.getUiSettings().setAllGesturesEnabled(false);
         map.setMyLocationEnabled(true);
+
+        sLocationManager = (LocationManager) this.getSystemService(this.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        String provider = sLocationManager.getBestProvider(criteria, false);
+        Location location = sLocationManager.getLastKnownLocation(provider);
+        if(location == null){
+            userLocation = new LatLng(55.8580, -4.259); // Glasgow
+        }
+        else {
+            userLocation = new LatLng(location.getLatitude(), location.getLongitude());
+        }
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 13));
+
         getDetails();
     }
 

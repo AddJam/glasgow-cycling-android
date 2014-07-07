@@ -62,21 +62,21 @@
                     android:textColor="@color/jcWhiteColor"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:paddingBottom="15dp"
+                    android:paddingBottom="25dp"
                     />
             </LinearLayout>
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <com.google.android.gms.maps.MapView
-                    android:id="@+id/map_background"
+                <fragment
+                    android:id="@+id/map"
                     android:layout_width="match_parent"
-                    android:layout_height="160dp">
-                </com.google.android.gms.maps.MapView>
+                    android:layout_height="130dp"
+                    class="com.google.android.gms.maps.MapFragment" />
                 <Button
                     android:layout_width="150dp"
                     android:layout_height="40dp"
-                    android:text="Start Rotue"
+                    android:text="Start Route"
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:background="@color/jcBlueColor"
