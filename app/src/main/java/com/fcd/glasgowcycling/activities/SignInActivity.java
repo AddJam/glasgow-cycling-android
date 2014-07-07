@@ -84,19 +84,14 @@ public class SignInActivity extends Activity {
             Log.d(TAG, "Sign In clicked");
             String email = emailField.getText().toString();
             String password = passwordField.getText().toString();
-            cyclingService.signin(email, password, new Callback<AuthModel>() {
-                @Override
-                public void success(AuthModel authModel, Response response) {
-                    Log.d(TAG, "Logged in! auth token is " + authModel.getUserToken());
-                    startActivity(new Intent(getApplicationContext(), UserOverviewActivity.class));
-                    finish();
-                }
-
-                @Override
-                public void failure(RetrofitError error) {
-                    Log.d(TAG, "Failed to login");
-                }
-            });
+            AuthModel authModel = cyclingService.signin(email, password);
+            if (authModel) {
+                Log.d(TAG, "Logged in! auth token is " + authModel.getUserToken());
+                startActivity(new Intent(getApplicationContext(), UserOverviewActivity.class));
+                finish();
+            } else {
+                Log.d(TAG, "Login failed");
+            }
         }
     }
 }

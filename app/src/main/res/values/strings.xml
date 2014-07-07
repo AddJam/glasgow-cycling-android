@@ -7,5 +7,5 @@
     <string name="sign_in_title">Welcome to Glasgow Cycling</string>
     <string name="title_activity_sign_in">Sign In</string>
     <string name="title_activity_user_overview">UserOverviewActivity</string>
-
+    <string name="authenticator_label">Glasgow Cycling</string>
 </resources>
