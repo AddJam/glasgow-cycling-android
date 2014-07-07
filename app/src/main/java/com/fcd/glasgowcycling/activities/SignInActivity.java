@@ -23,6 +23,7 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import retrofit.RetrofitError;
 
 public class SignInActivity extends AccountAuthenticatorActivity {
 
@@ -41,6 +42,7 @@ public class SignInActivity extends AccountAuthenticatorActivity {
     // API
     @Inject GoCyclingApiInterface sCyclingService;
     AccountManager mAccountManager;
+    private boolean fromAccountManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +51,11 @@ public class SignInActivity extends AccountAuthenticatorActivity {
         ButterKnife.inject(this);
         ((CyclingApplication) getApplication()).inject(this);
 
+        fromAccountManager = getIntent().getBooleanExtra(ARG_IS_ADDING_NEW_ACCOUNT, false);
+        Log.d(TAG, "From account manager: " + (fromAccountManager ? "YES" : "NO"));
+
         emailField.setText("chris.sloey@gmail.com");
-        passwordField.setText("password");
+        passwordField.setText("bananazz");
 
         mAccountManager = AccountManager.get(this);
 
@@ -95,6 +100,12 @@ public class SignInActivity extends AccountAuthenticatorActivity {
         }
         setAccountAuthenticatorResult(intent.getExtras());
         setResult(RESULT_OK, intent);
+
+        if (!fromAccountManager) {
+            // Load user overview
+            startActivity(new Intent(this, UserOverviewActivity.class));
+        }
+
         finish();
     }
 
@@ -114,7 +125,16 @@ public class SignInActivity extends AccountAuthenticatorActivity {
             new AsyncTask<Void, Void, Intent>() {
                 @Override
                 protected Intent doInBackground(Void... params) {
-                    AuthModel authModel = cyclingService.signin(email, password);
+                    AuthModel authModel = null;
+                    try {
+                        authModel = cyclingService.signin(email, password);
+                    } catch (RetrofitError error) {
+                        Log.d(TAG, "Retrofit error");
+                        if (error.getResponse().getStatus() == 401) {
+                            // Unauthorized
+                            Log.d(TAG, "Invalid details");
+                        }
+                    }
                     if (authModel != null) {
                         String authToken = authModel.getUserToken();
                         String refreshToken = authModel.getRefreshToken();
