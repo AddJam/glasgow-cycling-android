@@ -13,7 +13,7 @@ import android.widget.EditText;
 
 import com.fcd.glasgowcycling.CyclingApplication;
 import com.fcd.glasgowcycling.R;
-import com.fcd.glasgowcycling.api.AuthResult;
+import com.fcd.glasgowcycling.api.AuthModel;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 import javax.inject.Inject;
 
@@ -27,10 +27,15 @@ public class SignInActivity extends Activity {
 
     private static final String TAG = "SignInActivity";
 
+    // Bundle Args
+    public static final String ARG_IS_ADDING_NEW_ACCOUNT = "ADDING_NEW_ACCOUNT";
+
+    // Views
     @InjectView(R.id.email) AutoCompleteTextView emailField;
     @InjectView(R.id.password) EditText passwordField;
     @InjectView(R.id.email_sign_in_button) Button signInButton;
 
+    // API
     @Inject GoCyclingApiInterface cyclingService;
 
     @Override
@@ -79,10 +84,10 @@ public class SignInActivity extends Activity {
             Log.d(TAG, "Sign In clicked");
             String email = emailField.getText().toString();
             String password = passwordField.getText().toString();
-            cyclingService.signin(email, password, new Callback<AuthResult>() {
+            cyclingService.signin(email, password, new Callback<AuthModel>() {
                 @Override
-                public void success(AuthResult authResult, Response response) {
-                    Log.d(TAG, "Logged in! auth token is " + authResult.getUserToken());
+                public void success(AuthModel authModel, Response response) {
+                    Log.d(TAG, "Logged in! auth token is " + authModel.getUserToken());
                     startActivity(new Intent(getApplicationContext(), UserOverviewActivity.class));
                     finish();
                 }
