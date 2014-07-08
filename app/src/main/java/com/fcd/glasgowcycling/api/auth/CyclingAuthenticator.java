@@ -27,7 +27,7 @@ import javax.inject.Inject;
 public class CyclingAuthenticator extends AbstractAccountAuthenticator {
     private Context mContext;
     public static final String KEY_REFRESH_TOKEN = "refresh_token";
-    public final String ACCOUNT_TYPE = "com.fcd.GlasgowCycling";
+    public static final String ACCOUNT_TYPE = "com.fcd.GlasgowCycling";
     public static final int ERROR_CODE_ONE_ACCOUNT_ALLOWED = 100;
 
     @Inject
@@ -82,7 +82,6 @@ public class CyclingAuthenticator extends AbstractAccountAuthenticator {
 
     @Override
     public Bundle getAuthToken(AccountAuthenticatorResponse response, Account account, String authTokenType, Bundle options) throws NetworkErrorException {
-
         // Extract the username and password from the Account Manager, and ask
         // the server for an appropriate AuthToken.
         final AccountManager am = AccountManager.get(mContext);
