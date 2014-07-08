@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.fcd.glasgowcycling.activities.SignInActivity;
 import com.fcd.glasgowcycling.api.AuthModel;
+import com.fcd.glasgowcycling.activities.UserOverviewActivity;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -18,7 +19,8 @@ import retrofit.converter.GsonConverter;
  * Created by chrissloey on 01/07/2014.
  */
 @Module(complete=false, library = true, injects = {
-        SignInActivity.class
+        SignInActivity.class,
+        UserOverviewActivity.class
 })
 public class ApiClientModule {
 
@@ -34,12 +36,12 @@ public class ApiClientModule {
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                 .create();
 
-        AuthModel authModel = new AuthModel(mContext);
-        OAuthClient oAuthClient = new OAuthClient(authModel);
+//        AuthModel authModel = new AuthModel(mContext);
+//        OAuthClient oAuthClient = new OAuthClient(authModel);
 
         final RestAdapter restAdapter = new RestAdapter.Builder()
 //                .setEndpoint("http://10.0.2.2:3000") // Localhost (for simulator)
-                .setEndpoint("http://192.168.10.34:3000") // Tethered IP (device)
+                .setEndpoint("http://172.20.10.8:3000") // Tethered IP (device)
                 .setConverter(new GsonConverter(gson))
                 .setRequestInterceptor(new RequestInterceptor() {
                     @Override
@@ -48,7 +50,7 @@ public class ApiClientModule {
                         request.addQueryParam("client_secret", "84980d8bb9440cba2b3709ce30958e6c11da1e22a3475c4327a498c16b62fe0b");
                     }
                 })
-                .setClient(oAuthClient)
+//                .setClient(oAuthClient)
                 .build();
 
         return restAdapter.create(GoCyclingApiInterface.class);

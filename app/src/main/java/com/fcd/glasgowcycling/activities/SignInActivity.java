@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.fcd.glasgowcycling.CyclingApplication;
 import com.fcd.glasgowcycling.R;
@@ -37,7 +38,10 @@ public class SignInActivity extends AccountAuthenticatorActivity {
     // Views
     @InjectView(R.id.email) AutoCompleteTextView emailField;
     @InjectView(R.id.password) EditText passwordField;
-    @InjectView(R.id.email_sign_in_button) Button signInButton;
+
+    @InjectView(R.id.sign_in_button) Button signInButton;
+    @InjectView(R.id.sign_up_button) Button signupButton;
+    @InjectView(R.id.signin_image) ImageView signinImageView;
 
     // API
     @Inject GoCyclingApiInterface sCyclingService;
@@ -60,8 +64,8 @@ public class SignInActivity extends AccountAuthenticatorActivity {
         mAccountManager = AccountManager.get(this);
 
         signInButton.setOnClickListener(new SignInListener(sCyclingService));
+        //signUpButton.setOnClickListener(new SignUpListener()); TODO signup
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -132,10 +136,13 @@ public class SignInActivity extends AccountAuthenticatorActivity {
                         authModel = cyclingService.signin(email, password);
                     } catch (RetrofitError error) {
                         Log.d(TAG, "Retrofit error");
-                        if (error.getResponse().getStatus() == 401) {
+                        if (error.isNetworkError()) {
+                            Log.d(TAG, "Network error");
+                        } else if (error.getResponse().getStatus() == 401) {
                             // Unauthorized
                             Log.d(TAG, "Invalid details");
                         }
+                        return null;
                     }
                     if (authModel != null) {
                         String authToken = authModel.getUserToken();

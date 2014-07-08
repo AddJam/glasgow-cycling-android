@@ -1,8 +1,12 @@
 <resources>
-        <string name="title_activity_login">Sign in</string>
+    <string name="title_activity_sign_in">Welcome to Glasgow Cycling</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in</string>
+    <string name="welcome_label">Making Glasgow a Cycling city</string>
+    <string name="action_sign_in">Sign In</string>
+    <string name="action_sign_up">Sign Up</string>
+    <string name="action_resetpassword">Reset Password</string>
+
 </resources>

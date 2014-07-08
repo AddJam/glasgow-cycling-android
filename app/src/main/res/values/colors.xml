@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="jcDarkBlueColor">#3993C5</color>
+    <color name="jcLightBlueColor">#4CB9E2</color>
+    <color name="jcBlueColor">#00A1DF</color>
+    <color name="jcGreenColor">#7Ed321</color>
+    <color name="jcRedColor">#FF1A1A</color>
+    <color name="jcWhiteColor">#ffffff</color>
+    <color name="jcBlackColor">#ffffff</color>
+</resources>
