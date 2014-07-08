@@ -1,6 +1,7 @@
 package com.fcd.glasgowcycling.api.http;
 
 import com.fcd.glasgowcycling.api.AuthResult;
+import com.fcd.glasgowcycling.models.User;
 
 import java.util.HashMap;
 
@@ -14,4 +15,8 @@ import retrofit.http.Query;
 public interface GoCyclingApiInterface {
     @GET("/signin.json")
     void signin(@Query("user[email") String email, @Query("user[password]") String password, Callback<AuthResult> callback);
+
+    @GET("/details.json")
+    void details(Callback<User> callback);
+
 }

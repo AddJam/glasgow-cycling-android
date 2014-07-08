@@ -89,7 +89,6 @@ public class SignInActivity extends Activity {
                     startActivity(new Intent(getApplicationContext(), UserOverviewActivity.class));
                     finish();
                 }
-
                 @Override
                 public void failure(RetrofitError error) {
                     Log.d(TAG, "Failed to login");

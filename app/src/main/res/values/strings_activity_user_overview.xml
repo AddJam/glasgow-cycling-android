@@ -1,0 +1,13 @@
+<resources>
+    <string name="title_activity_user_overview">Glasgow Cycling</string>
+
+    <!-- Strings related to user overview -->
+    <string name="user_label">Username</string>
+    <string name="distance_stat">0.0 miles this month</string>
+    <string name="time_stat">0.0 hours this month</string>
+    <string name="my_routes_button">My Routes</string>
+    <string name="nearby_routes_button">Nearby Routes</string>
+    <string name="cycle_map_button">Glasgow Cycle Map</string>
+    <string name="action_change_password">Change Password</string>
+    <string name="action_account_settings">Account Settings</string>
+</resources>

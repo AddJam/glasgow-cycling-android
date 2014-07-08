@@ -5,66 +5,135 @@
     tools:context="com.fcd.glasgowcycling.activities.UserOverviewActivity">
 
     <ScrollView
-        android:id="@+id/user_overivew"
+        android:id="@+id/overivew_scroll"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
+        <LinearLayout
+            android:id="@+id/overview_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <LinearLayout
+                android:id="@+id/user_details"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/jcBlueColor">
+                <TextView
+                    android:id="@+id/username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/user_label"
+                    android:textSize="14sp"
+                    android:textColor="@color/jcWhiteColor"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:paddingBottom="14dp"
+                    android:paddingTop="15dp"/>
 
-    <LinearLayout
-        android:id="@+id/user_details"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@color/jcBlueColor">
+                <ImageView
+                    android:id="@+id/profile_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/cyclist"
+                    android:layout_gravity="center"
+                    android:paddingTop="15dp"/>
 
-    <TextView
-        android:id="@+id/username"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TODO Smith"
-        android:textSize="14sp"
-        android:textColor="@color/jcWhiteColor"
-        android:textStyle="bold"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:paddingBottom="14dp"
-        android:paddingTop="15dp"/>
+                <TextView
+                    android:id="@+id/distance_stat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/distance_stat"
+                    android:textSize="14sp"
+                    android:textColor="@color/jcWhiteColor"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:paddingBottom="3dp"
+                    android:paddingTop="15dp"/>
 
-    <ImageView
-        android:id="@+id/profile_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/cyclist"
-        android:layout_gravity="center"
-        android:paddingTop="15dp"/>
+                <TextView
+                    android:id="@+id/time_stat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/time_stat"
+                    android:textSize="14sp"
+                    android:textColor="@color/jcWhiteColor"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:paddingBottom="25dp"
+                    />
+            </LinearLayout>
+                <Button
+                    android:id="@+id/user_stats_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    />
+            </FrameLayout>
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <fragment
+                    android:id="@+id/map"
+                    android:layout_width="match_parent"
+                    android:layout_height="130dp"
+                    class="com.google.android.gms.maps.MapFragment" />
+                <Button
+                    android:layout_width="150dp"
+                    android:layout_height="40dp"
+                    android:text="Start Route"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:background="@color/jcBlueColor"
+                    android:textColor="@color/jcWhiteColor"
+                    />
+            </FrameLayout>
+            <LinearLayout
+                android:id="@+id/button_layout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+                android:paddingBottom="20dp">
 
-    <TextView
-        android:id="@+id/distance_stat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TODO 0.0m"
-        android:textSize="14sp"
-        android:textColor="@color/jcWhiteColor"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:paddingBottom="14dp"
-        android:paddingTop="15dp"/>
+            <Button
+                android:id="@+id/my_routes_button"
+                style="?android:textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/my_routes_button"
+                android:textStyle="bold"
+                android:background="@color/jcBlueColor"
+                android:textColor="@color/jcWhiteColor" />
 
-    <TextView
-        android:id="@+id/time_stat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TODO 1 hour 30 mins"
-        android:textSize="14sp"
-        android:textColor="@color/jcWhiteColor"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:paddingBottom="15dp"
-        android:paddingTop="4dp"/>
+            <Button
+                android:id="@+id/nearby_route_button"
+                style="?android:textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/nearby_routes_button"
+                android:textStyle="bold"
+                android:background="@color/jcBlueColor"
+                android:textColor="@color/jcWhiteColor" />
 
-        <TableLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-        </TableLayout>
-    </LinearLayout>
+            <Button
+                android:id="@+id/glasgow_cycle_map_button"
+                style="?android:textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/cycle_map_button"
+                android:textStyle="bold"
+                android:background="@color/jcBlueColor"
+                android:textColor="@color/jcWhiteColor" />
+            </LinearLayout>
+        </LinearLayout>
     </ScrollView>
 </RelativeLayout>
