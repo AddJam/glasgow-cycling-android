@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +18,7 @@ import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgowcycling.models.Month;
 import com.fcd.glasgowcycling.models.User;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
@@ -68,6 +70,8 @@ public class UserOverviewActivity extends Activity {
         }
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 13));
 
+        sLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000,
+                Criteria.ACCURACY_COARSE, new JCLocationListener());
         getDetails();
     }
 
@@ -112,5 +116,29 @@ public class UserOverviewActivity extends Activity {
         username.setText(user.getFirstName() + "" + user.getLastName());
         distanceStat.setText(String.valueOf(month.getKm()));
         timeStat.setText(month.getSeconds());
+    }
+
+    private class JCLocationListener implements LocationListener {
+
+        @Override
+        public void onLocationChanged(Location location) {
+            userLocation = new LatLng(location.getLatitude(), location.getLongitude());
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 13));
+        }
+
+        @Override
+        public void onStatusChanged(String s, int i, Bundle bundle) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(String s) {
+
+        }
+
+        @Override
+        public void onProviderDisabled(String s) {
+
+        }
     }
 }
