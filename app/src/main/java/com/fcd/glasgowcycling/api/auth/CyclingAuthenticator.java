@@ -8,8 +8,13 @@ import android.accounts.NetworkErrorException;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.MessageQueue;
 import android.text.TextUtils;
+import android.widget.Toast;
 
+import com.fcd.glasgowcycling.R;
 import com.fcd.glasgowcycling.activities.SignInActivity;
 import com.fcd.glasgowcycling.api.AuthModel;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
@@ -22,6 +27,8 @@ import javax.inject.Inject;
 public class CyclingAuthenticator extends AbstractAccountAuthenticator {
     private Context mContext;
     public static final String KEY_REFRESH_TOKEN = "refresh_token";
+    public final String ACCOUNT_TYPE = "com.fcd.GlasgowCycling";
+    public static final int ERROR_CODE_ONE_ACCOUNT_ALLOWED = 100;
 
     @Inject
     GoCyclingApiInterface cyclingService;
@@ -33,12 +40,34 @@ public class CyclingAuthenticator extends AbstractAccountAuthenticator {
 
     @Override
     public Bundle addAccount(AccountAuthenticatorResponse response, String accountType, String authTokenType, String[] requiredFeatures, Bundle options) throws NetworkErrorException {
-        final Intent intent = new Intent(mContext, SignInActivity.class);
-        intent.putExtra(SignInActivity.ARG_IS_ADDING_NEW_ACCOUNT, true);
-        intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
-        final Bundle bundle = new Bundle();
-        bundle.putParcelable(AccountManager.KEY_INTENT, intent);
-        return bundle;
+        AccountManager accountManager = AccountManager.get(mContext);
+        Account[] existingAccounts = accountManager.getAccountsByType(ACCOUNT_TYPE);
+
+        // Only allow one account
+        if (existingAccounts.length == 0) {
+            final Intent intent = new Intent(mContext, SignInActivity.class);
+            intent.putExtra(SignInActivity.ARG_IS_ADDING_NEW_ACCOUNT, true);
+            intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
+            final Bundle bundle = new Bundle();
+            bundle.putParcelable(AccountManager.KEY_INTENT, intent);
+            return bundle;
+        } else {
+            final Bundle bundle = new Bundle();
+            final String errorString = mContext.getString(R.string.one_account_allowed);
+            bundle.putInt(AccountManager.KEY_ERROR_CODE, CyclingAuthenticator.ERROR_CODE_ONE_ACCOUNT_ALLOWED);
+            bundle.putString(AccountManager.KEY_ERROR_MESSAGE, errorString);
+
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast toast = Toast.makeText(mContext, errorString, Toast.LENGTH_LONG);
+                    toast.show();
+                }
+            });
+
+            return bundle;
+        }
     }
 
     @Override
