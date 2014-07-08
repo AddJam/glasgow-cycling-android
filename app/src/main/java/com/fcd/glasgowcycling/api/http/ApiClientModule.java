@@ -46,8 +46,8 @@ public class ApiClientModule {
                 .setRequestInterceptor(new RequestInterceptor() {
                     @Override
                     public void intercept(RequestFacade request) {
-                        request.addQueryParam("client_id", "913623efb87a2efa99860b74f0ee7d63c25a750efcd9d93bb62a177add26eccb");
-                        request.addQueryParam("client_secret", "84980d8bb9440cba2b3709ce30958e6c11da1e22a3475c4327a498c16b62fe0b");
+                        request.addQueryParam("client_id", "123");
+                        request.addQueryParam("client_secret", "321");
                     }
                 })
 //                .setClient(oAuthClient)
