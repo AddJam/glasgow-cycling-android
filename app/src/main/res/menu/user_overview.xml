@@ -1,8 +1,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.fcd.glasgowcycling.activities.UserOverviewActivity" >
-    <item android:id="@+id/action_settings"
-        android:title="@string/action_resetpassword"
-        android:orderInCategory="100"
-        android:showAsAction="never" />
+    tools:context="com.fcd.glasgowcycling.activities.UserOverviewActivity">
+
+    <item android:id="@+id/action_account_settings"
+        android:title="@string/action_account_settings"
+        android:orderInCategory="100"/>
+    <item android:id="@+id/action_change_password"
+        android:title="@string/action_change_password"
+        android:orderInCategory="100"/>
 </menu>
