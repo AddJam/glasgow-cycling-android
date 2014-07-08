@@ -63,6 +63,10 @@ public class User{
         this.lastName = lastName;
     }
 
+    public String getName() {
+        return getFirstName() + " " + getLastName();
+    }
+
     public Month getMonth() {
         return month;
     }

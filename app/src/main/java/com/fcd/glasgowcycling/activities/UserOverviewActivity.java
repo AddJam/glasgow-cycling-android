@@ -47,12 +47,12 @@ public class UserOverviewActivity extends Activity {
     private LatLng userLocation;
     private LocationManager sLocationManager;
 
+    private User mUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_overview);
-
-        AuthModel model = new AuthModel(getApplicationContext());
 
         ((CyclingApplication) getApplication()).inject(this);
         ButterKnife.inject(this);
@@ -78,7 +78,7 @@ public class UserOverviewActivity extends Activity {
         sLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000,
                 Criteria.ACCURACY_COARSE, new JCLocationListener());
 
-//        getDetails();
+        getDetails();
         statsButton.setOnClickListener(new StatsListener());
     }
 
@@ -107,7 +107,8 @@ public class UserOverviewActivity extends Activity {
             @Override
             public void success(User user, Response response) {
                 Log.d(TAG, "retreived user details for " + user.getUserID());
-                populateFields(user);
+                mUser = user;
+                populateFields();
             }
 
             @Override
@@ -117,12 +118,12 @@ public class UserOverviewActivity extends Activity {
         });
     }
 
-    private void populateFields(User user){
-        Month month = user.getMonth();
+    private void populateFields(){
+        Month month = mUser.getMonth();
 
-        username.setText(user.getFirstName() + "" + user.getLastName());
-        distanceStat.setText(String.valueOf(month.getKm()));
-        timeStat.setText(month.getSeconds());
+        username.setText(mUser.getName());
+//        distanceStat.setText(String.valueOf(month.getKm()));
+//        timeStat.setText(month.getSeconds());
     }
 
     private class JCLocationListener implements LocationListener {
