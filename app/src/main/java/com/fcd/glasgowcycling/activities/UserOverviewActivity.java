@@ -2,9 +2,11 @@ package com.fcd.glasgowcycling.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import com.fcd.glasgowcycling.R;
+import com.fcd.glasgowcycling.api.AuthModel;
 
 public class UserOverviewActivity extends Activity {
 
@@ -12,6 +14,8 @@ public class UserOverviewActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_overview);
+
+        AuthModel model = new AuthModel(getApplicationContext());
     }
 
 
