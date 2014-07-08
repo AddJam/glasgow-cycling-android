@@ -1,7 +1,6 @@
 package com.fcd.glasgowcycling.activities;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -10,6 +9,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.fcd.glasgowcycling.CyclingApplication;
@@ -17,14 +18,10 @@ import com.fcd.glasgowcycling.R;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgowcycling.models.Month;
 import com.fcd.glasgowcycling.models.User;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.MapsInitializer;
 
 import javax.inject.Inject;
 
@@ -41,6 +38,10 @@ public class UserOverviewActivity extends Activity {
     @InjectView(R.id.username) TextView username;
     @InjectView(R.id.distance_stat) TextView distanceStat;
     @InjectView(R.id.time_stat) TextView timeStat;
+    @InjectView(R.id.user_stats_button) Button statsButton;
+    @InjectView(R.id.my_routes_button) Button myRoutesButton;
+    @InjectView(R.id.nearby_route_button) Button nearbyRoutesButton;
+    @InjectView(R.id.glasgow_cycle_map_button) Button cycleMapButton;
     private GoogleMap map;
     private LatLng userLocation;
     private LocationManager sLocationManager;
@@ -72,7 +73,9 @@ public class UserOverviewActivity extends Activity {
 
         sLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000,
                 Criteria.ACCURACY_COARSE, new JCLocationListener());
+
         getDetails();
+        statsButton.setOnClickListener(new StatsListener());
     }
 
 
@@ -139,6 +142,18 @@ public class UserOverviewActivity extends Activity {
         @Override
         public void onProviderDisabled(String s) {
 
+        }
+    }
+
+    private class StatsListener implements View.OnClickListener {
+
+        public StatsListener() {
+        }
+
+        @Override
+        public void onClick(View v) {
+            Log.d(TAG, "Stats clicked");
+            //TODO Go to the Stats Activity
         }
     }
 }
