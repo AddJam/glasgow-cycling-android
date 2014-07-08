@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Glasgow Cycling</string>
-    <string name="sign_in_title">Welcome to Glasgow Cycling</string>
+    <string name="authenticator_label">Glasgow Cycling</string>
+    <string name="one_account_allowed">Only one account can be added!</string>
 </resources>

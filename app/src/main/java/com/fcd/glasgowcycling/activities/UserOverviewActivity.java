@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.fcd.glasgowcycling.CyclingApplication;
 import com.fcd.glasgowcycling.R;
+import com.fcd.glasgowcycling.api.AuthModel;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgowcycling.models.Month;
 import com.fcd.glasgowcycling.models.User;
@@ -50,6 +51,9 @@ public class UserOverviewActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_overview);
+
+        AuthModel model = new AuthModel(getApplicationContext());
+
         ((CyclingApplication) getApplication()).inject(this);
         ButterKnife.inject(this);
 
@@ -74,7 +78,7 @@ public class UserOverviewActivity extends Activity {
         sLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000,
                 Criteria.ACCURACY_COARSE, new JCLocationListener());
 
-        getDetails();
+//        getDetails();
         statsButton.setOnClickListener(new StatsListener());
     }
 
