@@ -30,6 +30,7 @@ public class SignInActivity extends Activity {
 
     @InjectView(R.id.email) AutoCompleteTextView emailField;
     @InjectView(R.id.password) EditText passwordField;
+
     @InjectView(R.id.sign_in_button) Button signInButton;
     @InjectView(R.id.sign_up_button) Button signupButton;
     @InjectView(R.id.signin_image) ImageView signinImageView;
@@ -47,7 +48,7 @@ public class SignInActivity extends Activity {
         passwordField.setText("password");
 
         signInButton.setOnClickListener(new SignInListener(cyclingService));
-        //signUpButton.setOnClickListener(new SignUpListener()); Have to do this
+        //signUpButton.setOnClickListener(new SignUpListener()); TODO signup
     }
 
     @Override
@@ -89,6 +90,7 @@ public class SignInActivity extends Activity {
                     startActivity(new Intent(getApplicationContext(), UserOverviewActivity.class));
                     finish();
                 }
+
                 @Override
                 public void failure(RetrofitError error) {
                     Log.d(TAG, "Failed to login");
