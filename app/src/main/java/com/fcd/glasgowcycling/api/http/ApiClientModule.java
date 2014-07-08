@@ -1,5 +1,7 @@
 package com.fcd.glasgowcycling.api.http;
 
+import android.content.Context;
+
 import com.fcd.glasgowcycling.activities.SignInActivity;
 import com.fcd.glasgowcycling.api.AuthModel;
 import com.google.gson.FieldNamingPolicy;
@@ -16,10 +18,15 @@ import retrofit.converter.GsonConverter;
  * Created by chrissloey on 01/07/2014.
  */
 @Module(complete=false, library = true, injects = {
-        SignInActivity.class,
-        AuthModel.class
+        SignInActivity.class
 })
 public class ApiClientModule {
+
+    private Context mContext;
+
+    public ApiClientModule(Context context) {
+        mContext = context;
+    }
 
     @Provides
     public GoCyclingApiInterface provideClient() {
@@ -27,8 +34,8 @@ public class ApiClientModule {
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                 .create();
 
-//        AuthModel authModel = new AuthModel();
-//        OAuthClient oAuthClient = new OAuthClient(authModel);
+        AuthModel authModel = new AuthModel(mContext);
+        OAuthClient oAuthClient = new OAuthClient(authModel);
 
         final RestAdapter restAdapter = new RestAdapter.Builder()
 //                .setEndpoint("http://10.0.2.2:3000") // Localhost (for simulator)
@@ -41,7 +48,7 @@ public class ApiClientModule {
                         request.addQueryParam("client_secret", "84980d8bb9440cba2b3709ce30958e6c11da1e22a3475c4327a498c16b62fe0b");
                     }
                 })
-//                .setClient(oAuthClient)
+                .setClient(oAuthClient)
                 .build();
 
         return restAdapter.create(GoCyclingApiInterface.class);

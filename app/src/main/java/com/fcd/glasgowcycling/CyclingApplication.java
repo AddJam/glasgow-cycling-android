@@ -20,7 +20,7 @@ public class CyclingApplication extends Application {
     }
 
     private Object[] getModules() {
-        return new Object[] { new ApiClientModule() };
+        return new Object[] { new ApiClientModule(getApplicationContext()) };
     }
 
     public void inject(Object target) {
