@@ -122,8 +122,8 @@ public class UserOverviewActivity extends Activity {
         Month month = mUser.getMonth();
 
         username.setText(mUser.getName());
-//        distanceStat.setText(String.valueOf(month.getKm()));
-//        timeStat.setText(month.getSeconds());
+        distanceStat.setText(String.valueOf(month.getKm()) + " km");
+        timeStat.setText(String.valueOf(month.getSeconds()) + " seconds");
     }
 
     private class JCLocationListener implements LocationListener {

@@ -3,6 +3,7 @@ package com.fcd.glasgowcycling.api.http;
 import android.content.Context;
 import android.util.Log;
 
+import com.fcd.glasgowcycling.CyclingApplication;
 import com.fcd.glasgowcycling.activities.SignInActivity;
 import com.fcd.glasgowcycling.api.AuthModel;
 import com.fcd.glasgowcycling.activities.UserOverviewActivity;
@@ -31,13 +32,15 @@ import retrofit.converter.GsonConverter;
 public class ApiClientModule {
 
     private final String TAG = "ApiClientModule";
+    private final String ENDPOINT = "http://172.20.10.8:3000"; // "http://10.0.2.2:3000" == Localhost (for simulator)
     private Context mContext;
     private AuthModel mAuthModel;
-    @Inject GoCyclingApiInterface sCyclingService;
+    GoCyclingApiInterface sRefreshService;
 
     public ApiClientModule(Context context) {
         mContext = context;
         mAuthModel = new AuthModel(mContext);
+        sRefreshService = provideAuthClient();
     }
 
     @Provides
@@ -46,12 +49,28 @@ public class ApiClientModule {
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                 .create();
 
-        final RestAdapter restAdapter = new RestAdapter.Builder()
-//                .setEndpoint("http://10.0.2.2:3000") // Localhost (for simulator)
-                .setEndpoint("http://172.20.10.8:3000") // Tethered IP (device)
+        RestAdapter restAdapter = new RestAdapter.Builder()
+                .setEndpoint(ENDPOINT)
                 .setConverter(new GsonConverter(gson))
                 .setRequestInterceptor(new GoCyclingAPIRequestInterceptor())
                 .setErrorHandler(new GoCyclingAPIErrorHandler())
+                .build();
+
+        return restAdapter.create(GoCyclingApiInterface.class);
+    }
+
+    /*
+     * Client which doesn't handle errors (preventing recursion when refreshing in error handler)
+     */
+    private GoCyclingApiInterface provideAuthClient() {
+        Gson gson = new GsonBuilder()
+                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                .create();
+
+        RestAdapter restAdapter = new RestAdapter.Builder()
+                .setEndpoint(ENDPOINT)
+                .setConverter(new GsonConverter(gson))
+                .setRequestInterceptor(new GoCyclingAPIRequestInterceptor())
                 .build();
 
         return restAdapter.create(GoCyclingApiInterface.class);
@@ -68,7 +87,6 @@ public class ApiClientModule {
     }
 
     private class GoCyclingAPIErrorHandler implements ErrorHandler {
-        private boolean refreshingToken = false;
 
         @Override
         public Throwable handleError(RetrofitError cause) {
@@ -77,16 +95,16 @@ public class ApiClientModule {
             } else if (cause.getResponse().getStatus() == 401) {
                 // Refresh token and try again
                 Log.d(TAG, "Unauthorized error making request");
-                if (refreshingToken) {
-                    // TODO Log out
-                    Log.d(TAG, "Logging out");
-                } else {
-                    // Refresh token
-                    Log.d(TAG, "Refreshing token using " + mAuthModel.getRefreshToken());
-                    Log.d(TAG, "Access token was " + mAuthModel.getUserToken());
-                    mAuthModel = sCyclingService.refreshToken();
+                Log.d(TAG, "Refreshing token using " + mAuthModel.getRefreshToken());
+                Log.d(TAG, "Access token was " + mAuthModel.getUserToken());
+                try {
+                    mAuthModel = sRefreshService.refreshToken();
                     Log.d(TAG, "Refresh token is now " + mAuthModel.getRefreshToken());
                     Log.d(TAG, "Access token is now " + mAuthModel.getUserToken());
+                } catch (RetrofitError error) {
+                    // Couldn't refresh the token
+                    Log.d(TAG, "Error refreshing token");
+                    // TODO logout user
                 }
             }
             return cause;
