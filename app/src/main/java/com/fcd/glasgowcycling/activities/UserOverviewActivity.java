@@ -71,6 +71,7 @@ public class UserOverviewActivity extends Activity {
         ((CyclingApplication) getApplication()).inject(this);
         ButterKnife.inject(this);
 
+        // Show map
         map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
         map.getUiSettings().setMyLocationButtonEnabled(false);
         map.getUiSettings().setZoomControlsEnabled(false);
@@ -91,23 +92,27 @@ public class UserOverviewActivity extends Activity {
         sLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000,
                 Criteria.ACCURACY_COARSE, new JCLocationListener());
 
+        // Load user details
         getDetails();
+
+        // Stats
         statsButton.setOnClickListener(new StatsListener());
 
+        // Functions list view
         initFunctionList();
-        SimpleAdapter simpleAdpt = new SimpleAdapter(this, functions, android.R.layout.simple_list_item_1, new String[] {"function"}, new int[] {android.R.id.text1});
-        functionsList.setAdapter(simpleAdpt);
-        functionsList.setOnItemClickListener(new TableListener());
     }
 
     private void initFunctionList() {
         functions.add(createFunction("function", "My Routes"));
         functions.add(createFunction("function", "Nearby Routes"));
         functions.add(createFunction("function", "Cycle Map"));
+
+        SimpleAdapter simpleAdpt = new SimpleAdapter(this, functions, android.R.layout.simple_list_item_1, new String[] {"function"}, new int[] {android.R.id.text1});
+        functionsList.setAdapter(simpleAdpt);
+        functionsList.setOnItemClickListener(new TableListener());
     }
 
     private HashMap<String, String> createFunction(String key, String name) {
-
         HashMap<String, String> function = new HashMap<String, String>();
         function.put(key, name);
 
@@ -165,7 +170,6 @@ public class UserOverviewActivity extends Activity {
     }
 
     private class JCLocationListener implements LocationListener {
-
         @Override
         public void onLocationChanged(Location location) {
             userLocation = new LatLng(location.getLatitude(), location.getLongitude());
@@ -189,20 +193,15 @@ public class UserOverviewActivity extends Activity {
     }
 
     private class StatsListener implements View.OnClickListener {
-
-        public StatsListener() {
-        }
-
         @Override
         public void onClick(View v) {
             Log.d(TAG, "Stats clicked");
             //TODO Go to the Stats Activity
         }
     }
-    private class TableListener implements AdapterView.OnItemClickListener{
 
-        public TableListener() {
-        }
+    private class TableListener implements AdapterView.OnItemClickListener {
+        @Override
         public void onItemClick(AdapterView<?> parentAdapter, View view, int position, long id) {
             TextView clickedView = (TextView) view;
             Log.d(TAG, "Item clicked" + id + "Position" + position);
