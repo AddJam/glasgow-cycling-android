@@ -1,6 +1,8 @@
 package com.fcd.glasgowcycling.api.http;
 
+import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import com.fcd.glasgowcycling.CyclingApplication;
@@ -35,10 +37,12 @@ public class ApiClientModule {
     private final String TAG = "ApiClientModule";
     private final String ENDPOINT = "http://172.20.10.8:3000"; // "http://10.0.2.2:3000" == Localhost (for simulator)
     private Context mContext;
+    private CyclingApplication mApplication;
     private AuthModel mAuthModel;
     GoCyclingApiInterface sRefreshService;
 
-    public ApiClientModule(Context context) {
+    public ApiClientModule(Context context, CyclingApplication app) {
+        mApplication = app;
         mContext = context;
         mAuthModel = new AuthModel(mContext);
         sRefreshService = provideAuthClient();
@@ -94,6 +98,7 @@ public class ApiClientModule {
                             // Unauthorized - refresh failed, logout
                             // TODO logout user
                             Log.d(TAG, "Logging out, refresh token failed");
+                            mApplication.logout();
                         }
                         return cause;
                     }
