@@ -134,7 +134,7 @@ public class UserOverviewActivity extends Activity {
 
             @Override
             public void success(User user, Response response) {
-                Log.d(TAG, "retreived user details for " + user.getUserID());
+                Log.d(TAG, "retreived user details for " + user.getUserId());
                 mUser = user;
                 populateFields();
             }

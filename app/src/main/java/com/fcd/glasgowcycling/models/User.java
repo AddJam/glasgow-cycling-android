@@ -8,7 +8,7 @@ import com.google.gson.annotations.Expose;
 public class User{
 
     @Expose @DatabaseField(id = true)
-    private String userID;
+    private String userId;
 
     @Expose @DatabaseField
     private String firstName;
@@ -31,7 +31,6 @@ public class User{
     }
 
     public User(String firstName, String lastName, Month month, String email, String gender){
-
         this.firstName = firstName;
         this.lastName = lastName;
         this.month = month;
@@ -39,12 +38,12 @@ public class User{
         this.gender = gender;
     }
 
-    public String getUserID() {
-        return userID;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUserID(String userID) {
-        this.userID = userID;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getFirstName() {
