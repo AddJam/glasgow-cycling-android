@@ -1,17 +1,21 @@
 package com.fcd.glasgowcycling.activities;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -50,6 +54,8 @@ public class UserOverviewActivity extends Activity {
     @InjectView(R.id.time_stat) TextView timeStat;
     @InjectView(R.id.user_stats_button) Button statsButton;
     @InjectView(R.id.functions_list) ListView functionsList;
+    @InjectView(R.id.profile_image) ImageView profileImage;
+
     private GoogleMap map;
     private LatLng userLocation;
     private LocationManager sLocationManager;
@@ -79,8 +85,7 @@ public class UserOverviewActivity extends Activity {
         Location location = sLocationManager.getLastKnownLocation(provider);
         if(location == null){
             userLocation = new LatLng(55.8580, -4.259); // Glasgow
-        }
-        else {
+        } else {
             userLocation = new LatLng(location.getLatitude(), location.getLongitude());
         }
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 13));
@@ -98,7 +103,6 @@ public class UserOverviewActivity extends Activity {
     }
 
     private void initFunctionList() {
-
         functions.add(createFunction("function", "My Routes"));
         functions.add(createFunction("function", "Nearby Routes"));
         functions.add(createFunction("function", "Cycle Map"));
@@ -152,6 +156,12 @@ public class UserOverviewActivity extends Activity {
         username.setText(user.getFirstName() + "" + user.getLastName());
         distanceStat.setText(String.valueOf(month.getKm()));
         timeStat.setText(month.getSeconds());
+        Bitmap decodedImage;
+        if (user.getProfileImage().length() > 0){
+            byte[] decodedString = Base64.decode(user.getProfileImage(), Base64.DEFAULT);
+            decodedImage = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            profileImage.setImageBitmap(decodedImage);
+        }
     }
 
     private class JCLocationListener implements LocationListener {
