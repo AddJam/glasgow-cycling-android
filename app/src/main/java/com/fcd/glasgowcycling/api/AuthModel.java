@@ -31,8 +31,15 @@ public class AuthModel {
     @Expose
     private String refreshToken;
 
+    private Context mContext;
+
     public AuthModel(Context context) {
-        AccountManager accountManager = AccountManager.get(context);
+        mContext = context;
+        updateTokens();
+    }
+
+    public void updateTokens() {
+        AccountManager accountManager = AccountManager.get(mContext);
         Account[] accountList = accountManager.getAccountsByType(CyclingAuthenticator.ACCOUNT_TYPE);
         if (accountList.length > 0) {
             Account userAccount = accountList[0];
@@ -46,6 +53,9 @@ public class AuthModel {
     }
 
     public String getUserToken() {
+        if (accessToken == null) {
+            updateTokens();;
+        }
         return accessToken;
     }
 
@@ -54,6 +64,9 @@ public class AuthModel {
     }
 
     public String getRefreshToken() {
+        if (refreshToken == null) {
+            updateTokens();
+        }
         return refreshToken;
     }
 

@@ -19,6 +19,7 @@ import retrofit.ErrorHandler;
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
+import retrofit.client.Client;
 import retrofit.converter.GsonConverter;
 
 /**
@@ -70,7 +71,33 @@ public class ApiClientModule {
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint(ENDPOINT)
                 .setConverter(new GsonConverter(gson))
-                .setRequestInterceptor(new GoCyclingAPIRequestInterceptor())
+                .setRequestInterceptor(new RequestInterceptor() {
+                    @Override
+                    public void intercept(RequestFacade request) {
+                        request.addQueryParam("client_id", "123");
+                        request.addQueryParam("client_secret", "321");
+
+                        String refreshToken = mAuthModel.getRefreshToken();
+                        if (refreshToken != null) {
+                            request.addQueryParam("refresh_token", refreshToken);
+                        }
+                    }
+                })
+                .setErrorHandler(new ErrorHandler() {
+                    @Override
+                    public Throwable handleError(RetrofitError cause) {
+                        Log.d(TAG, "Error refreshing token");
+                        if (cause.isNetworkError()) {
+                            // Can retry refreshing
+                            Log.d(TAG, "Network error refreshing token");
+                        } else if (cause.getResponse().getStatus() == 401) {
+                            // Unauthorized - refresh failed, logout
+                            // TODO logout user
+                            Log.d(TAG, "Logging out, refresh token failed");
+                        }
+                        return cause;
+                    }
+                })
                 .build();
 
         return restAdapter.create(GoCyclingApiInterface.class);
@@ -82,7 +109,11 @@ public class ApiClientModule {
         public void intercept(RequestInterceptor.RequestFacade request) {
             request.addQueryParam("client_id", "123");
             request.addQueryParam("client_secret", "321");
-            request.addHeader("Authorization", "Bearer " + mAuthModel.getUserToken());
+
+            String userToken = mAuthModel.getUserToken();
+            if (userToken != null) {
+                request.addHeader("Authorization", "Bearer " + userToken);
+            }
         }
     }
 
@@ -102,9 +133,7 @@ public class ApiClientModule {
                     Log.d(TAG, "Refresh token is now " + mAuthModel.getRefreshToken());
                     Log.d(TAG, "Access token is now " + mAuthModel.getUserToken());
                 } catch (RetrofitError error) {
-                    // Couldn't refresh the token
                     Log.d(TAG, "Error refreshing token");
-                    // TODO logout user
                 }
             }
             return cause;
