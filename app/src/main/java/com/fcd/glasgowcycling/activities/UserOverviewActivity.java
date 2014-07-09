@@ -10,8 +10,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.fcd.glasgowcycling.CyclingApplication;
 import com.fcd.glasgowcycling.R;
@@ -22,6 +26,11 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.MapFragment;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -39,12 +48,13 @@ public class UserOverviewActivity extends Activity {
     @InjectView(R.id.distance_stat) TextView distanceStat;
     @InjectView(R.id.time_stat) TextView timeStat;
     @InjectView(R.id.user_stats_button) Button statsButton;
-    @InjectView(R.id.my_routes_button) Button myRoutesButton;
-    @InjectView(R.id.nearby_route_button) Button nearbyRoutesButton;
-    @InjectView(R.id.glasgow_cycle_map_button) Button cycleMapButton;
+
     private GoogleMap map;
     private LatLng userLocation;
     private LocationManager sLocationManager;
+
+    @InjectView(R.id.functions_list) ListView functionsList;
+    private List<Map<String,String>> functions = new ArrayList<Map<String,String>>();
 
     private User mUser;
 
@@ -79,8 +89,26 @@ public class UserOverviewActivity extends Activity {
 
         getDetails();
         statsButton.setOnClickListener(new StatsListener());
+
+        initFunctionList();
+        SimpleAdapter simpleAdpt = new SimpleAdapter(this, functions, android.R.layout.simple_list_item_1, new String[] {"function"}, new int[] {android.R.id.text1});
+        functionsList.setAdapter(simpleAdpt);
+        functionsList.setOnItemClickListener(new TableListener());
     }
 
+    private void initFunctionList() {
+        functions.add(createFunction("function", "My Routes"));
+        functions.add(createFunction("function", "Nearby Routes"));
+        functions.add(createFunction("function", "Cycle Map"));
+    }
+
+    private HashMap<String, String> createFunction(String key, String name) {
+
+        HashMap<String, String> function = new HashMap<String, String>();
+        function.put(key, name);
+
+        return function;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -160,6 +188,15 @@ public class UserOverviewActivity extends Activity {
             Log.d(TAG, "Stats clicked");
             //TODO Go to the Stats Activity
             getDetails();
+        }
+    }
+    private class TableListener implements AdapterView.OnItemClickListener{
+
+        public TableListener() {
+        }
+        public void onItemClick(AdapterView<?> parentAdapter, View view, int position, long id) {
+            TextView clickedView = (TextView) view;
+            Log.d(TAG, "Item clicked" + id + "Position" + position);
         }
     }
 }
