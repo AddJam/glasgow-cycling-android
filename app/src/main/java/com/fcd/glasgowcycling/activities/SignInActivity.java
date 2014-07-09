@@ -36,7 +36,7 @@ public class SignInActivity extends AccountAuthenticatorActivity {
     public final String ACCOUNT_TYPE = "com.fcd.GlasgowCycling";
 
     // Views
-    @InjectView(R.id.email) AutoCompleteTextView emailField;
+    @InjectView(R.id.email) EditText emailField;
     @InjectView(R.id.password) EditText passwordField;
 
     @InjectView(R.id.sign_in_button) Button signInButton;
