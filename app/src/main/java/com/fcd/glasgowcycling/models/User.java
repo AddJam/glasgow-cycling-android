@@ -25,17 +25,21 @@ public class User{
     @Expose @DatabaseField
     private String gender;
 
+    @Expose @DatabaseField
+    private String profileImage;
+
     // Need this for ormlite
     public User() {
 
     }
 
-    public User(String firstName, String lastName, Month month, String email, String gender){
+    public User(String firstName, String lastName, Month month, String email, String gender, String profileImage){
         this.firstName = firstName;
         this.lastName = lastName;
         this.month = month;
         this.email = email;
         this.gender = gender;
+        this.profileImage = profileImage;
     }
 
     public String getUserId() {
@@ -88,5 +92,13 @@ public class User{
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    public String getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
     }
 }

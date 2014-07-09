@@ -1,17 +1,21 @@
 package com.fcd.glasgowcycling.activities;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -48,6 +52,7 @@ public class UserOverviewActivity extends Activity {
     @InjectView(R.id.distance_stat) TextView distanceStat;
     @InjectView(R.id.time_stat) TextView timeStat;
     @InjectView(R.id.user_stats_button) Button statsButton;
+    @InjectView(R.id.profile_image) ImageView profileImage;
 
     private GoogleMap map;
     private LatLng userLocation;
@@ -79,8 +84,7 @@ public class UserOverviewActivity extends Activity {
         Location location = sLocationManager.getLastKnownLocation(provider);
         if(location == null){
             userLocation = new LatLng(55.8580, -4.259); // Glasgow
-        }
-        else {
+        } else {
             userLocation = new LatLng(location.getLatitude(), location.getLongitude());
         }
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 13));
@@ -157,6 +161,12 @@ public class UserOverviewActivity extends Activity {
         username.setText(mUser.getName());
         distanceStat.setText(String.valueOf(month.getKm()) + " km");
         timeStat.setText(String.valueOf(month.getSeconds()) + " seconds");
+        Bitmap decodedImage;
+        if (mUser.getProfileImage().length() > 0){
+            byte[] decodedString = Base64.decode(mUser.getProfileImage(), Base64.DEFAULT);
+            decodedImage = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            profileImage.setImageBitmap(decodedImage);
+        }
     }
 
     private class JCLocationListener implements LocationListener {
