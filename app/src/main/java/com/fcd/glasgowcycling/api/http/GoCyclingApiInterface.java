@@ -16,7 +16,7 @@ public interface GoCyclingApiInterface {
     AuthModel signin(@Query("email") String email, @Query("password") String password);
 
     @POST("/oauth/token?grant_type=refresh_token")
-    AuthModel refreshToken();
+    AuthModel refreshToken(@Query("refresh_token") String refreshToken);
 
     @GET("/details.json")
     void details(Callback<User> callback);

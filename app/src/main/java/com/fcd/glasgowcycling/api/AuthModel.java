@@ -38,6 +38,16 @@ public class AuthModel {
         updateTokens();
     }
 
+    public void saveTokens() {
+        AccountManager accountManager = AccountManager.get(mContext);
+        Account[] accountList = accountManager.getAccountsByType(CyclingAuthenticator.ACCOUNT_TYPE);
+        if (accountList.length > 0) {
+            Account userAccount = accountList[0];
+            accountManager.setAuthToken(userAccount, AccountManager.KEY_AUTHTOKEN, accessToken);
+            accountManager.setAuthToken(userAccount, CyclingAuthenticator.KEY_REFRESH_TOKEN, refreshToken);
+        }
+    }
+
     public void updateTokens() {
         AccountManager accountManager = AccountManager.get(mContext);
         Account[] accountList = accountManager.getAccountsByType(CyclingAuthenticator.ACCOUNT_TYPE);
@@ -52,10 +62,11 @@ public class AuthModel {
         }
     }
 
+    public void setContext(Context context) {
+        mContext = context;
+    }
+
     public String getUserToken() {
-        if (accessToken == null) {
-            updateTokens();;
-        }
         return accessToken;
     }
 
@@ -64,9 +75,6 @@ public class AuthModel {
     }
 
     public String getRefreshToken() {
-        if (refreshToken == null) {
-            updateTokens();
-        }
         return refreshToken;
     }
 

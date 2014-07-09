@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.fcd.glasgowcycling.CyclingApplication;
 import com.fcd.glasgowcycling.R;
-import com.fcd.glasgowcycling.api.AuthModel;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgowcycling.models.Month;
 import com.fcd.glasgowcycling.models.User;
@@ -104,6 +103,7 @@ public class UserOverviewActivity extends Activity {
 
     private void getDetails(){
         cyclingService.details(new Callback<User>() {
+
             @Override
             public void success(User user, Response response) {
                 Log.d(TAG, "retreived user details for " + user.getUserID());
