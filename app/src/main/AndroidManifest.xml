@@ -9,16 +9,30 @@
         android:icon="@drawable/logo"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+
         <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyDLoQyGQtDTQQkoqg8IkiZxvmwa4OxNcbY"/>
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
+
+        <activity
+            android:name=".activities.LaunchActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".activities.SignInActivity"
             android:label="@string/title_activity_sign_in"
-            android:windowSoftInputMode="adjustResize|stateVisible" >
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:noHistory="true"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".activities.UserOverviewActivity"
-            android:label="@string/title_activity_user_overview" >
+            android:label="@string/title_activity_user_overview"
+            android:noHistory="true"
+            android:screenOrientation="portrait">
         </activity>
 
         <service
@@ -32,14 +46,6 @@
                 android:name="android.accounts.AccountAuthenticator"
                 android:resource="@xml/authenticator" />
         </service>
-
-        <activity
-            android:name=".activities.LaunchActivity" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
     </application>
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->

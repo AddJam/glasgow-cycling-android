@@ -23,7 +23,6 @@ import android.widget.Toast;
 
 import com.fcd.glasgowcycling.CyclingApplication;
 import com.fcd.glasgowcycling.R;
-import com.fcd.glasgowcycling.api.AuthModel;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgowcycling.models.Month;
 import com.fcd.glasgowcycling.models.User;
@@ -53,22 +52,21 @@ public class UserOverviewActivity extends Activity {
     @InjectView(R.id.distance_stat) TextView distanceStat;
     @InjectView(R.id.time_stat) TextView timeStat;
     @InjectView(R.id.user_stats_button) Button statsButton;
-    @InjectView(R.id.functions_list) ListView functionsList;
     @InjectView(R.id.profile_image) ImageView profileImage;
 
     private GoogleMap map;
     private LatLng userLocation;
     private LocationManager sLocationManager;
 
+    @InjectView(R.id.functions_list) ListView functionsList;
     private List<Map<String,String>> functions = new ArrayList<Map<String,String>>();
-    private SimpleAdapter simpleAdpt;
+
+    private User mUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_overview);
-
-        AuthModel model = new AuthModel(getApplicationContext());
 
         ((CyclingApplication) getApplication()).inject(this);
         ButterKnife.inject(this);
@@ -97,7 +95,7 @@ public class UserOverviewActivity extends Activity {
         statsButton.setOnClickListener(new StatsListener());
 
         initFunctionList();
-        simpleAdpt = new SimpleAdapter(this, functions, android.R.layout.simple_list_item_1, new String[] {"function"}, new int[] {android.R.id.text1});
+        SimpleAdapter simpleAdpt = new SimpleAdapter(this, functions, android.R.layout.simple_list_item_1, new String[] {"function"}, new int[] {android.R.id.text1});
         functionsList.setAdapter(simpleAdpt);
         functionsList.setOnItemClickListener(new TableListener());
     }
@@ -137,10 +135,12 @@ public class UserOverviewActivity extends Activity {
 
     private void getDetails(){
         cyclingService.details(new Callback<User>() {
+
             @Override
             public void success(User user, Response response) {
-                Log.d(TAG, "retreived user details for " + user.getUserID());
-                populateFields(user);
+                Log.d(TAG, "retreived user details for " + user.getUserId());
+                mUser = user;
+                populateFields();
             }
 
             @Override
@@ -150,15 +150,15 @@ public class UserOverviewActivity extends Activity {
         });
     }
 
-    private void populateFields(User user){
-        Month month = user.getMonth();
+    private void populateFields(){
+        Month month = mUser.getMonth();
 
-        username.setText(user.getFirstName() + "" + user.getLastName());
-        distanceStat.setText(String.valueOf(month.getKm()));
-        timeStat.setText(month.getSeconds());
+        username.setText(mUser.getName());
+        distanceStat.setText(String.valueOf(month.getKm()) + " km");
+        timeStat.setText(String.valueOf(month.getSeconds()) + " seconds");
         Bitmap decodedImage;
-        if (user.getProfileImage().length() > 0){
-            byte[] decodedString = Base64.decode(user.getProfileImage(), Base64.DEFAULT);
+        if (mUser.getProfileImage().length() > 0){
+            byte[] decodedString = Base64.decode(mUser.getProfileImage(), Base64.DEFAULT);
             decodedImage = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             profileImage.setImageBitmap(decodedImage);
         }

@@ -36,7 +36,7 @@ public class SignInActivity extends AccountAuthenticatorActivity {
     public final String ACCOUNT_TYPE = "com.fcd.GlasgowCycling";
 
     // Views
-    @InjectView(R.id.email) AutoCompleteTextView emailField;
+    @InjectView(R.id.email) EditText emailField;
     @InjectView(R.id.password) EditText passwordField;
 
     @InjectView(R.id.sign_in_button) Button signInButton;
@@ -58,8 +58,8 @@ public class SignInActivity extends AccountAuthenticatorActivity {
         fromAccountManager = getIntent().getBooleanExtra(ARG_IS_ADDING_NEW_ACCOUNT, false);
         Log.d(TAG, "From account manager: " + (fromAccountManager ? "YES" : "NO"));
 
-        emailField.setText("chris.sloey@gmail.com");
-        passwordField.setText("bananazz");
+        emailField.setText("test@user.com");
+        passwordField.setText("password");
 
         mAccountManager = AccountManager.get(this);
 
