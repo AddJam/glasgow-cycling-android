@@ -187,7 +187,6 @@ public class UserOverviewActivity extends Activity {
         public void onClick(View v) {
             Log.d(TAG, "Stats clicked");
             //TODO Go to the Stats Activity
-            getDetails();
         }
     }
     private class TableListener implements AdapterView.OnItemClickListener{
