@@ -24,7 +24,7 @@
         <activity
             android:name=".activities.SignInActivity"
             android:label="@string/title_activity_sign_in"
-            android:windowSoftInputMode="adjustResize|stateVisible"
+            android:windowSoftInputMode="adjustResize|stateHidden"
             android:noHistory="true"
             android:screenOrientation="portrait">
         </activity>
