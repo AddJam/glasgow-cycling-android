@@ -31,16 +31,39 @@ public class AuthModel {
     @Expose
     private String refreshToken;
 
+    private Context mContext;
+
     public AuthModel(Context context) {
-        AccountManager accountManager = AccountManager.get(context);
+        mContext = context;
+        updateTokens();
+    }
+
+    public void saveTokens() {
+        AccountManager accountManager = AccountManager.get(mContext);
         Account[] accountList = accountManager.getAccountsByType(CyclingAuthenticator.ACCOUNT_TYPE);
-        Account userAccount = accountList[0];
-        String authToken = accountManager.peekAuthToken(userAccount, AccountManager.KEY_AUTHTOKEN);
-        String refreshToken = accountManager.peekAuthToken(userAccount, CyclingAuthenticator.KEY_REFRESH_TOKEN);
-        setUserToken(authToken);
-        setRefreshToken(refreshToken);
-        Log.d(TAG, "User token initialized to " + getUserToken());
-        Log.d(TAG, "Refresh token initialized to " + getRefreshToken());
+        if (accountList.length > 0) {
+            Account userAccount = accountList[0];
+            accountManager.setAuthToken(userAccount, AccountManager.KEY_AUTHTOKEN, accessToken);
+            accountManager.setAuthToken(userAccount, CyclingAuthenticator.KEY_REFRESH_TOKEN, refreshToken);
+        }
+    }
+
+    public void updateTokens() {
+        AccountManager accountManager = AccountManager.get(mContext);
+        Account[] accountList = accountManager.getAccountsByType(CyclingAuthenticator.ACCOUNT_TYPE);
+        if (accountList.length > 0) {
+            Account userAccount = accountList[0];
+            String authToken = accountManager.peekAuthToken(userAccount, AccountManager.KEY_AUTHTOKEN);
+            String refreshToken = accountManager.peekAuthToken(userAccount, CyclingAuthenticator.KEY_REFRESH_TOKEN);
+            setUserToken(authToken);
+            setRefreshToken(refreshToken);
+            Log.d(TAG, "User token initialized to " + getUserToken());
+            Log.d(TAG, "Refresh token initialized to " + getRefreshToken());
+        }
+    }
+
+    public void setContext(Context context) {
+        mContext = context;
     }
 
     public String getUserToken() {

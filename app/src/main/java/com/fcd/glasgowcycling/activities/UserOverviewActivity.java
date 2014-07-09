@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.fcd.glasgowcycling.CyclingApplication;
 import com.fcd.glasgowcycling.R;
-import com.fcd.glasgowcycling.api.AuthModel;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgowcycling.models.Month;
 import com.fcd.glasgowcycling.models.User;
@@ -104,6 +103,7 @@ public class UserOverviewActivity extends Activity {
 
     private void getDetails(){
         cyclingService.details(new Callback<User>() {
+
             @Override
             public void success(User user, Response response) {
                 Log.d(TAG, "retreived user details for " + user.getUserID());
@@ -122,8 +122,8 @@ public class UserOverviewActivity extends Activity {
         Month month = mUser.getMonth();
 
         username.setText(mUser.getName());
-//        distanceStat.setText(String.valueOf(month.getKm()));
-//        timeStat.setText(month.getSeconds());
+        distanceStat.setText(String.valueOf(month.getKm()) + " km");
+        timeStat.setText(String.valueOf(month.getSeconds()) + " seconds");
     }
 
     private class JCLocationListener implements LocationListener {
@@ -159,6 +159,7 @@ public class UserOverviewActivity extends Activity {
         public void onClick(View v) {
             Log.d(TAG, "Stats clicked");
             //TODO Go to the Stats Activity
+            getDetails();
         }
     }
 }

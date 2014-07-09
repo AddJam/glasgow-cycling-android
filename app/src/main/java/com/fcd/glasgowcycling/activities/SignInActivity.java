@@ -59,7 +59,7 @@ public class SignInActivity extends AccountAuthenticatorActivity {
         Log.d(TAG, "From account manager: " + (fromAccountManager ? "YES" : "NO"));
 
         emailField.setText("chris.sloey@gmail.com");
-        passwordField.setText("bananazz");
+        passwordField.setText("password");
 
         mAccountManager = AccountManager.get(this);
 
