@@ -16,44 +16,65 @@
         <fragment
             android:id="@+id/map"
             android:layout_width="364dp"
-            android:layout_height="350dp"
+            android:layout_height="320dp"
             class="com.google.android.gms.maps.MapFragment" />
+        <Button
+            android:id="@+id/finish_button"
+            style="?android:textAppearanceSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Finish Route"
+            android:textStyle="bold"
+            android:background="@color/jcRedColor"
+            android:textColor="@color/jcWhiteColor"
+            android:layout_marginBottom="13dp"
+            android:paddingRight="15dp"
+            android:paddingLeft="15dp"
+            />
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:paddingBottom="10dp"
-            android:paddingTop="15dp">
+            android:layout_height="fill_parent">
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:orientation="vertical">
                 <TextView
                     android:id="@+id/speed_label"
-                    android:layout_width="50dp"
+                    android:layout_width="1000dp"
                     android:layout_height="30dp"
                     android:text="Speed"
+                    android:textColor="@color/jcLightBlueColor"
                     />
                 <TextView
                     android:id="@+id/speed_info"
-                    android:layout_width="50dp"
+                    android:layout_width="100dp"
                     android:layout_height="30dp"
+                    android:textSize="23dp"
+                    android:layout_gravity="center"
+                    android:textColor="@color/jcBlueColor"
                     android:text="16.5 mph"
                     />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:orientation="vertical">
                 <TextView
                     android:id="@+id/avg_speed_label"
-                    android:layout_width="50dp"
+                    android:layout_width="100dp"
                     android:layout_height="30dp"
                     android:text="Avg Speed"
+                    android:textColor="@color/jcLightBlueColor"
                     />
                 <TextView
                     android:id="@+id/avg_speed_info"
-                    android:layout_width="50dp"
+                    android:layout_width="100dp"
                     android:layout_height="30dp"
+                    android:textSize="23dp"
+                    android:layout_gravity="center"
+                    android:textColor="@color/jcBlueColor"
                     android:text="16.5 mph"
                     />
             </LinearLayout>
@@ -61,57 +82,53 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:paddingBottom="10dp"
-            android:paddingTop="15dp">
+            android:paddingBottom="10dp">
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:orientation="vertical">
                 <TextView
                     android:id="@+id/time_label"
-                    android:layout_width="50dp"
+                    android:layout_width="100dp"
                     android:layout_height="30dp"
                     android:text="Time"
+                    android:textColor="@color/jcLightBlueColor"
+
                     />
                 <TextView
                     android:id="@+id/time_info"
-                    android:layout_width="50dp"
+                    android:layout_width="100dp"
                     android:layout_height="30dp"
+                    android:textSize="23dp"
+                    android:layout_gravity="center"
+                    android:textColor="@color/jcBlueColor"
                     android:text="16:10.43"
                     />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:orientation="vertical">
                 <TextView
                     android:id="@+id/distance_label"
-                    android:layout_width="50dp"
+                    android:layout_width="100dp"
                     android:layout_height="30dp"
                     android:text="Distance"
+                    android:textColor="@color/jcLightBlueColor"
                     />
                 <TextView
                     android:id="@+id/distance_info"
-                    android:layout_width="50dp"
+                    android:layout_width="100dp"
                     android:layout_height="30dp"
+                    android:textSize="23dp"
+                    android:layout_gravity="center"
+                    android:textColor="@color/jcBlueColor"
                     android:text="16.5 miles"
                     />
             </LinearLayout>
             </LinearLayout>
-        <Button
-            android:id="@+id/finish_button"
-            style="?android:textAppearanceSmall"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Finish Route"
-            android:textStyle="bold"
-            android:background="@color/jcRedColor"
-            android:textColor="@color/jcWhiteColor"
-            android:paddingBottom="10dp"
-            android:paddingRight="15dp"
-            android:paddingLeft="15dp"
-            />
         </LinearLayout>
     </ScrollView>
 
