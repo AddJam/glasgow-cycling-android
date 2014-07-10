@@ -159,8 +159,8 @@ public class UserOverviewActivity extends Activity {
         Month month = mUser.getMonth();
 
         username.setText(mUser.getName());
-        distanceStat.setText(String.valueOf(month.getKm()) + " km");
-        timeStat.setText(String.valueOf(month.getSeconds()) + " seconds");
+        distanceStat.setText(String.valueOf(month.getMiles()) + " miles");
+        timeStat.setText(month.getReadableDistance());
         Bitmap decodedImage;
         if (mUser.getProfilePic() != null){
             byte[] decodedString = Base64.decode(mUser.getProfilePic(), Base64.DEFAULT);
