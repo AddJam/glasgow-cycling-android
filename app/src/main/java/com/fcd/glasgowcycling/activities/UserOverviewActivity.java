@@ -162,8 +162,8 @@ public class UserOverviewActivity extends Activity {
         distanceStat.setText(String.valueOf(month.getKm()) + " km");
         timeStat.setText(String.valueOf(month.getSeconds()) + " seconds");
         Bitmap decodedImage;
-        if (mUser.getProfileImage().length() > 0){
-            byte[] decodedString = Base64.decode(mUser.getProfileImage(), Base64.DEFAULT);
+        if (mUser.getProfilePic() != null){
+            byte[] decodedString = Base64.decode(mUser.getProfilePic(), Base64.DEFAULT);
             decodedImage = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             profileImage.setImageBitmap(decodedImage);
         }
