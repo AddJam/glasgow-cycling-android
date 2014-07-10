@@ -1,6 +1,7 @@
 package com.fcd.glasgowcycling.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Criteria;
@@ -19,7 +20,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.fcd.glasgowcycling.CyclingApplication;
 import com.fcd.glasgowcycling.R;
@@ -28,8 +28,8 @@ import com.fcd.glasgowcycling.models.Month;
 import com.fcd.glasgowcycling.models.User;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,6 +53,7 @@ public class UserOverviewActivity extends Activity {
     @InjectView(R.id.time_stat) TextView timeStat;
     @InjectView(R.id.user_stats_button) Button statsButton;
     @InjectView(R.id.profile_image) ImageView profileImage;
+    @InjectView(R.id.capture_button) Button captureButton;
 
     private GoogleMap map;
     private LatLng userLocation;
@@ -97,6 +98,7 @@ public class UserOverviewActivity extends Activity {
 
         // Stats
         statsButton.setOnClickListener(new StatsListener());
+        captureButton.setOnClickListener(new CaptureListener());
 
         // Functions list view
         initFunctionList();
@@ -196,7 +198,16 @@ public class UserOverviewActivity extends Activity {
         @Override
         public void onClick(View v) {
             Log.d(TAG, "Stats clicked");
-            //TODO Go to the Stats Activity
+            //TODO implement stats
+
+        }
+    }
+
+    private class CaptureListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            Log.d(TAG, "Route capture clicked");
+            startActivity(new Intent(getApplicationContext(), RouteCapture.class));
         }
     }
 
