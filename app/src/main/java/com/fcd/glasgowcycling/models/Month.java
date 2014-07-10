@@ -46,13 +46,25 @@ public class Month {
         return (int)Math.floor(minutesInSeconds / 60);
     }
 
-    public String getReadableDistance() {
-        return String.valueOf(getHours()) + ":" + String.valueOf(getMinutes()) + " hours";
-    }
-
     public void setSeconds(Integer seconds) {
         this.seconds = seconds;
     }
 
+    public String getReadableDistance() {
+        if (getMinutes() == 0) {
+            return String.format("%d hours this month", getHours());
+        } else if (getMinutes() < 60) {
+            return String.format("%d minutes this month", getMinutes());
+        } else {
+            return String.format("%02d:%02d hours this month", getHours(), getMinutes());
+        }
+    }
 
+    public String getReadableTime() {
+        if (getMiles() == 0) {
+            return String.format("%.0f miles this month", getMiles());
+        } else {
+            return String.format("%.01f miles this month", getMiles());
+        }
+    }
 }

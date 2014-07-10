@@ -159,7 +159,7 @@ public class UserOverviewActivity extends Activity {
         Month month = mUser.getMonth();
 
         username.setText(mUser.getName());
-        distanceStat.setText(String.valueOf(month.getMiles()) + " miles");
+        distanceStat.setText(month.getReadableTime());
         timeStat.setText(month.getReadableDistance());
         Bitmap decodedImage;
         if (mUser.getProfilePic() != null){
