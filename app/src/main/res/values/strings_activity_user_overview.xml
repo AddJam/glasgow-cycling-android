@@ -2,7 +2,7 @@
     <string name="title_activity_user_overview">Glasgow Cycling</string>
 
     <!-- Strings related to user overview -->
-    <string name="distance_stat">0.0 miles this month</string>
+    <string name="distance_stat">0 miles this month</string>
     <string name="time_stat">00:00 hours this month</string>
     <string name="my_routes_button">My Routes</string>
     <string name="nearby_routes_button">Nearby Routes</string>
