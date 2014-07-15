@@ -125,6 +125,7 @@ public class RouteCaptureActivity extends Activity {
         public void onLocationChanged(Location location) {
             double delayBtnEvents = (System.nanoTime()- mLastEventTime )/(1000000000.0);
             mLastEventTime = System.nanoTime();
+            RoutePoint rp = new RoutePoint();
 
             //Sampling rate is the frequency at which updates are received
             String samplingRate = (new DecimalFormat("0.0000").format(1/delayBtnEvents));
@@ -132,7 +133,23 @@ public class RouteCaptureActivity extends Activity {
             float speed = (float) (location.getSpeed() * 3.6);  // Converting m/s to Km/hr
             float lat = (float) (location.getLatitude());  // Converting m/s to Km/hr
 
+//              TODO fix types
+//            rp.setAltitude(location.getAltitude());
+            rp.setCourse(location.getBearing());
+            rp.setLat(location.getLatitude());
+            rp.setLng(location.getLongitude());
+//            rp.setTime(System.nanoTime());
+            rp.sethAccuracy(location.getAccuracy());
+            rp.sethAccuracy(location.getAccuracy());
+            rp.setSpeed(location.getSpeed());
+
+            route.add(rp);
+
             speedInfo.setText(speed + " kmph"); //Updating UI
+//             TODO this
+//            avgSpeedInfo.setText(route.getAvgSpeed());
+//            timeInfo.setText(route.getTime());
+//            distanceInfo.setText(route.getDistance());
             Log.e(TAG, lat + " lat"); //Updating UI
 
             userLocation = new LatLng(location.getLatitude(),location.getLongitude());
