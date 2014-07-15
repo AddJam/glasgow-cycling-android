@@ -1,4 +1,4 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.fcd.glasgowcycling.activities.RouteCapture" >
+    tools:context="com.fcd.glasgowcycling.activities.RouteCaptureActivity" >
 </menu>

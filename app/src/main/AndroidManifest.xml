@@ -52,7 +52,7 @@
         </service>
 
         <activity
-            android:name=".activities.RouteCapture"
+            android:name=".activities.RouteCaptureActivity"
             android:label="@string/title_activity_route_capture"
             android:screenOrientation="portrait"
             android:parentActivityName=".activities.UserOverviewActivity" >

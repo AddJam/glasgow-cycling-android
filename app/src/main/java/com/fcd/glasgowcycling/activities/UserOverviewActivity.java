@@ -207,7 +207,7 @@ public class UserOverviewActivity extends Activity {
         @Override
         public void onClick(View v) {
             Log.d(TAG, "Route capture clicked");
-            startActivity(new Intent(getApplicationContext(), RouteCapture.class));
+            startActivity(new Intent(getApplicationContext(), RouteCaptureActivity.class));
         }
     }
 
