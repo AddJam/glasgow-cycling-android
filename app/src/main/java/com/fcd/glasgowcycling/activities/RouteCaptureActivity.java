@@ -79,9 +79,10 @@ public class RouteCaptureActivity extends Activity {
                             @Override
                             public void run() {
                                 long millis = System.currentTimeMillis() - route.getStartTime();
-                                timeInfo.setText(String.format("%d:%d.%d",
+                                timeInfo.setText(String.format("%02d:%02d.%02d",
                                         TimeUnit.MILLISECONDS.toHours(millis),
-                                        TimeUnit.MILLISECONDS.toMinutes(millis),
+                                        TimeUnit.MILLISECONDS.toMinutes(millis) -
+                                        TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)),
                                         TimeUnit.MILLISECONDS.toSeconds(millis) -
                                         TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis))
                                 ));
@@ -94,27 +95,6 @@ public class RouteCaptureActivity extends Activity {
         };
         t.start();
     }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.route_capture, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
 
     protected void startLocationTracking() {
        // if (GooglePlayServicesUtil.isGooglePlayServicesAvailable(this)) {
@@ -163,21 +143,12 @@ public class RouteCaptureActivity extends Activity {
             float lat = (float) (location.getLatitude());  // Converting m/s to Km/hr
 
 //              TODO fix types
-//            rp.setAltitude(location.getAltitude());
-            rp.setCourse(location.getBearing());
-            rp.setLat(location.getLatitude());
-            rp.setLng(location.getLongitude());
-            rp.setTime(System.currentTimeMillis());
-            rp.sethAccuracy(location.getAccuracy());
-            rp.sethAccuracy(location.getAccuracy());
-            rp.setSpeed(location.getSpeed());
 
-            route.getPointsArray().add(rp);
+            route.addRoutePoint(location);
 
-            speedInfo.setText(speed + " kph"); //Updating UI
-//             TODO this
-//            avgSpeedInfo.setText(route.getAvgSpeed());
-//            distanceInfo.setText(route.getDistance());
+            speedInfo.setText(String.format("%.02f kph", speed));
+            avgSpeedInfo.setText(String.format("%.02f kph", route.getAvgSpeed()));
+            distanceInfo.setText(String.format("%.02f m", route.getDistance()));
             Log.e(TAG, lat + " lat"); //Updating UI
 
             userLocation = new LatLng(location.getLatitude(),location.getLongitude());

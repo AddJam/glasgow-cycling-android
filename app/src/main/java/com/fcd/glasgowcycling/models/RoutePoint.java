@@ -24,7 +24,7 @@ public class RoutePoint {
 
     @Expose
     @DatabaseField
-    private float altitude;
+    private double altitude;
 
     @Expose
     @DatabaseField
@@ -77,11 +77,11 @@ public class RoutePoint {
         this.speed = speed;
     }
 
-    public float getAltitude() {
+    public double getAltitude() {
         return altitude;
     }
 
-    public void setAltitude(float altitude) {
+    public void setAltitude(double altitude) {
         this.altitude = altitude;
     }
 
@@ -128,7 +128,5 @@ public class RoutePoint {
     public int getId() {
         return this.id;
     }
-
-
 
 }
