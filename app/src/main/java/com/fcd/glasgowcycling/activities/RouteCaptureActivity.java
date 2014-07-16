@@ -3,6 +3,7 @@ package com.fcd.glasgowcycling.activities;
 import android.app.Activity;
 import android.location.Location;
 import android.os.Bundle;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,6 +26,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -47,7 +49,7 @@ public class RouteCaptureActivity extends Activity {
 
     private int timestamp;
 
-    private ArrayList<RoutePoint> route = new ArrayList<RoutePoint>();
+    private Route route = new Route();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,7 @@ public class RouteCaptureActivity extends Activity {
         ButterKnife.inject(this);
 
         startLocationTracking();
+        route.setStartTime(System.currentTimeMillis());
 
         // Show map
         map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
@@ -64,6 +67,33 @@ public class RouteCaptureActivity extends Activity {
         map.getUiSettings().setZoomControlsEnabled(false);
         map.getUiSettings().setAllGesturesEnabled(false);
         map.setMyLocationEnabled(true);
+
+        Thread t = new Thread() {
+
+            @Override
+            public void run() {
+                try {
+                    while (!isInterrupted()) {
+                        Thread.sleep(1000);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                long millis = System.currentTimeMillis() - route.getStartTime();
+                                timeInfo.setText(String.format("%d:%d.%d",
+                                        TimeUnit.MILLISECONDS.toHours(millis),
+                                        TimeUnit.MILLISECONDS.toMinutes(millis),
+                                        TimeUnit.MILLISECONDS.toSeconds(millis) -
+                                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis))
+                                ));
+                            }
+                        });
+                    }
+                } catch (InterruptedException e) {
+                }
+            }
+        };
+
+        t.start();
     }
 
 
@@ -143,12 +173,13 @@ public class RouteCaptureActivity extends Activity {
             rp.sethAccuracy(location.getAccuracy());
             rp.setSpeed(location.getSpeed());
 
-            route.add(rp);
+            route.getPointsArray().add(rp);
+
+
 
             speedInfo.setText(speed + " kmph"); //Updating UI
 //             TODO this
 //            avgSpeedInfo.setText(route.getAvgSpeed());
-//            timeInfo.setText(route.getTime());
 //            distanceInfo.setText(route.getDistance());
             Log.e(TAG, lat + " lat"); //Updating UI
 
