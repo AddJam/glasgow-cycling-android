@@ -2,6 +2,7 @@ package com.fcd.glasgowcycling.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.text.format.Time;
@@ -25,6 +26,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -157,6 +159,10 @@ public class RouteCaptureActivity extends Activity {
             // keep the map moving
             userLocation = new LatLng(location.getLatitude(),location.getLongitude());
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 13));
+            map.addPolyline(new PolylineOptions()
+                    .add(new LatLng(location.getLatitude(), location.getLongitude()))
+                    .width(5)
+                    .color(Color.BLUE));
         }
     };
 
@@ -165,6 +171,7 @@ public class RouteCaptureActivity extends Activity {
         public void onClick(View v) {
             Log.d(TAG, "Finish route capture clicked");
             startActivity(new Intent(getApplicationContext(), UserOverviewActivity.class));
+            finish();
         }
     }
 }
