@@ -28,13 +28,16 @@ public class Route {
             distance = distance + dist[0];
             avgSpeed = 0;
             for (int i = 0; i < pointsArray.size(); i++) {
-                avgSpeed += pointsArray.get(i).getSpeed();
+                avgSpeed = + pointsArray.get(i).getSpeed();
             }
         }
         else {
             distance = 0;
             avgSpeed = 0;
         }
+
+        avgSpeed = avgSpeed/pointsArray.size();
+
         RoutePoint newPoint = new RoutePoint();
         newPoint.setAltitude(location.getAltitude());
         newPoint.setCourse(location.getBearing());
