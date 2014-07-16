@@ -94,11 +94,9 @@
                     android:textColor="@color/jcWhiteColor"
                     />
             </FrameLayout>
-            <ListView
-                android:id="@+id/functions_list"
-                android:layout_width="match_parent"
-                android:layout_height="150dp">
-            </ListView>
+            <include android:id="@+id/user_routes" layout="@layout/icon_cell"></include>
+            <include android:id="@+id/nearby_routes" layout="@layout/icon_cell"></include>
+            <include android:id="@+id/cycle_map" layout="@layout/icon_cell"></include>
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>
