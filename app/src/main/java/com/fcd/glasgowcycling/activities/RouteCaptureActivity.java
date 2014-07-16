@@ -177,7 +177,7 @@ public class RouteCaptureActivity extends Activity {
 
 
 
-            speedInfo.setText(speed + " kmph"); //Updating UI
+            speedInfo.setText(speed + " kph"); //Updating UI
 //             TODO this
 //            avgSpeedInfo.setText(route.getAvgSpeed());
 //            distanceInfo.setText(route.getDistance());
