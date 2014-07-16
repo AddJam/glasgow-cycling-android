@@ -92,7 +92,6 @@ public class RouteCaptureActivity extends Activity {
                 }
             }
         };
-
         t.start();
     }
 
@@ -168,14 +167,12 @@ public class RouteCaptureActivity extends Activity {
             rp.setCourse(location.getBearing());
             rp.setLat(location.getLatitude());
             rp.setLng(location.getLongitude());
-//            rp.setTime(System.nanoTime());
+            rp.setTime(System.currentTimeMillis());
             rp.sethAccuracy(location.getAccuracy());
             rp.sethAccuracy(location.getAccuracy());
             rp.setSpeed(location.getSpeed());
 
             route.getPointsArray().add(rp);
-
-
 
             speedInfo.setText(speed + " kph"); //Updating UI
 //             TODO this

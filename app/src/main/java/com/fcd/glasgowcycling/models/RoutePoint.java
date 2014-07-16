@@ -16,7 +16,7 @@ public class RoutePoint {
 
     @Expose
     @DatabaseField
-    private TimeStampType time;
+    private long time;
 
     @Expose
     @DatabaseField
@@ -50,7 +50,7 @@ public class RoutePoint {
 
     }
 
-    public RoutePoint(TimeStampType time, float speed, float altitude, float course, double lat, double lng, float hAccuracy, float vAccuracy) {
+    public RoutePoint(long time, float speed, float altitude, float course, double lat, double lng, float hAccuracy, float vAccuracy) {
         this.time = time;
         this.speed = speed;
         this.altitude = altitude;
@@ -61,11 +61,11 @@ public class RoutePoint {
         this.vAccuracy = vAccuracy;
     }
 
-    public TimeStampType getTime() {
+    public long getTime() {
         return time;
     }
 
-    public void setTime(TimeStampType time) {
+    public void setTime(long time) {
         this.time = time;
     }
 
