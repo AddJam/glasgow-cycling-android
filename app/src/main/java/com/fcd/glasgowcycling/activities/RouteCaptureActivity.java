@@ -1,6 +1,8 @@
 package com.fcd.glasgowcycling.activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
@@ -175,8 +177,35 @@ public class RouteCaptureActivity extends Activity {
         @Override
         public void onClick(View v) {
             Log.d(TAG, "Finish route capture clicked");
-            startActivity(new Intent(getApplicationContext(), UserOverviewActivity.class));
-            finish();
+            if (route.getDistance() < 500){
+                tooShortDialog();
+            }
+            else {
+                startActivity(new Intent(getApplicationContext(), UserOverviewActivity.class));
+                finish();
+            }
         }
+    }
+
+    private void tooShortDialog(){
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+        builder1.setMessage("Route must be at least 500m in length. Stopping now it will not be recorded. Stop route capture?");
+        builder1.setCancelable(true);
+        builder1.setPositiveButton("Yes",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        startActivity(new Intent(getApplicationContext(), UserOverviewActivity.class));
+                        finish();
+                    }
+                });
+        builder1.setNegativeButton("No",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
     }
 }
