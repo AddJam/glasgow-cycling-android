@@ -1,12 +1,14 @@
 package com.fcd.glasgowcycling.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -94,6 +96,9 @@ public class RouteCaptureActivity extends Activity {
             }
         };
         t.start();
+
+        finishButton.setOnClickListener(new FinishListener());
+
     }
 
     protected void startLocationTracking() {
@@ -142,17 +147,24 @@ public class RouteCaptureActivity extends Activity {
             float speed = (float) (location.getSpeed() * 3.6);  // Converting m/s to Km/hr
             float lat = (float) (location.getLatitude());  // Converting m/s to Km/hr
 
-//              TODO fix types
-
+            // add location to Route, route takes care of distance and avg speed
             route.addRoutePoint(location);
 
             speedInfo.setText(String.format("%.02f kph", speed));
             avgSpeedInfo.setText(String.format("%.02f kph", route.getAvgSpeed()));
             distanceInfo.setText(String.format("%.02f m", route.getDistance()));
-            Log.e(TAG, lat + " lat"); //Updating UI
 
+            // keep the map moving
             userLocation = new LatLng(location.getLatitude(),location.getLongitude());
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 13));
         }
     };
+
+    private class FinishListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            Log.d(TAG, "Finish route capture clicked");
+            startActivity(new Intent(getApplicationContext(), UserOverviewActivity.class));
+        }
+    }
 }
