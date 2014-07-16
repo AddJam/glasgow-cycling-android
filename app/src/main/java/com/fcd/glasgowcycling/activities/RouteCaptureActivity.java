@@ -71,6 +71,7 @@ public class RouteCaptureActivity extends Activity {
         map.getUiSettings().setZoomControlsEnabled(false);
         map.getUiSettings().setAllGesturesEnabled(false);
         map.setMyLocationEnabled(true);
+        map.getUiSettings().setCompassEnabled(false);
 
         Thread t = new Thread() {
 
@@ -156,13 +157,17 @@ public class RouteCaptureActivity extends Activity {
             avgSpeedInfo.setText(String.format("%.02f kph", route.getAvgSpeed()));
             distanceInfo.setText(String.format("%.02f m", route.getDistance()));
 
-            // keep the map moving
+            //use existing userlocation
+            if (route.getPointsArray().size() > 1) {
+                map.addPolyline(new PolylineOptions()
+                        .add(userLocation, new LatLng(location.getLatitude(), location.getLongitude()))
+                        .width(5)
+                        .color(Color.BLUE));
+            }
+
+            // get the new location to keep the map moving
             userLocation = new LatLng(location.getLatitude(),location.getLongitude());
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 13));
-            map.addPolyline(new PolylineOptions()
-                    .add(new LatLng(location.getLatitude(), location.getLongitude()))
-                    .width(5)
-                    .color(Color.BLUE));
         }
     };
 
