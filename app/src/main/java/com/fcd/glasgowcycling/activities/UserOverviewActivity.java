@@ -14,11 +14,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.fcd.glasgowcycling.CyclingApplication;
@@ -30,11 +27,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -55,12 +47,13 @@ public class UserOverviewActivity extends Activity {
     @InjectView(R.id.profile_image) ImageView profileImage;
     @InjectView(R.id.capture_button) Button captureButton;
 
+    @InjectView(R.id.user_routes) View userRoutesView;
+    @InjectView(R.id.nearby_routes) View nearbyRoutesView;
+    @InjectView(R.id.cycle_map) View cycleMapView;
+
     private GoogleMap map;
     private LatLng userLocation;
     private LocationManager sLocationManager;
-
-    @InjectView(R.id.functions_list) ListView functionsList;
-    private List<Map<String,String>> functions = new ArrayList<Map<String,String>>();
 
     private User mUser;
 
@@ -101,24 +94,17 @@ public class UserOverviewActivity extends Activity {
         captureButton.setOnClickListener(new CaptureListener());
 
         // Functions list view
-        initFunctionList();
+        setupFunction(userRoutesView, R.drawable.logo, "My Routes");
+        setupFunction(nearbyRoutesView, R.drawable.logo, "Nearby Routes");
+        setupFunction(cycleMapView, R.drawable.logo, "Cycle Map");
     }
 
-    private void initFunctionList() {
-        functions.add(createFunction("function", "My Routes"));
-        functions.add(createFunction("function", "Nearby Routes"));
-        functions.add(createFunction("function", "Cycle Map"));
+    private void setupFunction(View view, int iconResource, String text) {
+        ImageView iconView = (ImageView) view.findViewById(R.id.icon);
+        iconView.setImageResource(iconResource);
 
-        SimpleAdapter simpleAdpt = new SimpleAdapter(this, functions, android.R.layout.simple_list_item_1, new String[] {"function"}, new int[] {android.R.id.text1});
-        functionsList.setAdapter(simpleAdpt);
-        functionsList.setOnItemClickListener(new TableListener());
-    }
-
-    private HashMap<String, String> createFunction(String key, String name) {
-        HashMap<String, String> function = new HashMap<String, String>();
-        function.put(key, name);
-
-        return function;
+        TextView textView = (TextView) view.findViewById(R.id.text);
+        textView.setText(text);
     }
 
     @Override
@@ -161,8 +147,8 @@ public class UserOverviewActivity extends Activity {
         Month month = mUser.getMonth();
 
         username.setText(mUser.getName());
-        distanceStat.setText(String.valueOf(month.getKm()) + " km");
-        timeStat.setText(String.valueOf(month.getSeconds()) + " seconds");
+        distanceStat.setText(month.getReadableTime());
+        timeStat.setText(month.getReadableDistance());
         Bitmap decodedImage;
         if (mUser.getProfilePic() != null){
             byte[] decodedString = Base64.decode(mUser.getProfilePic(), Base64.DEFAULT);
@@ -208,14 +194,6 @@ public class UserOverviewActivity extends Activity {
         public void onClick(View v) {
             Log.d(TAG, "CaptureRoute capture clicked");
             startActivity(new Intent(getApplicationContext(), RouteCaptureActivity.class));
-        }
-    }
-
-    private class TableListener implements AdapterView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> parentAdapter, View view, int position, long id) {
-            TextView clickedView = (TextView) view;
-            Log.d(TAG, "Item clicked" + id + "Position" + position);
         }
     }
 }
