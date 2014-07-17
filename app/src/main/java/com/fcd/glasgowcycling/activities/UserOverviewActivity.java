@@ -1,6 +1,7 @@
 package com.fcd.glasgowcycling.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
@@ -100,6 +101,13 @@ public class UserOverviewActivity extends Activity {
         setupFunction(userRoutesView, R.drawable.logo, "My Routes");
         setupFunction(nearbyRoutesView, R.drawable.logo, "Nearby Routes");
         setupFunction(cycleMapView, R.drawable.logo, "Cycle Map");
+
+        userRoutesView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), RouteListActivity.class));
+            }
+        });
     }
 
     private void setupFunction(View view, int iconResource, String text) {
