@@ -198,6 +198,21 @@ public class RouteCaptureActivity extends Activity {
         }
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                if (route.getDistance() < 500){
+                    tooShortDialog();
+                }
+                else {
+                    startActivity(new Intent(getApplicationContext(), UserOverviewActivity.class));
+                    finish();
+                }
+        }
+        return true;
+    }
+
     private void tooShortDialog(){
         AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
         builder1.setTitle("Route must be at least 500m");
