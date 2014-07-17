@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.fcd.glasgowcycling.R;
@@ -52,7 +53,7 @@ public class RouteAdapter extends ArrayAdapter<Route> {
     static class ViewHolder {
         @InjectView(R.id.toName) TextView toName;
         @InjectView(R.id.fromName) TextView fromName;
-        @InjectView(R.id.rating) TextView rating;
+        @InjectView(R.id.rating) RatingBar rating;
         @InjectView(R.id.numReviews) TextView numReviews;
         @InjectView(R.id.averageDistance) TextView averageDistance;
         @InjectView(R.id.averageTime) TextView averageTime;
