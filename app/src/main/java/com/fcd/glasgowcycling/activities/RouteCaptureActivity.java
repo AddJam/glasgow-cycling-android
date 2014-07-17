@@ -175,7 +175,7 @@ public class RouteCaptureActivity extends Activity {
 
             // get the new location to keep the map moving
             userLocation = new LatLng(location.getLatitude(),location.getLongitude());
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 13));
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 15));
         }
     };
 

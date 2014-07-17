@@ -26,6 +26,7 @@ public class Route {
             float[] dist = new float[2];
 
             //for doing distanceTo()
+            //TODO look into accuracy being high before incrementing
             Location source = new Location("fcd");
             source.setLatitude(lastPoint.getLat());
             source.setLongitude(lastPoint.getLng());
