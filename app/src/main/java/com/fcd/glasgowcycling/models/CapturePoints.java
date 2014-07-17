@@ -4,12 +4,11 @@ package com.fcd.glasgowcycling.models;
  * Created by michaelhayes on 10/07/2014.
  */
 import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.field.types.TimeStampType;
 import com.j256.ormlite.table.DatabaseTable;
 import com.google.gson.annotations.Expose;
 
-@DatabaseTable(tableName = "RoutePoint")
-public class RoutePoint {
+@DatabaseTable(tableName = "CapturePoints")
+public class CapturePoints {
 
     @DatabaseField(generatedId = true)
     private int id;
@@ -20,7 +19,7 @@ public class RoutePoint {
 
     @Expose
     @DatabaseField
-    private float speed;
+    private float kph;
 
     @Expose
     @DatabaseField
@@ -40,25 +39,25 @@ public class RoutePoint {
 
     @Expose
     @DatabaseField
-    private float hAccuracy;
+    private float horizontalAccuracy;
 
     @Expose
     @DatabaseField
-    private float vAccuracy;
+    private float verticalAccuracy;
 
-    public RoutePoint() {
+    public CapturePoints() {
 
     }
 
-    public RoutePoint(long time, float speed, float altitude, float course, double lat, double lng, float hAccuracy, float vAccuracy) {
+    public CapturePoints(long time, float kph, float altitude, float course, double lat, double lng, float horizontalAccuracy, float verticalAccuracy) {
         this.time = time;
-        this.speed = speed;
+        this.kph = kph;
         this.altitude = altitude;
         this.course = course;
         this.lat = lat;
         this.lng = lng;
-        this.hAccuracy = hAccuracy;
-        this.vAccuracy = vAccuracy;
+        this.horizontalAccuracy = horizontalAccuracy;
+        this.verticalAccuracy = verticalAccuracy;
     }
 
     public long getTime() {
@@ -69,12 +68,12 @@ public class RoutePoint {
         this.time = time;
     }
 
-    public float getSpeed() {
-        return speed;
+    public float getKph() {
+        return kph;
     }
 
-    public void setSpeed(float speed) {
-        this.speed = speed;
+    public void setKph(float kph) {
+        this.kph = kph;
     }
 
     public double getAltitude() {
@@ -109,20 +108,20 @@ public class RoutePoint {
         this.lng = lng;
     }
 
-    public float gethAccuracy() {
-        return hAccuracy;
+    public float getHorizontalAccuracy() {
+        return horizontalAccuracy;
     }
 
-    public void sethAccuracy(float hAccuracy) {
-        this.hAccuracy = hAccuracy;
+    public void setHorizontalAccuracy(float horizontalAccuracy) {
+        this.horizontalAccuracy = horizontalAccuracy;
     }
 
-    public float getvAccuracy() {
-        return vAccuracy;
+    public float getVerticalAccuracy() {
+        return verticalAccuracy;
     }
 
-    public void setvAccuracy(float vAccuracy) {
-        this.vAccuracy = vAccuracy;
+    public void setVerticalAccuracy(float verticalAccuracy) {
+        this.verticalAccuracy = verticalAccuracy;
     }
 
     public int getId() {

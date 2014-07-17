@@ -1,28 +1,27 @@
 package com.fcd.glasgowcycling.models;
 
 import android.location.Location;
-import android.text.format.Time;
 
 import java.util.ArrayList;
 
 /**
  * Created by michaelhayes on 10/07/2014.
  */
-public class Route {
+public class CaptureRoute {
 
-    private ArrayList<RoutePoint> pointsArray = new ArrayList<RoutePoint>();
+    private ArrayList<CapturePoints> pointsArray = new ArrayList<CapturePoints>();
     private long startTime;
     private float distance;
     private double avgSpeed;
 
-    public Route(){
+    public CaptureRoute(){
 
     }
 
     public void addRoutePoint(Location location){
         //increment distance and workout avg speed
         if (pointsArray.size() != 0) {
-            RoutePoint lastPoint = pointsArray.get(pointsArray.size() - 1);
+            CapturePoints lastPoint = pointsArray.get(pointsArray.size() - 1);
             float[] dist = new float[2];
 
             //for doing distanceTo()
@@ -34,7 +33,7 @@ public class Route {
             distance = distance + source.distanceTo(location);
             avgSpeed = 0;
             for (int i = 0; i < pointsArray.size(); i++) {
-                avgSpeed = avgSpeed + pointsArray.get(i).getSpeed();
+                avgSpeed = avgSpeed + pointsArray.get(i).getKph();
             }
         }
         avgSpeed = avgSpeed/pointsArray.size();
@@ -43,25 +42,25 @@ public class Route {
             avgSpeed = 0;
         }
 
-        RoutePoint newPoint = new RoutePoint();
+        CapturePoints newPoint = new CapturePoints();
         newPoint.setAltitude(location.getAltitude());
         newPoint.setCourse(location.getBearing());
         newPoint.setLat(location.getLatitude());
         newPoint.setLng(location.getLongitude());
         newPoint.setTime(System.currentTimeMillis());
-        newPoint.sethAccuracy(location.getAccuracy());
-        newPoint.sethAccuracy(location.getAccuracy());
-        newPoint.setSpeed(location.getSpeed());
+        newPoint.setHorizontalAccuracy(location.getAccuracy());
+        newPoint.setVerticalAccuracy(-1); // iOS gives this Android doesnt, set to minus 1 here
+        newPoint.setKph(location.getSpeed());
 
         pointsArray.add(newPoint);
 
     }
 
-    public ArrayList<RoutePoint> getPointsArray() {
+    public ArrayList<CapturePoints> getPointsArray() {
         return pointsArray;
     }
 
-    public void setPointsArray(ArrayList<RoutePoint> pointsArray) {
+    public void setPointsArray(ArrayList<CapturePoints> pointsArray) {
         this.pointsArray = pointsArray;
     }
 

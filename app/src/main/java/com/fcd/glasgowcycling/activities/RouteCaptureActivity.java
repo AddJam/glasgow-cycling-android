@@ -8,18 +8,16 @@ import android.graphics.Color;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.format.Time;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.fcd.glasgowcycling.CyclingApplication;
 import com.fcd.glasgowcycling.R;
-import com.fcd.glasgowcycling.models.Route;
-import com.fcd.glasgowcycling.models.RoutePoint;
+import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
+import com.fcd.glasgowcycling.models.CaptureRoute;
+import com.fcd.glasgowcycling.models.User;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -33,16 +31,21 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
+
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 import static com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
 
 public class RouteCaptureActivity extends Activity {
-
+    @Inject
+    GoCyclingApiInterface cyclingService;
     private static final String TAG = "RouteCaptureActivity";
 
     @InjectView(R.id.distance_info) TextView distanceInfo;
@@ -57,7 +60,7 @@ public class RouteCaptureActivity extends Activity {
 
     private int timestamp;
 
-    private Route route = new Route();
+    private CaptureRoute captureRoute = new CaptureRoute();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +70,7 @@ public class RouteCaptureActivity extends Activity {
         ButterKnife.inject(this);
 
         startLocationTracking();
-        route.setStartTime(System.currentTimeMillis());
+        captureRoute.setStartTime(System.currentTimeMillis());
 
         // Show map
         map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
@@ -87,7 +90,7 @@ public class RouteCaptureActivity extends Activity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                long millis = System.currentTimeMillis() - route.getStartTime();
+                                long millis = System.currentTimeMillis() - captureRoute.getStartTime();
                                 timeInfo.setText(String.format("%02d:%02d.%02d",
                                         TimeUnit.MILLISECONDS.toHours(millis),
                                         TimeUnit.MILLISECONDS.toMinutes(millis) -
@@ -158,15 +161,15 @@ public class RouteCaptureActivity extends Activity {
             float speed = (float) (location.getSpeed() * 3.6);  // Converting m/s to Km/hr
             float lat = (float) (location.getLatitude());  // Converting m/s to Km/hr
 
-            // add location to Route, route takes care of distance and avg speed
-            route.addRoutePoint(location);
+            // add location to CaptureRoute, captureRoute takes care of distance and avg speed
+            captureRoute.addRoutePoint(location);
 
             speedInfo.setText(String.format("%.02f kph", speed));
-            avgSpeedInfo.setText(String.format("%.02f kph", route.getAvgSpeed()));
-            distanceInfo.setText(String.format("%.02f m", route.getDistance()));
+            avgSpeedInfo.setText(String.format("%.02f kph", captureRoute.getAvgSpeed()));
+            distanceInfo.setText(String.format("%.02f m", captureRoute.getDistance()));
 
             //use existing userlocation
-            if (route.getPointsArray().size() > 1) {
+            if (captureRoute.getPointsArray().size() > 1) {
                 map.addPolyline(new PolylineOptions()
                         .add(userLocation, new LatLng(location.getLatitude(), location.getLongitude()))
                         .width(5)
@@ -183,7 +186,7 @@ public class RouteCaptureActivity extends Activity {
         @Override
         public void onClick(View v) {
             Log.d(TAG, "Finish route capture clicked");
-            if (route.getDistance() < 500){
+            if (captureRoute.getDistance() < 500){
                 tooShortDialog();
             }
             else {
@@ -195,7 +198,7 @@ public class RouteCaptureActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        if (route.getDistance() < 500){
+        if (captureRoute.getDistance() < 500){
             tooShortDialog();
         }
         else {
@@ -208,12 +211,11 @@ public class RouteCaptureActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                if (route.getDistance() < 500){
+                if (captureRoute.getDistance() < 500){
                     tooShortDialog();
                 }
                 else {
-                    startActivity(new Intent(getApplicationContext(), UserOverviewActivity.class));
-                    finish();
+                    finishCapture();
                 }
         }
         return true;
@@ -227,8 +229,7 @@ public class RouteCaptureActivity extends Activity {
         builder1.setPositiveButton("Yes",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        startActivity(new Intent(getApplicationContext(), UserOverviewActivity.class));
-                        finish();
+                        finishCapture();
                     }
                 });
         builder1.setNegativeButton("No",
@@ -249,8 +250,7 @@ public class RouteCaptureActivity extends Activity {
         builder1.setPositiveButton("Cancel",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        startActivity(new Intent(getApplicationContext(), UserOverviewActivity.class));
-                        finish();
+                        finishCapture();
                     }
                 });
         builder1.setNegativeButton("Download",
@@ -262,5 +262,12 @@ public class RouteCaptureActivity extends Activity {
                 });
         AlertDialog alert11 = builder1.create();
         alert11.show();
+    }
+
+    private void finishCapture(){
+        //Retrofit post
+        cyclingService.route(captureRoute.getPointsArray());
+        startActivity(new Intent(getApplicationContext(), UserOverviewActivity.class));
+        finish();
     }
 }

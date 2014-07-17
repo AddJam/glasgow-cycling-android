@@ -206,7 +206,7 @@ public class UserOverviewActivity extends Activity {
     private class CaptureListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            Log.d(TAG, "Route capture clicked");
+            Log.d(TAG, "CaptureRoute capture clicked");
             startActivity(new Intent(getApplicationContext(), RouteCaptureActivity.class));
         }
     }
