@@ -187,9 +187,21 @@ public class RouteCaptureActivity extends Activity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        if (route.getDistance() < 500){
+            tooShortDialog();
+        }
+        else {
+            startActivity(new Intent(getApplicationContext(), UserOverviewActivity.class));
+            finish();
+        }
+    }
+
     private void tooShortDialog(){
         AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
-        builder1.setMessage("Route must be at least 500m in length. Stopping now it will not be recorded. Stop route capture?");
+        builder1.setTitle("Route must be at least 500m");
+        builder1.setMessage("If you stop now this route will not be recorded. Stop capturing this route?");
         builder1.setCancelable(true);
         builder1.setPositiveButton("Yes",
                 new DialogInterface.OnClickListener() {
@@ -204,7 +216,6 @@ public class RouteCaptureActivity extends Activity {
                         dialog.cancel();
                     }
                 });
-
         AlertDialog alert11 = builder1.create();
         alert11.show();
     }

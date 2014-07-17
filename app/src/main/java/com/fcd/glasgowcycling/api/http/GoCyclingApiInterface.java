@@ -20,4 +20,7 @@ public interface GoCyclingApiInterface {
 
     @GET("/details.json")
     void details(Callback<User> callback);
+
+//    @POST("/routes.json")
+    //void route()
 }
