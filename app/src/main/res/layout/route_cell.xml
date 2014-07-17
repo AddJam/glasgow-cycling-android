@@ -1,40 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/toName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <TextView
-        android:id="@+id/fromName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <RatingBar
-        android:id="@+id/rating"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <TextView
-        android:id="@+id/numReviews"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <TextView
-        android:id="@+id/averageDistance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <TextView
-        android:id="@+id/averageTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <TextView
-        android:id="@+id/numInstances"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
     <ImageView
         android:id="@+id/typeImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:padding="20dp"
+        android:layout_alignParentRight="true"/>
 
-</LinearLayout>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@id/typeImage"
+        android:padding="10dp">
+        <RelativeLayout
+            android:id="@+id/toText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/toLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TO:"
+                android:layout_centerVertical="true"
+                android:paddingRight="10dp"/>
+            <TextView
+                android:id="@+id/toName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Destination"
+                android:layout_toRightOf="@id/toLabel"
+                android:textSize="22dp"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/fromText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/toText">
+            <TextView
+                android:id="@+id/fromLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="FROM:"
+                android:layout_centerVertical="true"
+                android:paddingRight="10dp"/>
+            <TextView
+                android:id="@+id/fromName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Source"
+                android:layout_toRightOf="@id/fromLabel"
+                android:textSize="22dp"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/route_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/fromText">
+            <TextView
+                android:id="@+id/averageDistance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0 miles"
+                android:layout_alignParentLeft="true"
+                android:textSize="16dp"/>
+            <TextView
+                android:id="@+id/averageTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0 minutes"
+                android:layout_toRightOf="@id/averageDistance"
+                android:textSize="16dp"
+                android:paddingLeft="20dp"/>
+            <TextView
+                android:id="@+id/numInstances"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0 routes"
+                android:layout_toRightOf="@id/averageTime"
+                android:textSize="16dp"
+                android:paddingLeft="20dp"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/route_details">
+            <RatingBar
+                android:id="@+id/rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:rating="0"
+                android:isIndicator="true" />
+            <TextView
+                android:id="@+id/numReviews"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="(0)"
+                android:layout_toRightOf="@id/rating"
+                android:layout_centerVertical="true"
+                android:textSize="16dp"/>
+        </RelativeLayout>
+    </RelativeLayout>
+
+</RelativeLayout>
