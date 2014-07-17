@@ -215,7 +215,7 @@ public class RouteCaptureActivity extends Activity {
                     tooShortDialog();
                 }
                 else {
-                    finishCapture();
+                    finishCapture(true);
                 }
         }
         return true;
@@ -229,7 +229,7 @@ public class RouteCaptureActivity extends Activity {
         builder1.setPositiveButton("Yes",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        finishCapture();
+                        finishCapture(false);
                     }
                 });
         builder1.setNegativeButton("No",
@@ -250,7 +250,7 @@ public class RouteCaptureActivity extends Activity {
         builder1.setPositiveButton("Cancel",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        finishCapture();
+                        finishCapture(false);
                     }
                 });
         builder1.setNegativeButton("Download",
@@ -264,9 +264,11 @@ public class RouteCaptureActivity extends Activity {
         alert11.show();
     }
 
-    private void finishCapture(){
-        //Retrofit post
-        cyclingService.route(captureRoute.getPointsArray());
+    private void finishCapture(boolean submit){
+        //if to submit Retrofit post
+        if (submit == true){
+            cyclingService.route(captureRoute.getPointsArray());
+        }
         startActivity(new Intent(getApplicationContext(), UserOverviewActivity.class));
         finish();
     }
