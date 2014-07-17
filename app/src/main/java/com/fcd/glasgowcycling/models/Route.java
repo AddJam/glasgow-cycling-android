@@ -28,11 +28,15 @@ public class Route {
             distance = distance + dist[0];
             avgSpeed = 0;
             for (int i = 0; i < pointsArray.size(); i++) {
-                avgSpeed = + pointsArray.get(i).getSpeed();
+                avgSpeed = avgSpeed + pointsArray.get(i).getSpeed();
             }
         }
 
         avgSpeed = avgSpeed/pointsArray.size();
+
+        if (avgSpeed < 1){
+            avgSpeed = 0;
+        }
 
         RoutePoint newPoint = new RoutePoint();
         newPoint.setAltitude(location.getAltitude());
