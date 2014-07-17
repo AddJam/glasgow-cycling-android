@@ -20,6 +20,7 @@ public class Route {
     }
 
     public void addRoutePoint(Location location){
+        //increment distance and workout avg speed
         if (pointsArray.size() != 0) {
             RoutePoint lastPoint = pointsArray.get(pointsArray.size() - 1);
             float[] dist = new float[2];
@@ -31,9 +32,8 @@ public class Route {
                 avgSpeed = avgSpeed + pointsArray.get(i).getSpeed();
             }
         }
-
         avgSpeed = avgSpeed/pointsArray.size();
-
+        //if avgSpeed is too low set to 0, stop minus speed showing
         if (avgSpeed < 1){
             avgSpeed = 0;
         }
