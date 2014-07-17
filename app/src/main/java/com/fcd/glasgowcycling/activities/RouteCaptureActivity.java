@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.format.Time;
 import android.util.Log;
@@ -21,6 +22,7 @@ import com.fcd.glasgowcycling.models.Route;
 import com.fcd.glasgowcycling.models.RoutePoint;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
@@ -107,10 +109,15 @@ public class RouteCaptureActivity extends Activity {
     }
 
     protected void startLocationTracking() {
-       // if (GooglePlayServicesUtil.isGooglePlayServicesAvailable(this)) {
+        int isAvailable = GooglePlayServicesUtil
+                .isGooglePlayServicesAvailable(this);
+        if (isAvailable == ConnectionResult.SUCCESS) {
             mLocationClient = new LocationClient(this, mConnectionCallbacks, mConnectionFailedListener);
             mLocationClient.connect();
-        //}
+        }
+        else{
+            noPlayServicesDialog();
+        }
     }
 
     private GooglePlayServicesClient.ConnectionCallbacks mConnectionCallbacks = new GooglePlayServicesClient.ConnectionCallbacks() {
@@ -144,7 +151,6 @@ public class RouteCaptureActivity extends Activity {
         public void onLocationChanged(Location location) {
             double delayBtnEvents = (System.nanoTime()- mLastEventTime )/(1000000000.0);
             mLastEventTime = System.nanoTime();
-            RoutePoint rp = new RoutePoint();
 
             //Sampling rate is the frequency at which updates are received
             String samplingRate = (new DecimalFormat("0.0000").format(1/delayBtnEvents));
@@ -229,6 +235,29 @@ public class RouteCaptureActivity extends Activity {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
+                    }
+                });
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
+    }
+
+    private void noPlayServicesDialog(){
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+        builder1.setTitle("Google Play Services Required");
+        builder1.setMessage("Google Play Services from the Play store is required to record a route. Please download from the Play Store?");
+        builder1.setCancelable(true);
+        builder1.setPositiveButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        startActivity(new Intent(getApplicationContext(), UserOverviewActivity.class));
+                        finish();
+                    }
+                });
+        builder1.setNegativeButton("Download",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.gms&hl=en"));
+                        startActivity(intent);
                     }
                 });
         AlertDialog alert11 = builder1.create();

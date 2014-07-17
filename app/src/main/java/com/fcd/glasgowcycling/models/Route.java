@@ -23,17 +23,13 @@ public class Route {
         if (pointsArray.size() != 0) {
             RoutePoint lastPoint = pointsArray.get(pointsArray.size() - 1);
             float[] dist = new float[2];
-            location.distanceBetween(lastPoint.getLat()/1E6, lastPoint.getLng()/1E6, location.getLatitude()/1E6, location.getLongitude()/1E6, dist);
+            location.distanceBetween(lastPoint.getLat()*1E6, lastPoint.getLng()*1E6, location.getLatitude()*1E6, location.getLongitude()*1E6, dist);
 
             distance = distance + dist[0];
             avgSpeed = 0;
             for (int i = 0; i < pointsArray.size(); i++) {
                 avgSpeed = + pointsArray.get(i).getSpeed();
             }
-        }
-        else {
-            distance = 0;
-            avgSpeed = 0;
         }
 
         avgSpeed = avgSpeed/pointsArray.size();
