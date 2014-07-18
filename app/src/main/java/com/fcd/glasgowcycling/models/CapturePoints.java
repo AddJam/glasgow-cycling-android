@@ -3,6 +3,7 @@ package com.fcd.glasgowcycling.models;
 /**
  * Created by michaelhayes on 10/07/2014.
  */
+import com.google.gson.annotations.SerializedName;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import com.google.gson.annotations.Expose;
@@ -34,6 +35,7 @@ public class CapturePoints {
     private double lat;
 
     @Expose
+    @SerializedName("long")
     @DatabaseField
     private double lng;
 
