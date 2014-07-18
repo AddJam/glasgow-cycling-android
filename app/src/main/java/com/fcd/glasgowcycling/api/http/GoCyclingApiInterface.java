@@ -1,7 +1,11 @@
 package com.fcd.glasgowcycling.api.http;
 
 import com.fcd.glasgowcycling.api.AuthModel;
+import com.fcd.glasgowcycling.models.Route;
+import com.fcd.glasgowcycling.models.RouteList;
 import com.fcd.glasgowcycling.models.User;
+
+import java.util.List;
 
 import retrofit.Callback;
 import retrofit.http.GET;
@@ -20,4 +24,7 @@ public interface GoCyclingApiInterface {
 
     @GET("/details.json")
     void details(Callback<User> callback);
+
+    @GET("/routes.json")
+    void searchRoutes(@Query("user_only") boolean userOnly, Callback<RouteList> callback);
 }

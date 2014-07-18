@@ -1,6 +1,7 @@
 package com.fcd.glasgowcycling.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
@@ -21,8 +22,6 @@ import android.widget.TextView;
 
 import com.fcd.glasgowcycling.CyclingApplication;
 import com.fcd.glasgowcycling.R;
-import com.fcd.glasgowcycling.adapters.FunctionItem;
-import com.fcd.glasgowcycling.adapters.FunctionListAdapter;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgowcycling.models.Month;
 import com.fcd.glasgowcycling.models.User;
@@ -102,6 +101,13 @@ public class UserOverviewActivity extends Activity {
         setupFunction(userRoutesView, R.drawable.logo, "My Routes");
         setupFunction(nearbyRoutesView, R.drawable.logo, "Nearby Routes");
         setupFunction(cycleMapView, R.drawable.logo, "Cycle Map");
+
+        userRoutesView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), RouteListActivity.class));
+            }
+        });
     }
 
     private void setupFunction(View view, int iconResource, String text) {
