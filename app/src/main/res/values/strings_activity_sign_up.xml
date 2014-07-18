@@ -1,0 +1,13 @@
+<resources>
+    <string name="title_activity_sign_up">Help Make Glasgow a Cycling City</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_first_name">Forename</string>
+    <string name="prompt_last_name">Surname</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="prompt_year_of_birth">Year of Birth</string>
+    <string name="prompt_gender">Gender</string>
+    <string name="introduction_label">Making Glasgow a Cycling city</string>
+
+</resources>
