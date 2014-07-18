@@ -43,7 +43,7 @@ public class RouteListActivity extends Activity {
             @Override
             public void success(RouteList routeList, Response response) {
                 Log.d(TAG, "Got routes - total: " + routeList.getRoutes().size());
-                routesList.setAdapter(new RouteAdapter(getApplicationContext(), R.layout.route_cell, routeList.getRoutes()));
+                routesList.setAdapter(new RouteAdapter(getBaseContext(), R.layout.route_cell, routeList.getRoutes()));
             }
 
             @Override

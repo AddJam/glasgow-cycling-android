@@ -32,25 +32,32 @@ public class RouteAdapter extends ArrayAdapter<Route> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Log.d(TAG, "Getting view for position " + position);
-        View v = convertView;
+        View view = convertView;
         ViewHolder holder; // to reference the child views for later actions
 
-        if (v == null) {
-            LayoutInflater vi = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = vi.inflate(R.layout.route_cell, null);
+        if (view == null) {
+            LayoutInflater viewInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            view = viewInflater.inflate(R.layout.route_cell, null);
             // cache view fields into the holder
-            holder = new ViewHolder(v);
+            holder = new ViewHolder(view);
             // associate the holder with the view for later lookup
-            v.setTag(holder);
+            view.setTag(holder);
         }
         else {
             // view already exists, get the holder instance from the view
-            holder = (ViewHolder) v.getTag();
+            holder = (ViewHolder) view.getTag();
         }
 
-        holder.toName.setText("Pew");
+        Route route = getItem(position);
 
-        return v;
+        holder.toName.setText(route.getEndName());
+        holder.fromName.setText(route.getStartName());
+        holder.numReviews.setText("(" + route.getNumReviews() + ")");
+        holder.averageDistance.setText(String.format("%.02f", route.getAverages().getDistanceMiles()) + " miles");
+        holder.rating.setRating(route.getAverages().getRating().floatValue());
+        holder.numInstances.setText(route.getNumInstances() + " routes");
+
+        return view;
     }
 
     // somewhere else in your class definition

@@ -11,10 +11,14 @@ public class Averages {
     @Expose
     private Double speed;
     @Expose
-    private Object rating;
+    private Double rating;
 
     public Double getDistance() {
         return distance;
+    }
+
+    public Double getDistanceMiles() {
+        return distance * 0.621371192;
     }
 
     public void setDistance(Double distance) {
@@ -37,11 +41,14 @@ public class Averages {
         this.speed = speed;
     }
 
-    public Object getRating() {
+    public Double getRating() {
+        if (rating == null) {
+            return 0.0;
+        }
         return rating;
     }
 
-    public void setRating(Object rating) {
+    public void setRating(Double rating) {
         this.rating = rating;
     }
 
