@@ -101,7 +101,7 @@ public class UserOverviewActivity extends Activity {
         userRoutesView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), RouteListActivity.class));
+                startActivity(new Intent(getBaseContext(), RouteListActivity.class));
             }
         });
     }

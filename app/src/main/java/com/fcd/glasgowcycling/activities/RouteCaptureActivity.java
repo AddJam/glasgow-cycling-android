@@ -190,8 +190,7 @@ public class RouteCaptureActivity extends Activity {
                 tooShortDialog();
             }
             else {
-                startActivity(new Intent(getApplicationContext(), UserOverviewActivity.class));
-                finish();
+                finishCapture(true);
             }
         }
     }
@@ -202,8 +201,7 @@ public class RouteCaptureActivity extends Activity {
             tooShortDialog();
         }
         else {
-            startActivity(new Intent(getApplicationContext(), UserOverviewActivity.class));
-            finish();
+            finishCapture(false);
         }
     }
 
@@ -211,12 +209,7 @@ public class RouteCaptureActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                if (captureRoute.getDistance() < 500){
-                    tooShortDialog();
-                }
-                else {
-                    finishCapture(true);
-                }
+                onBackPressed();
         }
         return true;
     }
@@ -269,7 +262,6 @@ public class RouteCaptureActivity extends Activity {
         if (submit == true){
             cyclingService.route(captureRoute.getPointsArray());
         }
-        startActivity(new Intent(getApplicationContext(), UserOverviewActivity.class));
         finish();
     }
 }
