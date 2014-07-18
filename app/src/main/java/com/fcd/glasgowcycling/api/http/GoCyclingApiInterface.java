@@ -1,11 +1,19 @@
 package com.fcd.glasgowcycling.api.http;
 
 import com.fcd.glasgowcycling.api.AuthModel;
+<<<<<<< HEAD
+import com.fcd.glasgowcycling.models.Route;
+import com.fcd.glasgowcycling.models.RouteList;
+import com.fcd.glasgowcycling.models.User;
+
+import java.util.List;
+=======
 import com.fcd.glasgowcycling.models.CapturePoints;
 import com.fcd.glasgowcycling.models.CaptureRoute;
 import com.fcd.glasgowcycling.models.User;
 
 import java.util.ArrayList;
+>>>>>>> 5fcd1233ae9587335625e6ce2bdffd9bb008b3e3
 
 import retrofit.Callback;
 import retrofit.http.Body;
@@ -25,6 +33,9 @@ public interface GoCyclingApiInterface {
 
     @GET("/details.json")
     void details(Callback<User> callback);
+
+    @GET("/routes.json")
+    void searchRoutes(@Query("user_only") boolean userOnly, Callback<RouteList> callback);
 
     @POST("/routes.json")
     void route(@Body ArrayList<CapturePoints> points);
