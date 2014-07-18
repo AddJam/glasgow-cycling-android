@@ -1,6 +1,7 @@
 package com.fcd.glasgowcycling.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,12 +23,15 @@ import butterknife.InjectView;
  */
 public class RouteAdapter extends ArrayAdapter<Route> {
 
+    private final String TAG = "RouteAdapter";
+
     public RouteAdapter(Context context, int resourceId, List<Route> routes) {
         super(context, resourceId, routes);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        Log.d(TAG, "Getting view for position " + position);
         View v = convertView;
         ViewHolder holder; // to reference the child views for later actions
 
