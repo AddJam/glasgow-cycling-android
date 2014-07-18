@@ -40,6 +40,13 @@
             android:inputType="textPassword"
             android:maxLines="1"
             android:singleLine="true"/>
+        <NumberPicker
+            android:id="@+id/year_of_birth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/prompt_year_of_birth"
+            android:maxLines="1"
+            android:singleLine="true"/>
 
     </LinearLayout>
 
