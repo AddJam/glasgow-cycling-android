@@ -42,7 +42,7 @@
             android:name=".activities.RouteListActivity"
             android:label="@string/title_activity_route_list"
             android:screenOrientation="portrait"
-            >
+            android:parentActivityName=".activities.UserOverviewActivity">
         </activity>
 
         <service
