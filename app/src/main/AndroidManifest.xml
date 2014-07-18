@@ -35,7 +35,6 @@
         <activity
             android:name=".activities.UserOverviewActivity"
             android:label="@string/title_activity_user_overview"
-            android:noHistory="true"
             android:screenOrientation="portrait" >
         </activity>
         <activity
