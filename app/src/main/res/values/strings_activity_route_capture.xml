@@ -1,0 +1,10 @@
+<resources>
+    <string name="title_activity_route_capture">Route Capture</string>
+
+    <!-- Strings related to user overview -->
+    <string name="distance_label">Distance</string>
+    <string name="time_label">Time:</string>
+    <string name="avg_speed_label">Avg Speed:</string>
+    <string name="speed_label">Speed:</string>
+    <string name="finish_button">Finish Route</string>
+</resources>

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -15,7 +14,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,12 +25,8 @@ import com.fcd.glasgowcycling.models.Month;
 import com.fcd.glasgowcycling.models.User;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.MapFragment;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import com.google.android.gms.maps.model.LatLng;
 
 import javax.inject.Inject;
 
@@ -51,6 +45,7 @@ public class UserOverviewActivity extends Activity {
     @InjectView(R.id.time_stat) TextView timeStat;
     @InjectView(R.id.user_stats_button) Button statsButton;
     @InjectView(R.id.profile_image) ImageView profileImage;
+    @InjectView(R.id.capture_button) Button captureButton;
 
     @InjectView(R.id.user_routes) View userRoutesView;
     @InjectView(R.id.nearby_routes) View nearbyRoutesView;
@@ -96,6 +91,7 @@ public class UserOverviewActivity extends Activity {
 
         // Stats
         statsButton.setOnClickListener(new StatsListener());
+        captureButton.setOnClickListener(new CaptureListener());
 
         // Functions list view
         setupFunction(userRoutesView, R.drawable.logo, "My Routes");
@@ -195,7 +191,16 @@ public class UserOverviewActivity extends Activity {
         @Override
         public void onClick(View v) {
             Log.d(TAG, "Stats clicked");
-            //TODO Go to the Stats Activity
+            //TODO implement stats
+
+        }
+    }
+
+    private class CaptureListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            Log.d(TAG, "CaptureRoute capture clicked");
+            startActivity(new Intent(getApplicationContext(), RouteCaptureActivity.class));
         }
     }
 }
