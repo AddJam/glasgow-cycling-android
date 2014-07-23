@@ -43,7 +43,7 @@ public class SignInActivity extends AccountAuthenticatorActivity {
     @InjectView(R.id.password) EditText passwordField;
 
     @InjectView(R.id.sign_in_button) Button signInButton;
-    @InjectView(R.id.sign_up_button) Button signupButton;
+    @InjectView(R.id.sign_up_button) Button signUpButton;
     @InjectView(R.id.signin_image) ImageView signinImageView;
 
     // API
@@ -85,7 +85,13 @@ public class SignInActivity extends AccountAuthenticatorActivity {
                 new LoginTask().execute();
             }
         });
-        //signUpButton.setOnClickListener(new SignUpListener()); TODO signup
+        signUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "Sign Up clicked");
+                startActivity(new Intent(getApplicationContext(), SignUpActivity.class));
+            }
+        });
     }
 
     @Override
