@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.fcd.glasgowcycling.CyclingApplication;
+import com.fcd.glasgowcycling.activities.RouteCaptureActivity;
 import com.fcd.glasgowcycling.activities.RouteListActivity;
 import com.fcd.glasgowcycling.activities.SignInActivity;
 import com.fcd.glasgowcycling.api.AuthModel;
@@ -36,7 +37,8 @@ import retrofit.converter.GsonConverter;
         SignInActivity.class,
         UserOverviewActivity.class,
         ApiClientModule.class,
-        RouteListActivity.class
+        RouteListActivity.class,
+        RouteCaptureActivity.class
 })
 public class ApiClientModule {
 
