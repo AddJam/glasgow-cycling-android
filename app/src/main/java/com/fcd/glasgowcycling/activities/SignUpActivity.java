@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.NumberPicker;
 import android.widget.RadioButton;
 
 import com.fcd.glasgowcycling.R;
@@ -48,6 +49,7 @@ public class SignUpActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Year of Birth clicked");
+                yearPicker();
             }
         });
 
@@ -84,8 +86,7 @@ public class SignUpActivity extends Activity {
         dialog.setContentView(R.layout.gender_dialog);
         dialog.setTitle("Select a gender");
         dialog.setCancelable(true);
-        // there are a lot of settings, for dialog, check them all out!
-        // set up radiobutton
+
         Button undisclosedButton = (Button) dialog.findViewById(R.id.undisclosed_button);
         Button femaleButton = (Button) dialog.findViewById(R.id.female_button);
         Button maleButton = (Button) dialog.findViewById(R.id.male_button);
@@ -111,6 +112,47 @@ public class SignUpActivity extends Activity {
             public void onClick(View v) {
                 Log.d(TAG, "Male Gender selected");
                 genderButton.setText("Male");
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
+    public void yearPicker(){
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.year_picker_dialog);
+        dialog.setTitle("Select a year of birth");
+        dialog.setCancelable(true);
+
+        Button closeButton = (Button) dialog.findViewById(R.id.close_button);
+        NumberPicker numberPicker = (NumberPicker) dialog.findViewById(R.id.year_picker);
+
+        String[] values = new String[100];
+        int value = 1900;
+        numberPicker.setMinValue(value);
+
+        for(int i=0;i<values.length;i++){
+            values[i]=Integer.toString(value);
+            value++;
+        }
+
+        numberPicker.setMaxValue(value - 1);
+        numberPicker.setDisplayedValues(values);
+        numberPicker.setValue(1990);
+        NumberPicker.OnValueChangeListener onValueChanged
+                =new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(
+                    NumberPicker picker,
+                    int oldVal,
+                    int newVal) {
+                String[] values=picker.getDisplayedValues();
+                yearOfBirthButton.setText(values[newVal]);}
+        };
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "Year of birth selected");
                 dialog.dismiss();
             }
         });
