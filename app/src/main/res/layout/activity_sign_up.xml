@@ -62,32 +62,60 @@
             android:inputType="textPassword"
             android:maxLines="1"
             android:singleLine="true"/>
-        <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/label_year_of_birth"
-        android:textStyle="bold"
-        android:layout_marginTop="5dp"/>
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_year_of_birth"
+                    android:textStyle="bold"
+                    android:layout_marginTop="5dp"/>
+                <Button
+                    android:id="@+id/year_of_birth_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/prompt_year_of_birth"
+                    android:maxLines="1"
+                    android:singleLine="true"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_gender"
+                    android:textStyle="bold"
+                    android:layout_marginTop="5dp"/>
+                />
+                <Button
+                    android:id="@+id/gender_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/prompt_gender"
+                    android:maxLines="1"
+                    android:singleLine="true"/>
+            </LinearLayout>
+        </LinearLayout>
         <Button
-            android:id="@+id/year_of_birth_button"
+            android:layout_marginTop="15dp"
+            android:id="@+id/submit_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/prompt_year_of_birth"
-            android:maxLines="1"
-            android:singleLine="true"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/label_gender"
+            android:text="@string/action_sign_up"
             android:textStyle="bold"
-            android:layout_marginTop="5dp"/>
-        <Button
-            android:id="@+id/gender_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/prompt_gender"
-            android:maxLines="1"
-            android:singleLine="true"/>
+            android:background="@color/jcGreenColor"
+            android:textColor="@color/jcWhiteColor"
+            />
     </LinearLayout>
+
 
 </RelativeLayout>
