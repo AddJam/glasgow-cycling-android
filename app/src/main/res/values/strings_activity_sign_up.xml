@@ -6,8 +6,8 @@
     <string name="prompt_last_name">Surname</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
-    <string name="prompt_year_of_birth">Please Select Year of Birth</string>
-    <string name="prompt_gender">Please Select Gender</string>
+    <string name="prompt_year_of_birth">Select Year</string>
+    <string name="prompt_gender">Select Gender</string>
     <string name="introduction_label">Making Glasgow a Cycling city</string>
     <string name="label_name">Name</string>
     <string name="label_password">Password</string>

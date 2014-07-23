@@ -4,9 +4,21 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.EditText;
+
 import com.fcd.glasgowcycling.R;
 
+import butterknife.InjectView;
+
 public class SignUpActivity extends Activity {
+
+    @InjectView(R.id.first_name) EditText firstNameField;
+    @InjectView(R.id.last_name) EditText lastNameField;
+    @InjectView(R.id.email) EditText emailField;
+    @InjectView(R.id.password) EditText passwordField;
+    @InjectView(R.id.gender_button) Button genderButton;
+    @InjectView(R.id.year_of_birth_button) Button yearOfBirthButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
