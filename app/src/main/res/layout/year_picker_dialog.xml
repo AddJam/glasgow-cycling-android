@@ -5,17 +5,16 @@
     android:layout_height="match_parent">
     <NumberPicker
         android:id="@+id/year_picker"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
-        android:layout_marginBottom="25dp"></NumberPicker>
+        android:layout_marginBottom="25dp"/>
 
     <Button
         android:layout_marginTop="5dp"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/close_button"
-        android:layout_below="@+id/year_picker"
         android:layout_centerInParent="true"
         android:text="Select" />
 </LinearLayout>

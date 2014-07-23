@@ -139,16 +139,13 @@ public class SignUpActivity extends Activity {
         numberPicker.setMaxValue(value - 1);
         numberPicker.setDisplayedValues(values);
         numberPicker.setValue(1990);
-        NumberPicker.OnValueChangeListener onValueChanged
-                =new NumberPicker.OnValueChangeListener() {
+        numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
-            public void onValueChange(
-                    NumberPicker picker,
-                    int oldVal,
-                    int newVal) {
-                String[] values=picker.getDisplayedValues();
-                yearOfBirthButton.setText(values[newVal]);}
-        };
+            public void onValueChange(NumberPicker numberPicker, int i, int i2) {
+                String[] values=numberPicker.getDisplayedValues();
+                yearOfBirthButton.setText(String.valueOf(i2));
+            }
+        });
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
