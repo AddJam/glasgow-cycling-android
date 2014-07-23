@@ -1,6 +1,7 @@
 package com.fcd.glasgowcycling.activities;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 
 import com.fcd.glasgowcycling.R;
 
@@ -38,6 +40,7 @@ public class SignUpActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Gender clicked");
+                genderPicker();
             }
         });
 
@@ -74,5 +77,43 @@ public class SignUpActivity extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void genderPicker(){
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.gender_dialog);
+        dialog.setTitle("Select a gender");
+        dialog.setCancelable(true);
+        // there are a lot of settings, for dialog, check them all out!
+        // set up radiobutton
+        Button undisclosedButton = (Button) dialog.findViewById(R.id.undisclosed_button);
+        Button femaleButton = (Button) dialog.findViewById(R.id.female_button);
+        Button maleButton = (Button) dialog.findViewById(R.id.male_button);
+
+        undisclosedButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "Undisclosed Gender selected");
+                genderButton.setText("Undisclosed");
+                dialog.dismiss();
+            }
+        });
+        femaleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "Female Gender selected");
+                genderButton.setText("Female");
+                dialog.dismiss();
+            }
+        });
+        maleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "Male Gender selected");
+                genderButton.setText("Male");
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 }
