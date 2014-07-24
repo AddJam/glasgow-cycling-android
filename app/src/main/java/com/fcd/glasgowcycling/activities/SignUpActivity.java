@@ -41,6 +41,15 @@ public class SignUpActivity extends Activity {
 
     private static final int SELECT_PHOTO = 100;
 
+    //contents of form
+    private Bitmap userSelectedImage;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String password;
+    private String gender;
+    private String yearOfBirth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,7 +125,8 @@ public class SignUpActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Undisclosed Gender selected");
-                genderButton.setText("Undisclosed");
+                gender = "Undisclosed";
+                genderButton.setText(gender);
                 dialog.dismiss();
             }
         });
@@ -124,7 +134,8 @@ public class SignUpActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Female Gender selected");
-                genderButton.setText("Female");
+                gender = "Female";
+                genderButton.setText(gender);
                 dialog.dismiss();
             }
         });
@@ -132,7 +143,8 @@ public class SignUpActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Male Gender selected");
-                genderButton.setText("Male");
+                gender = "Male";
+                genderButton.setText(gender);
                 dialog.dismiss();
             }
         });
@@ -164,7 +176,8 @@ public class SignUpActivity extends Activity {
             @Override
             public void onValueChange(NumberPicker numberPicker, int i, int i2) {
                 String[] values=numberPicker.getDisplayedValues();
-                yearOfBirthButton.setText(String.valueOf(i2));
+                yearOfBirth = String.valueOf(i2);
+                yearOfBirthButton.setText(yearOfBirth);
             }
         });
         closeButton.setOnClickListener(new View.OnClickListener() {
@@ -191,10 +204,17 @@ public class SignUpActivity extends Activity {
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
-                    Bitmap userSelectedImage = BitmapFactory.decodeStream(imageStream);
+                    userSelectedImage = BitmapFactory.decodeStream(imageStream);
                     Drawable drawableImage = new BitmapDrawable(getResources(),userSelectedImage);
                     pictureButton.setBackground(drawableImage);
                 }
         }
+    }
+
+    private void getSignupInputs(){
+        firstName = firstNameField.getText().toString();
+        lastName = lastNameField.getText().toString();
+        email = emailField.getText().toString();
+        password = passwordField.getText().toString();
     }
 }
