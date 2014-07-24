@@ -68,7 +68,8 @@
         <activity
             android:name=".activities.SignUpActivity"
             android:label="@string/title_activity_sign_up"
-            android:parentActivityName=".activities.SignInActivity" >
+            android:parentActivityName=".activities.SignInActivity"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.fcd.glasgowcycling.activities.SignInActivity" />
