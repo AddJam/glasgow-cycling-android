@@ -3,6 +3,11 @@ package com.fcd.glasgowcycling.activities;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -14,6 +19,9 @@ import android.widget.NumberPicker;
 import android.widget.RadioButton;
 
 import com.fcd.glasgowcycling.R;
+
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -28,8 +36,10 @@ public class SignUpActivity extends Activity {
     @InjectView(R.id.password) EditText passwordField;
     @InjectView(R.id.gender_button) Button genderButton;
     @InjectView(R.id.year_of_birth_button) Button yearOfBirthButton;
+    @InjectView(R.id.picture_button) Button pictureButton;
     @InjectView(R.id.submit_button) Button submitButton;
 
+    private static final int SELECT_PHOTO = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +69,17 @@ public class SignUpActivity extends Activity {
                 Log.d(TAG, "Submit sign up clicked");
             }
         });
+
+        pictureButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "Picture button clicked");
+                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                photoPickerIntent.setType("image/*");
+                startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+            }
+        });
+
     }
 
 
@@ -154,5 +175,26 @@ public class SignUpActivity extends Activity {
             }
         });
         dialog.show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+
+        switch(requestCode) {
+            case SELECT_PHOTO:
+                if(resultCode == RESULT_OK){
+                    Uri selectedImage = imageReturnedIntent.getData();
+                    InputStream imageStream = null;
+                    try {
+                        imageStream = getContentResolver().openInputStream(selectedImage);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    Bitmap userSelectedImage = BitmapFactory.decodeStream(imageStream);
+                    Drawable drawableImage = new BitmapDrawable(getResources(),userSelectedImage);
+                    pictureButton.setBackground(drawableImage);
+                }
+        }
     }
 }
