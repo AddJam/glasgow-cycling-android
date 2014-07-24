@@ -42,7 +42,7 @@ public class ApiClientModule {
 
     private final String TAG = "ApiClientModule";
 
-    private final String ENDPOINT = "http://192.168.1.38:3000"; // "http://10.0.2.2:3000" == Localhost (for simulator)
+    private final String ENDPOINT = "http://172.20.10.4:3000"; // "http://10.0.2.2:3000" == Localhost (for simulator)
     private Context mContext;
     private CyclingApplication mApplication;
     private AuthModel mAuthModel;
