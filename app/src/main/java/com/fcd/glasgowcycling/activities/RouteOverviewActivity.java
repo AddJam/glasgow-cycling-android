@@ -19,7 +19,7 @@ public class RouteOverviewActivity extends Activity {
         switch (item.getItemId())
         {
             case android.R.id.home:
-                this.finish();
+                finish();
                 return (true);
         }
         return super.onOptionsItemSelected(item);
