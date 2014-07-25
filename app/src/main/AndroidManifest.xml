@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.fcd.glasgowcycling"
-    android:installLocation="internalOnly">
+    android:installLocation="internalOnly" >
 
     <application
         android:name=".CyclingApplication"
@@ -40,8 +40,8 @@
         <activity
             android:name=".activities.RouteListActivity"
             android:label="@string/title_activity_route_list"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".activities.UserOverviewActivity">
+            android:parentActivityName=".activities.UserOverviewActivity"
+            android:screenOrientation="portrait" >
         </activity>
 
         <service
@@ -59,11 +59,20 @@
         <activity
             android:name=".activities.RouteCaptureActivity"
             android:label="@string/title_activity_route_capture"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".activities.UserOverviewActivity" >
+            android:parentActivityName=".activities.UserOverviewActivity"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.fcd.glasgowcycling.activities.UserOverviewActivity" />
+        </activity>
+        <activity
+            android:name=".activities.SignUpActivity"
+            android:label="@string/title_activity_sign_up"
+            android:parentActivityName=".activities.SignInActivity"
+            android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.fcd.glasgowcycling.activities.SignInActivity" />
         </activity>
     </application>
 

@@ -4,8 +4,10 @@ import android.content.Context;
 import android.util.Log;
 
 import com.fcd.glasgowcycling.CyclingApplication;
+import com.fcd.glasgowcycling.activities.RouteCaptureActivity;
 import com.fcd.glasgowcycling.activities.RouteListActivity;
 import com.fcd.glasgowcycling.activities.SignInActivity;
+import com.fcd.glasgowcycling.activities.SignUpActivity;
 import com.fcd.glasgowcycling.api.AuthModel;
 import com.fcd.glasgowcycling.activities.UserOverviewActivity;
 import com.google.gson.FieldNamingPolicy;
@@ -36,13 +38,15 @@ import retrofit.converter.GsonConverter;
         SignInActivity.class,
         UserOverviewActivity.class,
         ApiClientModule.class,
-        RouteListActivity.class
+        RouteListActivity.class,
+        RouteCaptureActivity.class,
+        SignUpActivity.class
 })
 public class ApiClientModule {
 
     private final String TAG = "ApiClientModule";
 
-    private final String ENDPOINT = "http://192.168.1.38:3000"; // "http://10.0.2.2:3000" == Localhost (for simulator)
+    private final String ENDPOINT = "http://172.20.10.4:3000"; // "http://10.0.2.2:3000" == Localhost (for simulator)
     private Context mContext;
     private CyclingApplication mApplication;
     private AuthModel mAuthModel;
