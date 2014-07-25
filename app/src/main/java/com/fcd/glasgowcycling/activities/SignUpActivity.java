@@ -5,28 +5,35 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
-import android.widget.RadioButton;
 
+import com.fcd.glasgowcycling.CyclingApplication;
 import com.fcd.glasgowcycling.R;
+import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 public class SignUpActivity extends Activity {
+
+    @Inject
+    GoCyclingApiInterface cyclingService;
 
     private static final String TAG = "SignUpActivity";
 
@@ -51,6 +58,7 @@ public class SignUpActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
         ButterKnife.inject(this);
+        ((CyclingApplication) getApplication()).inject(this);
 
         genderButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -182,7 +190,10 @@ public class SignUpActivity extends Activity {
                         e.printStackTrace();
                     }
                     userSelectedImage = BitmapFactory.decodeStream(imageStream);
-                    Drawable drawableImage = new BitmapDrawable(getResources(),userSelectedImage);
+                    if (userSelectedImage.getWidth() > 400 || userSelectedImage.getHeight() > 400){
+                        userSelectedImage = Bitmap.createBitmap(userSelectedImage, (userSelectedImage.getWidth() / 2) - 200, (userSelectedImage.getHeight() / 2) - 200, 400, 400);
+                    }
+                    Drawable drawableImage = new BitmapDrawable(getResources(), userSelectedImage);
                     pictureButton.setBackground(drawableImage);
                 }
         }
@@ -193,7 +204,15 @@ public class SignUpActivity extends Activity {
         String lastName = lastNameField.getText().toString();
         String email = emailField.getText().toString();
         String password = passwordField.getText().toString();
+        String profilePic = "";
+        if (userSelectedImage != null){
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            userSelectedImage.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+            byte[] byteArray = byteArrayOutputStream.toByteArray();
+            profilePic = Base64.encodeToString(byteArray, Base64.DEFAULT);
+        }
+        Log.d(TAG, "Base 64 img >> "+ profilePic);
 
-
+  
     }
 }
