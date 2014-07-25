@@ -35,4 +35,10 @@ public interface GoCyclingApiInterface {
 
     @POST("/routes.json")
     void route(@Body ArrayList<CapturePoints> points);
+
+    @POST("/signup.json")
+    void signup(@Query("user[email]") String email, @Query("user[firstName']") String firstName,
+                @Query("user[lastName']") String lastName, @Query("user[password']") String password,
+                @Query("user[gender']") String gender,@Query("user[yearOfBith']") String yearOfBirth,
+                @Query("user[profilePic']") String profilePic, Callback<User> callback);
 }

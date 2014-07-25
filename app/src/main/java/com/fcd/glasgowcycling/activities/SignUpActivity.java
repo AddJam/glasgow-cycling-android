@@ -43,10 +43,6 @@ public class SignUpActivity extends Activity {
 
     //contents of form
     private Bitmap userSelectedImage;
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String password;
     private String gender;
     private String yearOfBirth;
 
@@ -76,6 +72,7 @@ public class SignUpActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Submit sign up clicked");
+                submitSignup();
             }
         });
 
@@ -89,26 +86,6 @@ public class SignUpActivity extends Activity {
             }
         });
 
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.sign_up, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     public void genderPicker(){
@@ -211,10 +188,12 @@ public class SignUpActivity extends Activity {
         }
     }
 
-    private void getSignupInputs(){
-        firstName = firstNameField.getText().toString();
-        lastName = lastNameField.getText().toString();
-        email = emailField.getText().toString();
-        password = passwordField.getText().toString();
+    private void submitSignup(){
+        String firstName = firstNameField.getText().toString();
+        String lastName = lastNameField.getText().toString();
+        String email = emailField.getText().toString();
+        String password = passwordField.getText().toString();
+
+
     }
 }
