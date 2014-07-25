@@ -1,14 +1,12 @@
 package com.fcd.glasgowcycling.api.http;
 
 import com.fcd.glasgowcycling.api.AuthModel;
-import com.fcd.glasgowcycling.models.Route;
+import com.fcd.glasgowcycling.api.SignupRequest;
 import com.fcd.glasgowcycling.models.RouteList;
 import com.fcd.glasgowcycling.models.User;
 
 import java.util.List;
 import com.fcd.glasgowcycling.models.CapturePoints;
-import com.fcd.glasgowcycling.models.CaptureRoute;
-import com.fcd.glasgowcycling.models.User;
 
 import java.util.ArrayList;
 import retrofit.Callback;
@@ -37,8 +35,5 @@ public interface GoCyclingApiInterface {
     void route(@Body ArrayList<CapturePoints> points);
 
     @POST("/signup.json")
-    void signup(@Query("user[email]") String email, @Query("user[firstName']") String firstName,
-                @Query("user[lastName']") String lastName, @Query("user[password']") String password,
-                @Query("user[gender']") String gender,@Query("user[yearOfBith']") String yearOfBirth,
-                @Query("user[profilePic']") String profilePic, Callback<User> callback);
+    void signup(@Body SignupRequest body, Callback<AuthModel> callback);
 }

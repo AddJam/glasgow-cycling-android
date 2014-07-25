@@ -27,8 +27,8 @@ import javax.inject.Inject;
 public class CyclingAuthenticator extends AbstractAccountAuthenticator {
     private Context mContext;
     public static final String KEY_REFRESH_TOKEN = "refresh_token";
-    public static final String ACCOUNT_TYPE = "com.fcd.GlasgowCycling";
     public static final int ERROR_CODE_ONE_ACCOUNT_ALLOWED = 100;
+    public static final String ACCOUNT_TYPE = "com.fcd.GlasgowCycling";
 
     @Inject
     GoCyclingApiInterface cyclingService;

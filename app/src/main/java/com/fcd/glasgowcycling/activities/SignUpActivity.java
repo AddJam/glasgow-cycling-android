@@ -1,11 +1,12 @@
 package com.fcd.glasgowcycling.activities;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -19,6 +20,9 @@ import android.widget.NumberPicker;
 
 import com.fcd.glasgowcycling.CyclingApplication;
 import com.fcd.glasgowcycling.R;
+import com.fcd.glasgowcycling.api.AuthModel;
+import com.fcd.glasgowcycling.api.SignupRequest;
+import com.fcd.glasgowcycling.api.auth.CyclingAuthenticator;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 
 import java.io.ByteArrayOutputStream;
@@ -29,6 +33,9 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class SignUpActivity extends Activity {
 
@@ -48,10 +55,12 @@ public class SignUpActivity extends Activity {
 
     private static final int SELECT_PHOTO = 100;
 
-    //contents of form
+    // contents of form
     private Bitmap userSelectedImage;
     private String gender;
     private String yearOfBirth;
+
+    private AccountManager mAccountManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +68,8 @@ public class SignUpActivity extends Activity {
         setContentView(R.layout.activity_sign_up);
         ButterKnife.inject(this);
         ((CyclingApplication) getApplication()).inject(this);
+
+        mAccountManager = AccountManager.get(this);
 
         genderButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -202,8 +213,8 @@ public class SignUpActivity extends Activity {
     private void submitSignup(){
         String firstName = firstNameField.getText().toString();
         String lastName = lastNameField.getText().toString();
-        String email = emailField.getText().toString();
-        String password = passwordField.getText().toString();
+        final String email = emailField.getText().toString();
+        final String password = passwordField.getText().toString();
         String profilePic = "";
         if (userSelectedImage != null){
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -212,7 +223,32 @@ public class SignUpActivity extends Activity {
             profilePic = Base64.encodeToString(byteArray, Base64.DEFAULT);
         }
         Log.d(TAG, "Base 64 img >> "+ profilePic);
+        AuthModel authModel;
 
-  
+        cyclingService.signup(new SignupRequest(email, firstName, lastName, password, gender, yearOfBirth, profilePic),
+                new Callback<AuthModel>() {
+            @Override
+            public void success(AuthModel authModel, Response response) {
+                final Account account = new Account(email, CyclingAuthenticator.ACCOUNT_TYPE);
+                // Creating the account on the device and setting the auth token we got
+                // (Not setting the auth token will cause another call to the server to authenticate the user)
+                mAccountManager.addAccountExplicitly(account, password, null);
+                mAccountManager.setAuthToken(account, AccountManager.KEY_AUTHTOKEN, authModel.getUserToken());
+                mAccountManager.setAuthToken(account, CyclingAuthenticator.KEY_REFRESH_TOKEN, authModel.getRefreshToken());
+                startActivity(new Intent(getBaseContext(), UserOverviewActivity.class));
+                finish();
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.d(TAG, "Retrofit error");
+                if (error.isNetworkError()) {
+                    Log.d(TAG, "Network error");
+                } else if (error.getResponse().getStatus() == 401) {
+                    // Unauthorized
+                    Log.d(TAG, "Invalid details");
+                }
+            }
+        });
     }
 }

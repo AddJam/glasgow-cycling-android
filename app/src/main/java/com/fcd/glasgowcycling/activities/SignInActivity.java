@@ -36,7 +36,6 @@ public class SignInActivity extends AccountAuthenticatorActivity {
     // Bundle Args
     public static final String ARG_IS_ADDING_NEW_ACCOUNT = "ADDING_NEW_ACCOUNT";
     public static final String PARAM_USER_PASS = "USER_PASSWORD";
-    public final String ACCOUNT_TYPE = "com.fcd.GlasgowCycling";
 
     // Views
     @InjectView(R.id.email) EditText emailField;
@@ -119,7 +118,7 @@ public class SignInActivity extends AccountAuthenticatorActivity {
         final Account account = new Account(accountName, intent.getStringExtra(AccountManager.KEY_ACCOUNT_TYPE));
         String refreshToken = intent.getStringExtra(CyclingAuthenticator.KEY_REFRESH_TOKEN);
         boolean addingAccount = getIntent().getBooleanExtra(ARG_IS_ADDING_NEW_ACCOUNT, false);
-        boolean accountExists = mAccountManager.getAccountsByType(ACCOUNT_TYPE).length > 0;
+        boolean accountExists = mAccountManager.getAccountsByType(CyclingAuthenticator.ACCOUNT_TYPE).length > 0;
         if (addingAccount || !accountExists) {
             String authToken = intent.getStringExtra(AccountManager.KEY_AUTHTOKEN);
             // Creating the account on the device and setting the auth token we got
@@ -173,7 +172,7 @@ public class SignInActivity extends AccountAuthenticatorActivity {
                 String refreshToken = authModel.getRefreshToken();
                 final Intent res = new Intent();
                 res.putExtra(AccountManager.KEY_ACCOUNT_NAME, email);
-                res.putExtra(AccountManager.KEY_ACCOUNT_TYPE, ACCOUNT_TYPE);
+                res.putExtra(AccountManager.KEY_ACCOUNT_TYPE, CyclingAuthenticator.ACCOUNT_TYPE);
                 res.putExtra(AccountManager.KEY_AUTHTOKEN, authToken);
                 res.putExtra(CyclingAuthenticator.KEY_REFRESH_TOKEN, refreshToken);
                 res.putExtra(PARAM_USER_PASS, password);
@@ -183,6 +182,7 @@ public class SignInActivity extends AccountAuthenticatorActivity {
                 return null;
             }
         }
+
         @Override
         protected void onPostExecute(Intent intent) {
             if (intent != null) {
