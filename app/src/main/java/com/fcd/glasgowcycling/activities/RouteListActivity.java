@@ -46,7 +46,14 @@ public class RouteListActivity extends Activity {
         routesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                startActivity(new Intent(getBaseContext(), RouteOverviewActivity.class));
+                Route route = routes.get(position);
+                if (route != null) {
+                    Intent overviewIntent = new Intent(getBaseContext(), RouteOverviewActivity.class);
+                    Bundle extras = new Bundle();
+                    extras.putSerializable("route", route);
+                    overviewIntent.putExtras(extras);
+                    startActivity(overviewIntent);
+                }
             }
         });
 

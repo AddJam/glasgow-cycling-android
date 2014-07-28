@@ -3,7 +3,9 @@ package com.fcd.glasgowcycling.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Route {
+import java.io.Serializable;
+
+public class Route implements Serializable {
 
     @Expose
     private Integer id;

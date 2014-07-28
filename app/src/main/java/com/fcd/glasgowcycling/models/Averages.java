@@ -2,7 +2,9 @@ package com.fcd.glasgowcycling.models;
 
 import com.google.gson.annotations.Expose;
 
-public class Averages {
+import java.io.Serializable;
+
+public class Averages implements Serializable {
 
     @Expose
     private Double distance;
