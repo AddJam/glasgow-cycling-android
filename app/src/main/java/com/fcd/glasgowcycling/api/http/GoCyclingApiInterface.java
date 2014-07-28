@@ -15,6 +15,7 @@ import retrofit.Callback;
 import retrofit.http.Body;
 import retrofit.http.GET;
 import retrofit.http.POST;
+import retrofit.http.Path;
 import retrofit.http.Query;
 
 /**
@@ -35,4 +36,7 @@ public interface GoCyclingApiInterface {
 
     @POST("/routes.json")
     void route(@Body ArrayList<CapturePoints> points);
+
+    @GET("/routes/find/{id}.json")
+    void routeDetails(@Path("id") int routeId, Callback<Route> routeDetails);
 }

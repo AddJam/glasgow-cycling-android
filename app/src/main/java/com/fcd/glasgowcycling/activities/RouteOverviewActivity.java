@@ -42,7 +42,7 @@ public class RouteOverviewActivity extends Activity {
         speed.setText(route.getAverages().getReadableSpeed());
         distance.setText(route.getAverages().getReadableDistance());
 
-        // Show map
+        // Setup map
         map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
         map.getUiSettings().setMyLocationButtonEnabled(true);
         map.getUiSettings().setZoomControlsEnabled(true);
