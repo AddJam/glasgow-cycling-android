@@ -26,7 +26,7 @@ import retrofit.client.Response;
 
 public class SearchActivity extends Activity {
 
-    @InjectView(R.id.search_string) ListView routesList;
+    @InjectView(R.id.route_list) ListView routesList;
     @Inject GoCyclingApiInterface cyclingService;
 
     private final String TAG = "Search";
@@ -63,7 +63,6 @@ public class SearchActivity extends Activity {
                     Log.d(TAG, "Failed to get routes");
                 }
             });
-
         }
     }
 }
