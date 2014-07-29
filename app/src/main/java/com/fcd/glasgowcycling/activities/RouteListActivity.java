@@ -53,7 +53,4 @@ public class RouteListActivity extends Activity {
         });
     }
 
-    private void refresh() {
-        routesList.invalidateViews();
-    }
 }
