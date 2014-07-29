@@ -4,20 +4,21 @@
     <style name="AppTheme" parent="@android:Theme.Holo.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/JCActionBar</item>
         <item name="android:windowContentOverlay">@null</item>
+        <item name="android:actionBarWidgetTheme">@style/JCActionBar.Widget</item>
+        <item name="android:dropDownListViewStyle">@style/JCActionBar.Widget</item>
     </style>
     <style name="JCActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
         <item name="android:titleTextStyle">@style/JCActionBar.TitleTextStyle</item>
         <item name="android:background">@color/jcBlueColor</item>
         <item name="android:actionMenuTextColor">@color/jcWhiteColor</item>
-        <item name="android:dropDownListViewStyle">@style/JCActionBar.Widget</item>
     </style>
     <style name="JCActionBar.TitleTextStyle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
         <item name="android:textColor">@color/jcWhiteColor</item>
     </style>
 
-    <style name="JCActionBar.Widget" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Menu">
+    <style name="JCActionBar.Widget" parent="@android:style/Theme.Holo">
+        <item name="android:textColorHint">@android:color/white</item>
         <item name="android:textAppearanceSmallPopupMenu">@color/jcWhiteColor</item>
         <item name="android:popupBackground">@color/jcDarkBlueColor</item>
-        <item name="android:textColorHint">@color/jcWhiteColor</item>
     </style>
 </resources>
