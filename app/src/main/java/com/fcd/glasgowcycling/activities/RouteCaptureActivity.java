@@ -172,8 +172,8 @@ public class RouteCaptureActivity extends Activity {
             if (captureRoute.getPointsArray().size() > 1) {
                 map.addPolyline(new PolylineOptions()
                         .add(userLocation, new LatLng(location.getLatitude(), location.getLongitude()))
-                        .width(5)
-                        .color(Color.BLUE));
+                        .width(10)
+                        .color(getResources().getColor(R.color.jcBlueColor)));
             }
 
             // get the new location to keep the map moving
