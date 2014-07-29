@@ -18,8 +18,12 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.CircleOptionsCreator;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -71,16 +75,30 @@ public class RouteOverviewActivity extends Activity {
             @Override
             public void success(Route routeDetails, Response response) {
                 Log.d(TAG, "Successfully got route details");
-                if (routeDetails.getPoints().size() > 1) {
-                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(routeDetails.getPoints().get(0).getLatLng(), 15));
-                    for (int i = 1; i < routeDetails.getPoints().size(); i++) {
-                        Point previousPoint = routeDetails.getPoints().get(i-1);
-                        Point currentPoint = routeDetails.getPoints().get(i);
+                List<Point> points = routeDetails.getPoints();
+                if (points.size() > 1) {
+                    LatLng routeStart = points.get(0).getLatLng();
+                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(routeStart, 15));
+                    for (int i = 1; i < points.size(); i++) {
+                        Point previousPoint = points.get(i - 1);
+                        Point currentPoint = points.get(i);
                         map.addPolyline(new PolylineOptions()
                                 .add(previousPoint.getLatLng(), currentPoint.getLatLng())
                                 .width(10)
-                                .color(Color.BLUE));
+                                .color(getResources().getColor(R.color.jcBlueColor)));
                     }
+                    LatLng routeEnd = points.get(points.size() - 1).getLatLng();
+                    map.addCircle(new CircleOptions()
+                            .center(routeStart)
+                            .radius(150)
+                            .fillColor(getResources().getColor(R.color.jcTransparentBlueColor))
+                            .strokeWidth(0));
+
+                    map.addCircle(new CircleOptions()
+                            .center(routeEnd)
+                            .radius(150)
+                            .fillColor(getResources().getColor(R.color.jcTransparentBlueColor))
+                            .strokeWidth(0));
                 }
             }
 
