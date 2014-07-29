@@ -107,6 +107,26 @@ public class RouteOverviewActivity extends Activity {
                 Log.d(TAG, "Failed to get route details");
             }
         });
+
+        // Reviews
+        final int routeId = route.getId();
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                Log.d(TAG, "Setting rating to " + rating);
+                cyclingService.reviewRoute(routeId, (int)rating, new Callback<Route>() {
+                    @Override
+                    public void success(Route route, Response response) {
+                        Log.d(TAG, "Review successfully submitted");
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        Log.d(TAG, "Review failed to submit");
+                    }
+                });
+            }
+        });
     }
 
     @Override

@@ -39,4 +39,7 @@ public interface GoCyclingApiInterface {
 
     @GET("/routes/find/{id}.json")
     void routeDetails(@Path("id") int routeId, Callback<Route> routeDetails);
+
+    @POST("/review.json")
+    void reviewRoute(@Query("route_id") int routeId, @Query("rating") int rating, Callback<Route> route);
 }
