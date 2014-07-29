@@ -18,5 +18,6 @@
     <style name="JCActionBar.Widget" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Menu">
         <item name="android:textAppearanceSmallPopupMenu">@color/jcWhiteColor</item>
         <item name="android:popupBackground">@color/jcDarkBlueColor</item>
+        <item name="android:textColorHint">@color/jcWhiteColor</item>
     </style>
 </resources>
