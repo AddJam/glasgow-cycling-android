@@ -1,25 +1,16 @@
 package com.fcd.glasgowcycling.activities;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.fcd.glasgowcycling.CyclingApplication;
 import com.fcd.glasgowcycling.R;
-import com.fcd.glasgowcycling.adapters.OnRouteClickListener;
+import com.fcd.glasgowcycling.adapters.RouteClickListener;
 import com.fcd.glasgowcycling.adapters.RouteAdapter;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
-import com.fcd.glasgowcycling.models.Route;
 import com.fcd.glasgowcycling.models.RouteList;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -33,7 +24,7 @@ public class RouteListActivity extends Activity {
 
     private final String TAG = "RouteList";
 
-    private OnRouteClickListener mRouteClickListener;
+    private RouteClickListener mRouteClickListener;
     @InjectView(R.id.route_list) ListView routesList;
     @Inject GoCyclingApiInterface cyclingService;
 
@@ -48,7 +39,7 @@ public class RouteListActivity extends Activity {
             routesList.setOnItemClickListener(mRouteClickListener);
             routesList.setAdapter(new RouteAdapter(getBaseContext(), R.layout.route_cell, mRouteClickListener.getRoutes()));
         } else {
-            mRouteClickListener = new OnRouteClickListener(this);
+            mRouteClickListener = new RouteClickListener(this);
             routesList.setOnItemClickListener(mRouteClickListener);
             cyclingService.searchRoutes(true, new Callback<RouteList>() {
                 @Override

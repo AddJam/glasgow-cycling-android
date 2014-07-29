@@ -14,11 +14,11 @@ import java.util.List;
 /**
  * Created by chrissloey on 29/07/2014.
  */
-public class OnRouteClickListener implements AdapterView.OnItemClickListener {
+public class RouteClickListener implements AdapterView.OnItemClickListener {
     private Context mContext;
     private List<Route> mRoutes;
 
-    public OnRouteClickListener(Context context) {
+    public RouteClickListener(Context context) {
         mContext = context;
     }
 
