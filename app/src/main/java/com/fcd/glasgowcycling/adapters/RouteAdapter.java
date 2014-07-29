@@ -53,7 +53,8 @@ public class RouteAdapter extends ArrayAdapter<Route> {
         holder.toName.setText(route.getEndName());
         holder.fromName.setText(route.getStartName());
         holder.numReviews.setText("(" + route.getNumReviews() + ")");
-        holder.averageDistance.setText(String.format("%.02f", route.getAverages().getDistanceMiles()) + " miles");
+        holder.averageDistance.setText(route.getAverages().getReadableDistance());
+        holder.averageTime.setText(route.getAverages().getReadableTime());
         holder.rating.setRating(route.getAverages().getRating().floatValue());
         holder.numInstances.setText(route.getNumInstances() + " routes");
 

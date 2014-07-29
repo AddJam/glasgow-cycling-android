@@ -98,7 +98,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:rating="0"
-                android:isIndicator="true" />
+                android:isIndicator="true"
+                android:focusable="false"/>
             <TextView
                 android:id="@+id/numReviews"
                 android:layout_width="wrap_content"
