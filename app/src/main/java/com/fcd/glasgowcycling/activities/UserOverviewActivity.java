@@ -240,9 +240,11 @@ public class UserOverviewActivity extends Activity {
         temperature.setText(mWeather.getReadableTemp());
         precipitation.setText(mWeather.getReadablePrecipitationProbability());
         windspeed.setText(mWeather.getReadableWindSpeed());
-        weatherSource.setText("Powered By: " + mWeather.getSource());
+        weatherSource.setText(mWeather.getSource());
 
-        String uri = "@drawable/"+mWeather.getIcon()+".png";
+        String uri = "@drawable/"+mWeather.getIcon();
+        Log.d(TAG, "Weather drawable " + uri);
+
         int imageResource = getResources().getIdentifier(uri, null, getPackageName());
         Drawable icon = getResources().getDrawable(imageResource);
 

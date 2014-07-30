@@ -44,7 +44,6 @@ public class Weather {
     }
 
     public String getUseableIcon() {
-
         String usable = icon.replace('-','_');
         return usable;
     }
@@ -58,7 +57,7 @@ public class Weather {
     }
 
     public String getReadablePrecipitationProbability() {
-        return (precipitationProbability * 100) + "%";
+        return String.format("%.0f",(precipitationProbability * 100)) + "%";
     }
 
     public void setPrecipitationProbability(Double precipitationProbability) {
@@ -78,9 +77,8 @@ public class Weather {
     }
 
     public String getReadableTemp() {
-        return ((temp - 32)/1.8) + "°C";
+        return String.format("%.1f", ((temp - 32)/1.8)) + "°C";
     }
-
 
     public void setTemp(Double temp) {
         this.temp = temp;
@@ -91,7 +89,7 @@ public class Weather {
     }
 
     public String getReadableWindSpeed() {
-        return windSpeed + "mph";
+        return String.format("%.0f", windSpeed) + " mph";
     }
 
     public void setWindSpeed(Double windSpeed) {
