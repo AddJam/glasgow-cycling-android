@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
@@ -23,6 +25,7 @@ import com.fcd.glasgowcycling.R;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgowcycling.models.Month;
 import com.fcd.glasgowcycling.models.User;
+import com.fcd.glasgowcycling.models.Weather;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -51,11 +54,20 @@ public class UserOverviewActivity extends Activity {
     @InjectView(R.id.nearby_routes) View nearbyRoutesView;
     @InjectView(R.id.cycle_map) View cycleMapView;
 
+    //weather
+    @InjectView(R.id.temp_info) TextView temperature;
+    @InjectView(R.id.precip_info) TextView precipitation;
+    @InjectView(R.id.wind_speed_info) TextView windspeed;
+    @InjectView(R.id.weather_source) TextView weatherSource;
+    @InjectView(R.id.weather_icon) ImageView weatherIcon;
+
+
     private GoogleMap map;
     private LatLng userLocation;
     private LocationManager sLocationManager;
 
     private User mUser;
+    private Weather mWeather;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +100,9 @@ public class UserOverviewActivity extends Activity {
 
         // Load user details
         getDetails();
+
+        //Get and set weather
+        getWeather();
 
         // Stats
         statsButton.setOnClickListener(new StatsListener());
@@ -202,5 +217,35 @@ public class UserOverviewActivity extends Activity {
             Log.d(TAG, "CaptureRoute capture clicked");
             startActivity(new Intent(getApplicationContext(), RouteCaptureActivity.class));
         }
+    }
+
+    private void getWeather(){
+        cyclingService.getWeather(new Callback<Weather>() {
+
+            @Override
+            public void success(Weather weather, Response response) {
+                Log.d(TAG, "retreived weather for period" + weather.getTime());
+                mWeather = weather;
+                setWeather();
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.d(TAG, "Failed to get weather");
+            }
+        });
+    }
+
+    private void setWeather(){
+        temperature.setText(mWeather.getReadableTemp());
+        precipitation.setText(mWeather.getReadablePrecipitationProbability());
+        windspeed.setText(mWeather.getReadableWindSpeed());
+        weatherSource.setText("Powered By: " + mWeather.getSource());
+
+        String uri = "@drawable/"+mWeather.getIcon()+".png";
+        int imageResource = getResources().getIdentifier(uri, null, getPackageName());
+        Drawable icon = getResources().getDrawable(imageResource);
+
+        weatherIcon.setImageDrawable(icon);
     }
 }

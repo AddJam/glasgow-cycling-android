@@ -16,59 +16,59 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-            <LinearLayout
-                android:id="@+id/user_details"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="@color/jcBlueColor">
-                <TextView
-                    android:id="@+id/username"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/user_details"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textColor="@color/jcWhiteColor"
-                    android:textStyle="bold"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:paddingBottom="14dp"
-                    android:paddingTop="15dp"/>
+                    android:orientation="vertical"
+                    android:background="@color/jcBlueColor">
+                    <TextView
+                        android:id="@+id/username"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textColor="@color/jcWhiteColor"
+                        android:textStyle="bold"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:paddingBottom="14dp"
+                        android:paddingTop="15dp"/>
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/profile_image"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:src="@drawable/default_profile_pic"
-                    android:layout_gravity="center"
-                    android:paddingTop="15dp"
-                    app:border_width="4dp"
-                    app:border_color="#FFFFFF"/>
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/profile_image"
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:src="@drawable/default_profile_pic"
+                        android:layout_gravity="center"
+                        android:paddingTop="15dp"
+                        app:border_width="4dp"
+                        app:border_color="#FFFFFF"/>
 
-                <TextView
-                    android:id="@+id/distance_stat"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/distance_stat"
-                    android:textSize="14sp"
-                    android:textColor="@color/jcWhiteColor"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:paddingBottom="3dp"
-                    android:paddingTop="15dp"/>
+                    <TextView
+                        android:id="@+id/distance_stat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/distance_stat"
+                        android:textSize="14sp"
+                        android:textColor="@color/jcWhiteColor"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:paddingBottom="3dp"
+                        android:paddingTop="15dp"/>
 
-                <TextView
-                    android:id="@+id/time_stat"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/time_stat"
-                    android:textSize="14sp"
-                    android:textColor="@color/jcWhiteColor"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:paddingBottom="25dp"
-                    />
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/time_stat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/time_stat"
+                        android:textSize="14sp"
+                        android:textColor="@color/jcWhiteColor"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:paddingBottom="25dp"
+                        />
+                </LinearLayout>
                 <Button
                     android:id="@+id/user_stats_button"
                     android:layout_width="match_parent"
@@ -98,6 +98,105 @@
             <include android:id="@+id/user_routes" layout="@layout/icon_cell"></include>
             <include android:id="@+id/nearby_routes" layout="@layout/icon_cell"></include>
             <include android:id="@+id/cycle_map" layout="@layout/icon_cell"></include>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/jcBlueColor"
+                android:orientation="vertical"
+                android:paddingTop="15dp">
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:paddingBottom="10dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_weight="0.15">
+                    <ImageView
+                        android:id="@+id/weather_icon"
+                        android:src="@drawable/sleet"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:paddingBottom="10dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_weight="0.15">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/temp_label"
+                            android:text="@string/temp_label"
+                            android:textColor="@color/jcWhiteColor"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <TextView
+                            android:id="@+id/temp_info"
+                            android:text="12.0 C"
+                            android:textColor="@color/jcWhiteColor"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:paddingBottom="10dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_weight="0.15">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/precip_label"
+                            android:text="@string/precip_label"
+                            android:textColor="@color/jcWhiteColor"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <TextView
+                            android:id="@+id/precip_info"
+                            android:text="34%"
+                            android:textColor="@color/jcWhiteColor"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:paddingBottom="10dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_weight="0.15">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/wind_speed_label"
+                            android:text="@string/wind_speed_label"
+                            android:textColor="@color/jcWhiteColor"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <TextView
+                            android:id="@+id/wind_speed_info"
+                            android:text="12.0 mph"
+                            android:textColor="@color/jcWhiteColor"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/weather_source"
+                    android:textColor="@color/jcWhiteColor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

@@ -9,4 +9,7 @@
     <string name="cycle_map_button">Glasgow Cycle Map</string>
     <string name="action_change_password">Change Password</string>
     <string name="action_account_settings">Account Settings</string>
+    <string name="temp_label">Temperature:</string>
+    <string name="precip_label">Precipitation:</string>
+    <string name="wind_speed_label">Wind Speed:</string>
 </resources>
