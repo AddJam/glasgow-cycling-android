@@ -103,7 +103,8 @@
                 android:layout_height="wrap_content"
                 android:background="@color/jcBlueColor"
                 android:orientation="horizontal"
-                android:paddingTop="15dp">
+                android:paddingTop="15dp"
+                android:id="@+id/weather_area">
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -195,14 +196,14 @@
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
-            <TextView
-                android:id="@+id/weather_source"
-                android:textColor="@color/jcWhiteColor"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/jcBlueColor"
-                android:paddingLeft="10dp"
-                />
+                <TextView
+                    android:id="@+id/weather_source"
+                    android:textColor="@color/jcWhiteColor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/jcBlueColor"
+                    android:paddingLeft="10dp"
+                    />
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

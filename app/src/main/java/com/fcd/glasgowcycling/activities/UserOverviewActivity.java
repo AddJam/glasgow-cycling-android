@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fcd.glasgowcycling.CyclingApplication;
@@ -60,7 +61,7 @@ public class UserOverviewActivity extends Activity {
     @InjectView(R.id.wind_speed_info) TextView windspeed;
     @InjectView(R.id.weather_source) TextView weatherSource;
     @InjectView(R.id.weather_icon) ImageView weatherIcon;
-
+    @InjectView(R.id.weather_area) LinearLayout weatherArea;
 
     private GoogleMap map;
     private LatLng userLocation;
@@ -226,12 +227,14 @@ public class UserOverviewActivity extends Activity {
             public void success(Weather weather, Response response) {
                 Log.d(TAG, "retreived weather for period" + weather.getTime());
                 mWeather = weather;
+                weatherArea.setVisibility(View.VISIBLE);
                 setWeather();
             }
 
             @Override
             public void failure(RetrofitError error) {
                 Log.d(TAG, "Failed to get weather");
+                weatherArea.setVisibility(View.INVISIBLE);
             }
         });
     }
@@ -244,10 +247,10 @@ public class UserOverviewActivity extends Activity {
 
         String uri = "@drawable/"+mWeather.getIcon();
         Log.d(TAG, "Weather drawable " + uri);
-
         int imageResource = getResources().getIdentifier(uri, null, getPackageName());
         Drawable icon = getResources().getDrawable(imageResource);
 
         weatherIcon.setImageDrawable(icon);
     }
+
 }
