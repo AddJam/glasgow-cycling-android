@@ -140,6 +140,12 @@
             android:background="@color/jcGreenColor"
             android:textColor="@color/jcWhiteColor"
             />
+        <ImageView
+            android:paddingTop="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/cyclist_blue"/>
     </LinearLayout>
     </ScrollView>
 </RelativeLayout>
