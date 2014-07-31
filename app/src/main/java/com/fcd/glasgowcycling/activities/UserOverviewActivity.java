@@ -54,7 +54,7 @@ public class UserOverviewActivity extends Activity {
     @InjectView(R.id.cycle_map) View cycleMapView;
 
     private GoogleMap map;
-    private LatLng userLocation;
+    private LatLng mUserLocation;
     private LocationManager sLocationManager;
 
     private User mUser;
@@ -79,11 +79,11 @@ public class UserOverviewActivity extends Activity {
         String provider = sLocationManager.getBestProvider(criteria, false);
         Location location = sLocationManager.getLastKnownLocation(provider);
         if(location == null){
-            userLocation = new LatLng(55.8580, -4.259); // Glasgow
+            mUserLocation = new LatLng(55.8580, -4.259); // Glasgow
         } else {
-            userLocation = new LatLng(location.getLatitude(), location.getLongitude());
+            mUserLocation = new LatLng(location.getLatitude(), location.getLongitude());
         }
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 13));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(mUserLocation, 13));
 
         sLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000,
                 Criteria.ACCURACY_COARSE, new JCLocationListener());
@@ -106,6 +106,18 @@ public class UserOverviewActivity extends Activity {
                 Intent userRoutesIntent = new Intent(getBaseContext(), RouteListActivity.class);
                 Bundle extras = new Bundle();
                 extras.putBoolean("user_only", true);
+                userRoutesIntent.putExtras(extras);
+                startActivity(userRoutesIntent);
+            }
+        });
+
+        nearbyRoutesView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent userRoutesIntent = new Intent(getBaseContext(), RouteListActivity.class);
+                Bundle extras = new Bundle();
+                extras.putDouble("source_lat", mUserLocation.latitude);
+                extras.putDouble("source_long", mUserLocation.longitude);
                 userRoutesIntent.putExtras(extras);
                 startActivity(userRoutesIntent);
             }
@@ -182,8 +194,8 @@ public class UserOverviewActivity extends Activity {
     private class JCLocationListener implements LocationListener {
         @Override
         public void onLocationChanged(Location location) {
-            userLocation = new LatLng(location.getLatitude(), location.getLongitude());
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 13));
+            mUserLocation = new LatLng(location.getLatitude(), location.getLongitude());
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(mUserLocation, 13));
         }
 
         @Override
