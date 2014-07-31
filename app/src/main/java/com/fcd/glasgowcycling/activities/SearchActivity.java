@@ -25,19 +25,12 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class SearchActivity extends Activity {
-
-    @InjectView(R.id.route_list) ListView routesList;
-    @Inject GoCyclingApiInterface cyclingService;
-
+public class SearchActivity extends RouteListActivity {
     private final String TAG = "Search";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.route_list);
-        ButterKnife.inject(this);
-        ((CyclingApplication) getApplication()).inject(this);
 
         handleIntent(getIntent());
     }
@@ -54,20 +47,7 @@ public class SearchActivity extends Activity {
 
             float lat = 55.4f;
             float lng = -4.29f;
-            int perPage = 1000;
-            int pageNum = 1;
-            cyclingService.searchRoutes(lat, lng, perPage, pageNum, new Callback<RouteList>() {
-                @Override
-                public void success(RouteList routeList, Response response) {
-                    Log.d(TAG, "Got routes - total: " + routeList.getRoutes().size());
-                    routesList.setAdapter(new RouteAdapter(getBaseContext(), R.layout.route_cell, routeList.getRoutes()));
-                }
-
-                @Override
-                public void failure(RetrofitError error) {
-                    Log.d(TAG, "Failed to get routes");
-                }
-            });
+            search(false, lat, lng);
         }
     }
 
