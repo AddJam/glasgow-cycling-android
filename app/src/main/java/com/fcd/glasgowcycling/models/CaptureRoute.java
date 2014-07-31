@@ -11,7 +11,7 @@ public class CaptureRoute {
 
     private ArrayList<CapturePoints> pointsArray = new ArrayList<CapturePoints>();
     private long startTime;
-    private float distance;
+    private float distance = 500;
     private double avgSpeed;
 
     public CaptureRoute(){

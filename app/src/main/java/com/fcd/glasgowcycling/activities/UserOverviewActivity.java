@@ -1,6 +1,7 @@
 package com.fcd.glasgowcycling.activities;
 
 import android.app.Activity;
+import android.app.SearchManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.fcd.glasgowcycling.CyclingApplication;
@@ -52,7 +54,7 @@ public class UserOverviewActivity extends Activity {
     @InjectView(R.id.cycle_map) View cycleMapView;
 
     private GoogleMap map;
-    private LatLng userLocation;
+    private LatLng mUserLocation;
     private LocationManager sLocationManager;
 
     private User mUser;
@@ -77,11 +79,11 @@ public class UserOverviewActivity extends Activity {
         String provider = sLocationManager.getBestProvider(criteria, false);
         Location location = sLocationManager.getLastKnownLocation(provider);
         if(location == null){
-            userLocation = new LatLng(55.8580, -4.259); // Glasgow
+            mUserLocation = new LatLng(55.8580, -4.259); // Glasgow
         } else {
-            userLocation = new LatLng(location.getLatitude(), location.getLongitude());
+            mUserLocation = new LatLng(location.getLatitude(), location.getLongitude());
         }
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 13));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(mUserLocation, 13));
 
         sLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000,
                 Criteria.ACCURACY_COARSE, new JCLocationListener());
@@ -101,7 +103,23 @@ public class UserOverviewActivity extends Activity {
         userRoutesView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getBaseContext(), RouteListActivity.class));
+                Intent userRoutesIntent = new Intent(getBaseContext(), RouteListActivity.class);
+                Bundle extras = new Bundle();
+                extras.putBoolean("user_only", true);
+                userRoutesIntent.putExtras(extras);
+                startActivity(userRoutesIntent);
+            }
+        });
+
+        nearbyRoutesView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent userRoutesIntent = new Intent(getBaseContext(), RouteListActivity.class);
+                Bundle extras = new Bundle();
+                extras.putDouble("source_lat", mUserLocation.latitude);
+                extras.putDouble("source_long", mUserLocation.longitude);
+                userRoutesIntent.putExtras(extras);
+                startActivity(userRoutesIntent);
             }
         });
     }
@@ -118,6 +136,15 @@ public class UserOverviewActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.user_overview, menu);
+
+        // Associate searchable configuration with the SearchView
+        SearchManager searchManager =
+                (SearchManager) getSystemService(this.SEARCH_SERVICE);
+        SearchView searchView =
+                (SearchView) menu.findItem(R.id.search).getActionView();
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getComponentName()));
+
         return true;
     }
 
@@ -167,8 +194,8 @@ public class UserOverviewActivity extends Activity {
     private class JCLocationListener implements LocationListener {
         @Override
         public void onLocationChanged(Location location) {
-            userLocation = new LatLng(location.getLatitude(), location.getLongitude());
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 13));
+            mUserLocation = new LatLng(location.getLatitude(), location.getLongitude());
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(mUserLocation, 13));
         }
 
         @Override

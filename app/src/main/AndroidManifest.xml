@@ -36,12 +36,16 @@
             android:name=".activities.UserOverviewActivity"
             android:label="@string/title_activity_user_overview"
             android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".activities.SearchActivity" />
         </activity>
         <activity
             android:name=".activities.RouteListActivity"
             android:label="@string/title_activity_route_list"
             android:parentActivityName=".activities.UserOverviewActivity"
             android:screenOrientation="portrait" >
+
         </activity>
         <activity
             android:name=".activities.RouteCaptureActivity"
@@ -61,7 +65,28 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="RouteListActivity" />
         </activity>
-
+        <activity
+            android:name=".activities.SignUpActivity"
+            android:label="@string/title_activity_sign_up"
+            android:parentActivityName=".activities.SignInActivity"
+            android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.fcd.glasgowcycling.activities.SignInActivity" />
+        </activity>
+        <activity
+            android:name=".activities.SearchActivity"
+            android:label="@string/title_activity_search"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop"
+            android:parentActivityName=".activities.UserOverviewActivity">
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+        </activity>
         <service
             android:name=".api.auth.AuthenticatorService"
             android:exported="false" >
