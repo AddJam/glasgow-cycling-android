@@ -3,55 +3,58 @@ package com.fcd.glasgowcycling.models;
 /**
  * Created by michaelhayes on 10/07/2014.
  */
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
 import com.google.gson.annotations.SerializedName;
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
 import com.google.gson.annotations.Expose;
 
-@DatabaseTable(tableName = "CapturePoints")
-public class CapturePoints {
+@Table(name = "CapturePoints")
+public class CapturePoint extends Model {
 
-    @DatabaseField(generatedId = true)
-    private int id;
+    @Column(name = "PointId")
+    @SerializedName("id")
+    private int pointId;
 
     @Expose
-    @DatabaseField
+    @Column(name = "Time")
     private long time;
 
     @Expose
-    @DatabaseField
+    @Column(name = "Kph")
     private float kph;
 
     @Expose
-    @DatabaseField
+    @Column(name = "Altitude")
     private double altitude;
 
     @Expose
-    @DatabaseField
+    @Column(name = "Course")
     private float course;
 
     @Expose
-    @DatabaseField
+    @Column(name = "Lat")
     private double lat;
 
     @Expose
     @SerializedName("long")
-    @DatabaseField
+    @Column(name = "Lng")
     private double lng;
 
     @Expose
-    @DatabaseField
+    @Column(name = "HorizontalAccuracy")
     private float horizontalAccuracy;
 
     @Expose
-    @DatabaseField
+    @Column(name = "VerticalAccuracy")
     private float verticalAccuracy;
 
-    public CapturePoints() {
-
+    public CapturePoint() {
+        super();
     }
 
-    public CapturePoints(long time, float kph, float altitude, float course, double lat, double lng, float horizontalAccuracy, float verticalAccuracy) {
+    public CapturePoint(long time, float kph, float altitude, float course, double lat, double lng, float horizontalAccuracy, float verticalAccuracy) {
+        super();
         this.time = time;
         this.kph = kph;
         this.altitude = altitude;
@@ -126,8 +129,8 @@ public class CapturePoints {
         this.verticalAccuracy = verticalAccuracy;
     }
 
-    public int getId() {
-        return this.id;
+    public int getPointId() {
+        return this.pointId;
     }
 
 }
