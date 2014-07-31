@@ -1,6 +1,7 @@
 package com.fcd.glasgowcycling.models;
 
 import android.location.Location;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -11,8 +12,9 @@ public class CaptureRoute {
 
     private ArrayList<CapturePoints> pointsArray = new ArrayList<CapturePoints>();
     private long startTime;
-    private float distance = 500;
+    private float distance = 0;
     private double avgSpeed;
+    private final String TAG = "Capture";
 
     public CaptureRoute(){
 
@@ -22,7 +24,6 @@ public class CaptureRoute {
         //increment distance and workout avg speed
         if (pointsArray.size() != 0) {
             CapturePoints lastPoint = pointsArray.get(pointsArray.size() - 1);
-            float[] dist = new float[2];
 
             //for doing distanceTo()
             //TODO look into accuracy being high before incrementing
@@ -30,6 +31,7 @@ public class CaptureRoute {
             source.setLatitude(lastPoint.getLat());
             source.setLongitude(lastPoint.getLng());
 
+            Log.d(TAG, "Location with accuracy " + location.getAccuracy() + " and time " + location.getTime() + " and speed " + location.getSpeed());
             distance = distance + source.distanceTo(location);
             avgSpeed = 0;
             for (int i = 0; i < pointsArray.size(); i++) {

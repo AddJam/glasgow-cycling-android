@@ -128,7 +128,7 @@
                     android:textSize="23sp"
                     android:layout_gravity="center"
                     android:textColor="@color/jcBlueColor"
-                    android:text="0.0"
+                    android:text="0.0m"
                     />
             </LinearLayout>
         </LinearLayout>

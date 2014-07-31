@@ -64,6 +64,7 @@ public class RouteCaptureActivity extends Activity {
     private LatLng userLocation;
     private LocationClient mLocationClient;
     private double mLastGeoDist = 0;
+    private boolean mStartedMoving = false;
 
     private int timestamp;
 
@@ -159,27 +160,31 @@ public class RouteCaptureActivity extends Activity {
 
         @Override
         public void onLocationChanged(Location location) {
-            double delayBtnEvents = (System.nanoTime()- mLastEventTime )/(1000000000.0);
-            mLastEventTime = System.nanoTime();
+            if(location.getSpeed() > 0){
+                mStartedMoving = true;
+            }
 
-            //Sampling rate is the frequency at which updates are received
-            String samplingRate = (new DecimalFormat("0.0000").format(1/delayBtnEvents));
+            long tenSecondsAgo = (System.currentTimeMillis()/1000L)-10;
+            boolean inaccurateLocation = location.getAccuracy() > 65 && location.getTime() < tenSecondsAgo;
+            if(!mStartedMoving || inaccurateLocation){
+                return;
+            }
 
             float speed = (float) (location.getSpeed());
-            String streetname = "";
+            String streetName = "";
             if (captureRoute.getDistance() > (mLastGeoDist + 0.1)) {
                 mLastGeoDist = captureRoute.getDistance();
                 Geocoder coder = new Geocoder(getApplicationContext());
                 try {
                     List<Address> geoInfo = coder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-                    streetname = geoInfo.get(0).getAddressLine(1);
+                    streetName = geoInfo.get(0).getAddressLine(1);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
 
             // add location to CaptureRoute, captureRoute takes care of distance and avg speed
-            captureRoute.addRoutePoint(location, streetname);
+            captureRoute.addRoutePoint(location, streetName);
 
             speedInfo.setText(String.format("%.02f kph", speed));
             avgSpeedInfo.setText(String.format("%.02f kph", captureRoute.getAvgSpeed()));
