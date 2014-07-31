@@ -7,6 +7,7 @@ import com.fcd.glasgowcycling.CyclingApplication;
 import com.fcd.glasgowcycling.activities.RouteCaptureActivity;
 import com.fcd.glasgowcycling.activities.RouteListActivity;
 import com.fcd.glasgowcycling.activities.SearchActivity;
+import com.fcd.glasgowcycling.activities.RouteOverviewActivity;
 import com.fcd.glasgowcycling.activities.SignInActivity;
 import com.fcd.glasgowcycling.activities.SignUpActivity;
 import com.fcd.glasgowcycling.api.AuthModel;
@@ -42,7 +43,8 @@ import retrofit.converter.GsonConverter;
         RouteListActivity.class,
         RouteCaptureActivity.class,
         SignUpActivity.class,
-        SearchActivity.class
+        SearchActivity.class,
+        RouteOverviewActivity.class
 })
 public class ApiClientModule {
 

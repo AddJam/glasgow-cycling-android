@@ -45,20 +45,8 @@
             android:label="@string/title_activity_route_list"
             android:parentActivityName=".activities.UserOverviewActivity"
             android:screenOrientation="portrait" >
+
         </activity>
-
-        <service
-            android:name=".api.auth.AuthenticatorService"
-            android:exported="false" >
-            <intent-filter>
-                <action android:name="android.accounts.AccountAuthenticator" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.accounts.AccountAuthenticator"
-                android:resource="@xml/authenticator" />
-        </service>
-
         <activity
             android:name=".activities.RouteCaptureActivity"
             android:label="@string/title_activity_route_capture"
@@ -67,6 +55,15 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.fcd.glasgowcycling.activities.UserOverviewActivity" />
+        </activity>
+        <activity
+            android:name=".activities.RouteOverviewActivity"
+            android:label="@string/title_activity_route_overview"
+            android:parentActivityName=".activities.RouteListActivity"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="RouteListActivity" />
         </activity>
         <activity
             android:name=".activities.SignUpActivity"
@@ -90,6 +87,17 @@
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
         </activity>
+        <service
+            android:name=".api.auth.AuthenticatorService"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator" />
+        </service>
     </application>
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->

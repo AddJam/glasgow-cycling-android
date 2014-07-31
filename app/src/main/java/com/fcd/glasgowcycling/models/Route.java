@@ -3,7 +3,11 @@ package com.fcd.glasgowcycling.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Route {
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Route implements Serializable {
 
     @Expose
     private Integer id;
@@ -32,6 +36,17 @@ public class Route {
     private Integer numReviews;
     @Expose
     private Averages averages;
+
+    @Expose
+    private List<Point> points = new ArrayList<Point>();
+
+    public List<Point> getPoints() {
+        return points;
+    }
+
+    public void setPoints(List<Point> points) {
+        this.points = points;
+    }
 
     public Integer getId() {
         return id;
