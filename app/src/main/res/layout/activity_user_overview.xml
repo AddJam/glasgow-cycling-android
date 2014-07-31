@@ -101,7 +101,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/jcBlueColor"
+                android:background="@color/jcLightBlueColor"
                 android:orientation="horizontal"
                 android:paddingTop="15dp"
                 android:id="@+id/weather_area">
@@ -136,7 +136,6 @@
                             android:layout_height="wrap_content" />
                         <TextView
                             android:id="@+id/temp_info"
-                            android:text="## C"
                             android:textSize="20sp"
                             android:textColor="@color/jcWhiteColor"
                             android:layout_width="wrap_content"
@@ -162,7 +161,6 @@
                             android:layout_height="wrap_content" />
                         <TextView
                             android:id="@+id/precip_info"
-                            android:text="##%"
                             android:textColor="@color/jcWhiteColor"
                             android:textSize="20sp"
                             android:layout_width="wrap_content"
@@ -188,7 +186,6 @@
                             android:layout_height="wrap_content" />
                         <TextView
                             android:id="@+id/wind_speed_info"
-                            android:text="## mph"
                             android:textColor="@color/jcWhiteColor"
                             android:textSize="20sp"
                             android:layout_width="wrap_content"
@@ -201,7 +198,7 @@
                     android:textColor="@color/jcWhiteColor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/jcBlueColor"
+                    android:background="@color/jcLightBlueColor"
                     android:paddingLeft="10dp"
                     />
         </LinearLayout>
