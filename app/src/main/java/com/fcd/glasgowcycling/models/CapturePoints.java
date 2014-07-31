@@ -47,6 +47,10 @@ public class CapturePoints {
     @DatabaseField
     private float verticalAccuracy;
 
+    @Expose
+    @DatabaseField
+    private String street_name;
+
     public CapturePoints() {
 
     }
@@ -128,6 +132,14 @@ public class CapturePoints {
 
     public int getId() {
         return this.id;
+    }
+
+    public String getStreet_name() {
+        return street_name;
+    }
+
+    public void setStreet_name(String street_name) {
+        this.street_name = street_name;
     }
 
 }
