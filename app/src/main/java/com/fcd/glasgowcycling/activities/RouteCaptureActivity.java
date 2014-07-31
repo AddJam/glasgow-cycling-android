@@ -186,8 +186,8 @@ public class RouteCaptureActivity extends Activity {
             // add location to CaptureRoute, captureRoute takes care of distance and avg speed
             captureRoute.addRoutePoint(location, streetName);
 
-            speedInfo.setText(String.format("%.02f kph", speed));
-            avgSpeedInfo.setText(String.format("%.02f kph", captureRoute.getAvgSpeed()));
+            speedInfo.setText(String.format("%.02f mph", speed * 2.2369362920544));
+            avgSpeedInfo.setText(String.format("%.02f mph", captureRoute.getAvgSpeedMiles()));
             distanceInfo.setText(String.format("%.02f m", captureRoute.getDistance()));
 
             //use existing userlocation

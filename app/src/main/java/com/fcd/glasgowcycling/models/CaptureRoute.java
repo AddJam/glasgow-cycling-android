@@ -87,6 +87,10 @@ public class CaptureRoute {
         return avgSpeed;
     }
 
+    public double getAvgSpeedMiles() {
+        return avgSpeed * 2.2369362920544;
+    }
+
     public void setAvgSpeed(double avgSpeed) {
         this.avgSpeed = avgSpeed;
     }
