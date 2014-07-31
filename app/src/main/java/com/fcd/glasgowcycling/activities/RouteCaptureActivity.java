@@ -159,8 +159,7 @@ public class RouteCaptureActivity extends Activity {
             //Sampling rate is the frequency at which updates are received
             String samplingRate = (new DecimalFormat("0.0000").format(1/delayBtnEvents));
 
-            float speed = (float) (location.getSpeed() * 3.6);  // Converting m/s to Km/hr
-            float lat = (float) (location.getLatitude());  // Converting m/s to Km/hr
+            float speed = (float) (location.getSpeed());
 
             // add location to CaptureRoute, captureRoute takes care of distance and avg speed
             captureRoute.addRoutePoint(location);
