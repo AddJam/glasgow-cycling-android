@@ -66,8 +66,6 @@ public class RouteCaptureActivity extends Activity {
     private double mLastGeoDist = 0;
     private boolean mStartedMoving = false;
 
-    private int timestamp;
-
     private CaptureRoute captureRoute = new CaptureRoute();
 
     @Override
@@ -116,7 +114,6 @@ public class RouteCaptureActivity extends Activity {
         t.start();
 
         finishButton.setOnClickListener(new FinishListener());
-
     }
 
     protected void startLocationTracking() {
@@ -155,8 +152,6 @@ public class RouteCaptureActivity extends Activity {
     };
 
     private LocationListener mLocationListener = new LocationListener() {
-
-        private long mLastEventTime = 0;
 
         @Override
         public void onLocationChanged(Location location) {
