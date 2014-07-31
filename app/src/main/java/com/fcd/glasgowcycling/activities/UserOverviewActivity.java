@@ -273,7 +273,7 @@ public class UserOverviewActivity extends Activity {
         windspeed.setText(mWeather.getReadableWindSpeed());
         weatherSource.setText(mWeather.getSource());
 
-        String uri = "@drawable/"+mWeather.getIcon();
+        String uri = "@drawable/"+mWeather.getUseableIcon();
         Log.d(TAG, "Weather drawable " + uri);
         int imageResource = getResources().getIdentifier(uri, null, getPackageName());
         Drawable icon = getResources().getDrawable(imageResource);
