@@ -103,7 +103,11 @@ public class UserOverviewActivity extends Activity {
         userRoutesView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getBaseContext(), RouteListActivity.class));
+                Intent userRoutesIntent = new Intent(getBaseContext(), RouteListActivity.class);
+                Bundle extras = new Bundle();
+                extras.putBoolean("user_only", true);
+                userRoutesIntent.putExtras(extras);
+                startActivity(userRoutesIntent);
             }
         });
     }
