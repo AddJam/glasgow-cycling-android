@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -31,7 +33,10 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -58,6 +63,7 @@ public class RouteCaptureActivity extends Activity {
     private GoogleMap map;
     private LatLng userLocation;
     private LocationClient mLocationClient;
+    private double mLastGeoDist = 0;
 
     private int timestamp;
 
@@ -160,9 +166,20 @@ public class RouteCaptureActivity extends Activity {
             String samplingRate = (new DecimalFormat("0.0000").format(1/delayBtnEvents));
 
             float speed = (float) (location.getSpeed());
+            String streetname = "";
+            if (captureRoute.getDistance() > (mLastGeoDist + 0.1)) {
+                mLastGeoDist = captureRoute.getDistance();
+                Geocoder coder = new Geocoder(getApplicationContext());
+                try {
+                    List<Address> geoInfo = coder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                    streetname = geoInfo.get(0).getAddressLine(1);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
 
             // add location to CaptureRoute, captureRoute takes care of distance and avg speed
-            captureRoute.addRoutePoint(location);
+            captureRoute.addRoutePoint(location, streetname);
 
             speedInfo.setText(String.format("%.02f kph", speed));
             avgSpeedInfo.setText(String.format("%.02f kph", captureRoute.getAvgSpeed()));
