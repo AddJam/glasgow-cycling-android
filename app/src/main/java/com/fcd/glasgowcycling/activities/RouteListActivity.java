@@ -69,6 +69,14 @@ public class RouteListActivity extends Activity {
             float sourceLat = bundle.getFloat("source_lat");
             float sourceLong = bundle.getFloat("source_long");
             search(userOnly, sourceLat, sourceLong);
+
+            if (userOnly) {
+                setTitle("My Routes");
+            } else {
+                setTitle("Nearby Routes");
+            }
+        } else {
+            setTitle("Search");
         }
     }
 
