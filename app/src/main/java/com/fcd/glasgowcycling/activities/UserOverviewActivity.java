@@ -19,11 +19,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-<<<<<<< HEAD
 import android.widget.SearchView;
-=======
 import android.widget.LinearLayout;
->>>>>>> ca82fb72436a8ce012fb06772d8fdd1e3918c4cc
 import android.widget.TextView;
 
 import com.fcd.glasgowcycling.CyclingApplication;
@@ -46,7 +43,8 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class UserOverviewActivity extends Activity {
-    @Inject GoCyclingApiInterface cyclingService;
+    @Inject
+    GoCyclingApiInterface cyclingService;
     private static final String TAG = "OverviewActivity";
 
     @InjectView(R.id.username) TextView username;
