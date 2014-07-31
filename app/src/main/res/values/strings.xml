@@ -9,6 +9,6 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="search">Search Routes</string>
-    <string name="title_activity_search">SearchActivity</string>
+    <string name="title_activity_search">Cycle Route Search</string>
 
 </resources>
