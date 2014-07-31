@@ -8,6 +8,7 @@ import com.fcd.glasgowcycling.models.User;
 
 import java.util.List;
 import com.fcd.glasgowcycling.models.CapturePoints;
+import com.fcd.glasgowcycling.models.Weather;
 
 import java.util.ArrayList;
 import retrofit.Callback;
@@ -48,4 +49,7 @@ public interface GoCyclingApiInterface {
 
     @POST("/review.json")
     void reviewRoute(@Query("route_id") int routeId, @Query("rating") int rating, Callback<Route> route);
+
+    @GET("/weather.json")
+    void getWeather(Callback<Weather> weather);
 }
