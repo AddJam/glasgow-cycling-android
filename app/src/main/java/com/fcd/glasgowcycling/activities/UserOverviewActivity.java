@@ -113,9 +113,9 @@ public class UserOverviewActivity extends Activity {
         captureButton.setOnClickListener(new CaptureListener());
 
         // Functions list view
-        setupFunction(userRoutesView, R.drawable.logo, "My Routes");
-        setupFunction(nearbyRoutesView, R.drawable.logo, "Nearby Routes");
-        setupFunction(cycleMapView, R.drawable.logo, "Cycle Map");
+        setupFunction(userRoutesView, R.drawable.my_routes_icon, "My Routes");
+        setupFunction(nearbyRoutesView, R.drawable.nearby_routes_icon, "Nearby Routes");
+        setupFunction(cycleMapView, R.drawable.cycle_map_icon, "Cycle Map");
 
         userRoutesView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -273,7 +273,7 @@ public class UserOverviewActivity extends Activity {
         windspeed.setText(mWeather.getReadableWindSpeed());
         weatherSource.setText(mWeather.getSource());
 
-        String uri = "@drawable/"+mWeather.getIcon();
+        String uri = "@drawable/"+mWeather.getUseableIcon();
         Log.d(TAG, "Weather drawable " + uri);
         int imageResource = getResources().getIdentifier(uri, null, getPackageName());
         Drawable icon = getResources().getDrawable(imageResource);
