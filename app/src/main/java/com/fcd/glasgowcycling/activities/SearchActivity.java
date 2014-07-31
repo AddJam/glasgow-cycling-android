@@ -26,7 +26,7 @@ import retrofit.client.Response;
 
 public class SearchActivity extends Activity {
 
-    @InjectView(R.id.search_string) ListView routesList;
+    @InjectView(R.id.route_list) ListView routesList;
     @Inject GoCyclingApiInterface cyclingService;
 
     private final String TAG = "Search";
@@ -51,7 +51,11 @@ public class SearchActivity extends Activity {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
 
-            cyclingService.searchRoutes(true, new Callback<RouteList>() {
+            float lat = 55.4f;
+            float lng = -4.29f;
+            int perPage = 1000;
+            int pageNum = 1;
+            cyclingService.searchRoutes(lat, lng, perPage, pageNum, new Callback<RouteList>() {
                 @Override
                 public void success(RouteList routeList, Response response) {
                     Log.d(TAG, "Got routes - total: " + routeList.getRoutes().size());

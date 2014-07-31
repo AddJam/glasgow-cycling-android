@@ -39,7 +39,9 @@ public class RouteListActivity extends Activity {
         ((CyclingApplication) getApplication()).inject(this);
         ButterKnife.inject(this);
 
-        cyclingService.searchRoutes(true, new Callback<RouteList>() {
+        int perPage = 1000;
+        int pageNum = 1;
+        cyclingService.routes(true, perPage, pageNum, new Callback<RouteList>() {
             @Override
             public void success(RouteList routeList, Response response) {
                 Log.d(TAG, "Got routes - total: " + routeList.getRoutes().size());
