@@ -117,7 +117,7 @@ public class AccountSettingsActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Submit sign up clicked");
-                //logout();
+                ((CyclingApplication)getApplication()).logout();
             }
         });
     }
