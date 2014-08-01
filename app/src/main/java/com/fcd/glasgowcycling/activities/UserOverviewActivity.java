@@ -1,7 +1,9 @@
 package com.fcd.glasgowcycling.activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.SearchManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,6 +13,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
@@ -31,6 +34,9 @@ import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgowcycling.models.Month;
 import com.fcd.glasgowcycling.models.User;
 import com.fcd.glasgowcycling.models.Weather;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -82,6 +88,13 @@ public class UserOverviewActivity extends Activity {
 
         ((CyclingApplication) getApplication()).inject(this);
         ButterKnife.inject(this);
+
+        // Check play services
+        int isAvailable = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        if (isAvailable != ConnectionResult.SUCCESS) {
+            noPlayServicesDialog();
+            return;
+        }
 
         // Show map
         map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
@@ -322,4 +335,25 @@ public class UserOverviewActivity extends Activity {
         weatherIcon.setImageDrawable(icon);
     }
 
+    private void noPlayServicesDialog(){
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+        builder1.setTitle("Google Play Services Required");
+        builder1.setMessage("Google Play Services from the Play store is required to record a route. Please download from the Play Store?");
+        builder1.setCancelable(true);
+        builder1.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        finish();
+                    }
+                });
+        builder1.setPositiveButton("Download",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.gms&hl=en"));
+                        startActivity(intent);
+                    }
+                });
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
+    }
 }
