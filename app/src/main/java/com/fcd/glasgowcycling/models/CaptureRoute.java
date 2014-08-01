@@ -1,6 +1,7 @@
 package com.fcd.glasgowcycling.models;
 
 import android.location.Location;
+import android.util.Log;
 
 import com.google.gson.annotations.Expose;
 
@@ -16,26 +17,24 @@ public class CaptureRoute {
     private List<CapturePoint> points = new ArrayList<CapturePoint>();
 
     private long startTime;
-    private float distance = 500;
+    private float distance = 0;
     private double avgSpeed;
+    private final String TAG = "Capture";
 
     public CaptureRoute(){
 
     }
 
-    public void addRoutePoint(Location location){
+    public void addRoutePoint(Location location, String streetname){
         //increment distance and workout avg speed
         double combinedSpeed = 0;
         if (points.size() != 0) {
             CapturePoint lastPoint = points.get(points.size() - 1);
-            float[] dist = new float[2];
-
-            //for doing distanceTo()
-            //TODO look into accuracy being high before incrementing
             Location source = new Location("fcd");
             source.setLatitude(lastPoint.getLat());
             source.setLongitude(lastPoint.getLng());
 
+            Log.d(TAG, "Location with accuracy " + location.getAccuracy() + " and time " + location.getTime() + " and speed " + location.getSpeed());
             distance = distance + source.distanceTo(location);
             combinedSpeed = 0;
             for (int i = 0; i < points.size(); i++) {
@@ -57,6 +56,7 @@ public class CaptureRoute {
         newPoint.setHorizontalAccuracy(location.getAccuracy());
         newPoint.setVerticalAccuracy(-1); // iOS gives this Android doesnt, set to minus 1 here
         newPoint.setKph(location.getSpeed());
+        newPoint.setStreet_name(streetname);
 
         points.add(newPoint);
 
@@ -88,6 +88,10 @@ public class CaptureRoute {
 
     public double getAvgSpeed() {
         return avgSpeed;
+    }
+
+    public double getAvgSpeedMiles() {
+        return avgSpeed * 2.2369362920544;
     }
 
     public void setAvgSpeed(double avgSpeed) {

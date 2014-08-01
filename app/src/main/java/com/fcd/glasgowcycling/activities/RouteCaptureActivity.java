@@ -3,6 +3,9 @@ package com.fcd.glasgowcycling.activities;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,7 +33,8 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.text.DecimalFormat;
+import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -55,10 +59,10 @@ public class RouteCaptureActivity extends Activity {
     @InjectView(R.id.finish_button) Button finishButton;
 
     private GoogleMap map;
-    private LatLng userLocation;
+    private LatLng lastUserLocation;
     private LocationClient mLocationClient;
-
-    private int timestamp;
+    private double mLastGeoDist = 0;
+    private boolean mStartedMoving = false;
 
     private CaptureRoute captureRoute = new CaptureRoute();
 
@@ -109,7 +113,6 @@ public class RouteCaptureActivity extends Activity {
         t.start();
 
         finishButton.setOnClickListener(new FinishListener());
-
     }
 
     private GooglePlayServicesClient.ConnectionCallbacks mConnectionCallbacks = new GooglePlayServicesClient.ConnectionCallbacks() {
@@ -137,36 +140,52 @@ public class RouteCaptureActivity extends Activity {
 
     private LocationListener mLocationListener = new LocationListener() {
 
-        private long mLastEventTime = 0;
-
         @Override
         public void onLocationChanged(Location location) {
-            double delayBtnEvents = (System.nanoTime()- mLastEventTime )/(1000000000.0);
-            mLastEventTime = System.nanoTime();
+            LatLng currentLocation = new LatLng(location.getLatitude(),location.getLongitude());
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
 
-            //Sampling rate is the frequency at which updates are received
-            String samplingRate = (new DecimalFormat("0.0000").format(1/delayBtnEvents));
+            if(location.getSpeed() > 0){
+                mStartedMoving = true;
+            }
+
+            long tenSecondsAgo = (System.currentTimeMillis()/1000L)-10;
+            boolean inaccurateLocation = location.getAccuracy() > 65 && location.getTime() < tenSecondsAgo;
+            if(!mStartedMoving || inaccurateLocation){
+                return;
+            }
 
             float speed = (float) (location.getSpeed());
+            String streetName = "";
+            if (captureRoute.getDistance() > (mLastGeoDist + 0.1)) {
+                mLastGeoDist = captureRoute.getDistance();
+                Geocoder coder = new Geocoder(getApplicationContext());
+                try {
+                    List<Address> geoInfo = coder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                    if (geoInfo.get(0).getAddressLine(1).isEmpty() == false) {
+                        streetName = geoInfo.get(0).getAddressLine(1);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
 
             // add location to CaptureRoute, captureRoute takes care of distance and avg speed
-            captureRoute.addRoutePoint(location);
+            captureRoute.addRoutePoint(location, streetName);
 
-            speedInfo.setText(String.format("%.02f kph", speed));
-            avgSpeedInfo.setText(String.format("%.02f kph", captureRoute.getAvgSpeed()));
+            speedInfo.setText(String.format("%.02f mph", speed * 2.2369362920544));
+            avgSpeedInfo.setText(String.format("%.02f mph", captureRoute.getAvgSpeedMiles()));
             distanceInfo.setText(String.format("%.02f m", captureRoute.getDistance()));
 
             //use existing userlocation
             if (captureRoute.getPoints().size() > 1) {
                 map.addPolyline(new PolylineOptions()
-                        .add(userLocation, new LatLng(location.getLatitude(), location.getLongitude()))
+                        .add(lastUserLocation, currentLocation)
                         .width(10)
                         .color(getResources().getColor(R.color.jcBlueColor)));
             }
 
-            // get the new location to keep the map moving
-            userLocation = new LatLng(location.getLatitude(),location.getLongitude());
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 15));
+            lastUserLocation = currentLocation;
         }
     };
 
@@ -226,12 +245,6 @@ public class RouteCaptureActivity extends Activity {
     private void finishCapture(boolean submit){
         //if to submit Retrofit post
         if (submit) {
-            Gson gson = new GsonBuilder()
-                    .excludeFieldsWithoutExposeAnnotation()
-                    .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-                    .create();
-            String postJson = gson.toJson(captureRoute);
-
             cyclingService.route(captureRoute, new Callback<RouteCaptureResponse>() {
                 @Override
                 public void success(RouteCaptureResponse routeCaptureResponse, Response response) {

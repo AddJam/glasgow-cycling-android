@@ -49,6 +49,10 @@ public class CapturePoint extends Model {
     @Column(name = "VerticalAccuracy")
     private float verticalAccuracy;
 
+    @Expose
+    @Column(name = "StreetName")
+    private String street_name;
+
     public CapturePoint() {
         super();
     }
@@ -131,6 +135,14 @@ public class CapturePoint extends Model {
 
     public int getPointId() {
         return this.pointId;
+    }
+
+    public String getStreet_name() {
+        return street_name;
+    }
+
+    public void setStreet_name(String street_name) {
+        this.street_name = street_name;
     }
 
 }
