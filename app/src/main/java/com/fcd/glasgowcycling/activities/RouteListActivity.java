@@ -3,6 +3,7 @@ package com.fcd.glasgowcycling.activities;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.ListView;
 
 import com.fcd.glasgowcycling.CyclingApplication;
@@ -88,6 +89,17 @@ public class RouteListActivity extends Activity {
         } else {
             cyclingService.searchRoutes(sourceLat, sourceLong, perPage, pageNum, mSearchCallback);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                finish();
+                return (true);
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }

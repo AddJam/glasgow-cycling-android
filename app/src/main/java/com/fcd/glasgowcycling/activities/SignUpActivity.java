@@ -235,7 +235,10 @@ public class SignUpActivity extends Activity {
                 mAccountManager.addAccountExplicitly(account, password, null);
                 mAccountManager.setAuthToken(account, AccountManager.KEY_AUTHTOKEN, authModel.getUserToken());
                 mAccountManager.setAuthToken(account, CyclingAuthenticator.KEY_REFRESH_TOKEN, authModel.getRefreshToken());
-                startActivity(new Intent(getBaseContext(), UserOverviewActivity.class));
+
+                Intent userIntent = new Intent(getBaseContext(), UserOverviewActivity.class);
+                userIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(userIntent);
                 finish();
             }
 
