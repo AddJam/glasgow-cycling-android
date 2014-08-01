@@ -20,6 +20,7 @@ public class CaptureRoute {
 
     public void addRoutePoint(Location location){
         //increment distance and workout avg speed
+        double combinedSpeed = 0;
         if (pointsArray.size() != 0) {
             CapturePoint lastPoint = pointsArray.get(pointsArray.size() - 1);
             float[] dist = new float[2];
@@ -31,14 +32,14 @@ public class CaptureRoute {
             source.setLongitude(lastPoint.getLng());
 
             distance = distance + source.distanceTo(location);
-            avgSpeed = 0;
+            combinedSpeed = 0;
             for (int i = 0; i < pointsArray.size(); i++) {
-                avgSpeed = avgSpeed + pointsArray.get(i).getKph();
+                combinedSpeed = combinedSpeed + pointsArray.get(i).getKph();
             }
         }
-        avgSpeed = avgSpeed/pointsArray.size();
+        avgSpeed = combinedSpeed/pointsArray.size();
         //if avgSpeed is too low set to 0, stop minus speed showing
-        if (avgSpeed < 1){
+        if (avgSpeed < 0 || pointsArray.size() == 0){
             avgSpeed = 0;
         }
 
