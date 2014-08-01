@@ -267,12 +267,35 @@ public class UserOverviewActivity extends Activity {
     }
 
     private void getWeather(){
+        // Load offline
+        Weather weather = new Select().from(Weather.class).limit(1).executeSingle();
+        if (weather != null) {
+            mWeather = weather;
+            setWeather();
+        }
+
+        int currentTime = (int) (System.currentTimeMillis() / 1000L);
+        int sinceLastHour = currentTime % 3600;
+        int lastHourMark = currentTime - sinceLastHour;
+
+        if (mWeather != null && mWeather.getTime() >= lastHourMark) {
+            Log.d(TAG, "Not updating weather, using cache");
+            return;
+        }
+
+        // Load from API
         cyclingService.getWeather(new Callback<Weather>() {
 
             @Override
             public void success(Weather weather, Response response) {
                 Log.d(TAG, "retreived weather for period" + weather.getTime());
+                // Delete existing weathers
+                new Delete().from(Weather.class).execute();
+
+                // Store
                 mWeather = weather;
+                mWeather.save();
+
                 weatherArea.setVisibility(View.VISIBLE);
                 setWeather();
             }

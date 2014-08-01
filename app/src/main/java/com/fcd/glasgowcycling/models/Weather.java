@@ -1,5 +1,8 @@
 package com.fcd.glasgowcycling.models;
 
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -8,28 +11,36 @@ import com.google.gson.annotations.SerializedName;
  * Created by michaelhayes on 29/07/2014.
  */
 
-public class Weather {
+@Table(name = "Weathers")
+public class Weather extends Model {
 
-    @Expose
+    @Expose @Column(name = "Time")
     private Integer time;
-    @Expose
+
+    @Expose @Column(name = "Icon")
     private String icon;
-    @SerializedName("precipitation_probability")
-    @Expose
+
+    @Expose @Column(name = "PrecipitationProbability")
     private Double precipitationProbability;
-    @SerializedName("precipitation_type")
-    @Expose
+
+    @Expose @Column(name = "PrecipitationType")
     private String precipitationType;
-    @Expose
+
+    @Expose @Column(name = "Temp")
     private Double temp;
-    @SerializedName("wind_speed")
-    @Expose
+
+    @Expose @Column(name = "WindSpeed")
     private Double windSpeed;
-    @SerializedName("wind_bearing")
-    @Expose
+
+    @Expose @Column(name = "WindBearing")
     private Integer windBearing;
-    @Expose
+
+    @Expose @Column(name = "Source")
     private String source;
+
+    public Weather() {
+        super();
+    }
 
     public Integer getTime() {
         return time;
