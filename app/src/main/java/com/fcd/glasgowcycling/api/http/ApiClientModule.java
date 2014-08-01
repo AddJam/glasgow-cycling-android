@@ -117,6 +117,8 @@ public class ApiClientModule {
         public Throwable handleError(RetrofitError cause) {
             if (cause.isNetworkError()) {
                 Log.d(TAG, "Network error making request: " + cause.getUrl());
+            } else if (cause.getResponse() == null) {
+                Log.d(TAG, "Error making request");
             } else if (cause.getResponse().getStatus() == 401) {
                 // Refresh token and try again
                 Log.d(TAG, "Unauthorized error making request");
