@@ -86,7 +86,7 @@ public class SignInActivity extends AccountAuthenticatorActivity {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Sign Up clicked");
-                startActivity(new Intent(getApplicationContext(), SignUpActivity.class));
+                startActivity(new Intent(getBaseContext(), SignUpActivity.class));
             }
         });
     }
@@ -133,7 +133,9 @@ public class SignInActivity extends AccountAuthenticatorActivity {
 
         if (!fromAccountManager) {
             // Load user overview
-            startActivity(new Intent(this, UserOverviewActivity.class));
+            Intent userIntent = new Intent(getBaseContext(), UserOverviewActivity.class);
+            userIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(userIntent);
         }
 
         finish();
