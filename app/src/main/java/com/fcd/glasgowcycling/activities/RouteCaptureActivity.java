@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -20,7 +19,6 @@ import com.fcd.glasgowcycling.CyclingApplication;
 import com.fcd.glasgowcycling.R;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgowcycling.models.CaptureRoute;
-import com.fcd.glasgowcycling.models.User;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -34,8 +32,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.io.IOException;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -43,9 +39,6 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 import static com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
 
@@ -61,7 +54,7 @@ public class RouteCaptureActivity extends Activity {
     @InjectView(R.id.finish_button) Button finishButton;
 
     private GoogleMap map;
-    private LatLng userLocation;
+    private LatLng lastUserLocation;
     private LocationClient mLocationClient;
     private double mLastGeoDist = 0;
     private boolean mStartedMoving = false;
@@ -155,6 +148,9 @@ public class RouteCaptureActivity extends Activity {
 
         @Override
         public void onLocationChanged(Location location) {
+            LatLng currentLocation = new LatLng(location.getLatitude(),location.getLongitude());
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
+
             if(location.getSpeed() > 0){
                 mStartedMoving = true;
             }
@@ -188,14 +184,12 @@ public class RouteCaptureActivity extends Activity {
             //use existing userlocation
             if (captureRoute.getPointsArray().size() > 1) {
                 map.addPolyline(new PolylineOptions()
-                        .add(userLocation, new LatLng(location.getLatitude(), location.getLongitude()))
+                        .add(lastUserLocation, currentLocation)
                         .width(10)
                         .color(getResources().getColor(R.color.jcBlueColor)));
             }
 
-            // get the new location to keep the map moving
-            userLocation = new LatLng(location.getLatitude(),location.getLongitude());
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 15));
+            lastUserLocation = currentLocation;
         }
     };
 
