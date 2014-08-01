@@ -21,7 +21,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
+import com.fcd.glasgowcycling.CyclingApplication;
 import com.fcd.glasgowcycling.R;
 import com.fcd.glasgowcycling.api.AuthModel;
 import com.fcd.glasgowcycling.api.SignupRequest;
@@ -29,6 +31,9 @@ import com.fcd.glasgowcycling.api.auth.CyclingAuthenticator;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgowcycling.models.Month;
 import com.fcd.glasgowcycling.models.User;
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -36,12 +41,13 @@ import java.io.InputStream;
 
 import javax.inject.Inject;
 
+import butterknife.ButterKnife;
 import butterknife.InjectView;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class AccountSettings extends Activity {
+public class AccountSettingsActivity extends Activity {
 
     @Inject
     GoCyclingApiInterface cyclingService;
@@ -51,7 +57,7 @@ public class AccountSettings extends Activity {
     @InjectView(R.id.settings_first_name) EditText lastNameField;
     @InjectView(R.id.settings_email) EditText emailField;
     @InjectView(R.id.settings_picture_button) ImageView pictureButton;
-    @InjectView(R.id.gender_button) Button genderButton;
+    @InjectView(R.id.settings_gender_button) Button genderButton;
     @InjectView(R.id.settings_submit_button) Button submitButton;
     @InjectView(R.id.settings_logout_button) Button logoutButton;
 
@@ -64,6 +70,8 @@ public class AccountSettings extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_settings);
+        ((CyclingApplication) getApplication()).inject(this);
+        ButterKnife.inject(this);
 
         mUser = new Select().from(User.class).limit(1).executeSingle();
 
@@ -101,6 +109,7 @@ public class AccountSettings extends Activity {
             public void onClick(View v) {
                 Log.d(TAG, "Submit settings clicked");
                 //submit settings
+                submitAccountDetails();
             }
         });
 
@@ -207,11 +216,24 @@ public class AccountSettings extends Activity {
             byte[] byteArray = byteArrayOutputStream.toByteArray();
             mUser.setProfilePic(Base64.encodeToString(byteArray, Base64.DEFAULT));
         }
-        
-        cyclingService.updateDetails(mUser, new Callback<User>() {
+
+        Gson gson = new GsonBuilder()
+                .excludeFieldsWithoutExposeAnnotation()
+                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                .create();
+        String userJson = gson.toJson(mUser);
+
+        cyclingService.updateDetails(userJson, new Callback<User>() {
                     @Override
                     public void success(User user, Response response) {
                         Log.d(TAG, "User details updated");
+                        new Delete().from(User.class).execute();
+
+                        // Store
+                        mUser = user;
+                        mUser.getMonth().save();
+                        mUser.save();
+                        finish();
                     }
 
                     @Override

@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.fcd.glasgowcycling.activities.AccountSettings">
+    tools:context="com.fcd.glasgowcycling.activities.AccountSettingsActivity">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -102,7 +102,7 @@
                 android:id="@+id/settings_submit_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/sign_up_button"
+                android:text="@string/settings_save_button"
                 android:textStyle="bold"
                 android:background="@color/jcGreenColor"
                 android:textColor="@color/jcWhiteColor"
@@ -112,7 +112,7 @@
                 android:id="@+id/settings_logout_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/sign_up_button"
+                android:text="@string/settings_logout_button"
                 android:textStyle="bold"
                 android:background="@color/jcRedColor"
                 android:textColor="@color/jcWhiteColor"

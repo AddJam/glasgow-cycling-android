@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.fcd.glasgowcycling.CyclingApplication;
-import com.fcd.glasgowcycling.activities.AccountSettings;
+import com.fcd.glasgowcycling.activities.AccountSettingsActivity;
 import com.fcd.glasgowcycling.activities.RouteCaptureActivity;
 import com.fcd.glasgowcycling.activities.RouteListActivity;
 import com.fcd.glasgowcycling.activities.SearchActivity;
@@ -27,7 +27,6 @@ import retrofit.ErrorHandler;
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
-import retrofit.client.ApacheClient;
 import retrofit.client.Header;
 import retrofit.client.Request;
 import retrofit.client.Response;
@@ -46,7 +45,7 @@ import retrofit.converter.GsonConverter;
         SignUpActivity.class,
         SearchActivity.class,
         RouteOverviewActivity.class,
-        AccountSettings.class
+        AccountSettingsActivity.class
 })
 public class ApiClientModule {
 
@@ -87,6 +86,7 @@ public class ApiClientModule {
      */
     private GoCyclingApiInterface provideAuthClient() {
         Gson gson = new GsonBuilder()
+                .excludeFieldsWithoutExposeAnnotation()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                 .create();
 
@@ -119,6 +119,8 @@ public class ApiClientModule {
         public Throwable handleError(RetrofitError cause) {
             if (cause.isNetworkError()) {
                 Log.d(TAG, "Network error making request: " + cause.getUrl());
+            } else if (cause.getResponse() == null) {
+                Log.d(TAG, "Error with request");
             } else if (cause.getResponse().getStatus() == 401) {
                 // Refresh token and try again
                 Log.d(TAG, "Unauthorized error making request");

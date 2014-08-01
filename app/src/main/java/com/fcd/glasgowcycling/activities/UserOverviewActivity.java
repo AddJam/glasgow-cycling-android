@@ -186,9 +186,15 @@ public class UserOverviewActivity extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_account_settings) {
+            startActivity(new Intent(getApplicationContext(), AccountSettingsActivity.class));
             return true;
         }
+        if (id == R.id.action_change_password) {
+            startActivity(new Intent(getApplicationContext(), AccountSettingsActivity.class));
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 

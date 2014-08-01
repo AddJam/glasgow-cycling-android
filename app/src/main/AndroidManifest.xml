@@ -107,7 +107,7 @@
         </service>
 
         <activity
-            android:name=".activities.AccountSettings"
+            android:name=".activities.AccountSettingsActivity"
             android:label="@string/title_activity_account_settings" >
         </activity>
     </application>
