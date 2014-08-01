@@ -20,8 +20,8 @@ import android.widget.NumberPicker;
 
 import com.fcd.glasgowcycling.CyclingApplication;
 import com.fcd.glasgowcycling.R;
-import com.fcd.glasgowcycling.api.AuthModel;
-import com.fcd.glasgowcycling.api.SignupRequest;
+import com.fcd.glasgowcycling.api.responses.AuthModel;
+import com.fcd.glasgowcycling.api.requests.SignupRequest;
 import com.fcd.glasgowcycling.api.auth.CyclingAuthenticator;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 

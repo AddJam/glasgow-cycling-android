@@ -1,15 +1,15 @@
 package com.fcd.glasgowcycling.api.http;
 
-import com.fcd.glasgowcycling.api.AuthModel;
-import com.fcd.glasgowcycling.api.SignupRequest;
-import com.fcd.glasgowcycling.models.CapturePoint;
+import com.fcd.glasgowcycling.api.responses.AuthModel;
+import com.fcd.glasgowcycling.api.requests.SignupRequest;
+import com.fcd.glasgowcycling.api.responses.RouteCaptureResponse;
+import com.fcd.glasgowcycling.models.CaptureRoute;
 import com.fcd.glasgowcycling.models.Route;
 import com.fcd.glasgowcycling.models.RouteList;
 import com.fcd.glasgowcycling.models.User;
 
 import com.fcd.glasgowcycling.models.Weather;
 
-import java.util.ArrayList;
 import retrofit.Callback;
 import retrofit.http.Body;
 import retrofit.http.GET;
@@ -38,7 +38,7 @@ public interface GoCyclingApiInterface {
                     @Query("per_page") int perPage, @Query("page_num") int pageNum, Callback<RouteList> callback);
 
     @POST("/routes.json")
-    void route(@Body ArrayList<CapturePoint> points);
+    void route(@Body CaptureRoute route, Callback<RouteCaptureResponse> callback);
 
     @POST("/signup.json")
     void signup(@Body SignupRequest body, Callback<AuthModel> callback);

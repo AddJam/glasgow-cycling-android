@@ -1,4 +1,4 @@
-package com.fcd.glasgowcycling.api;
+package com.fcd.glasgowcycling.api.requests;
 
 import com.google.gson.annotations.Expose;
 

@@ -10,7 +10,7 @@ import com.fcd.glasgowcycling.activities.SearchActivity;
 import com.fcd.glasgowcycling.activities.RouteOverviewActivity;
 import com.fcd.glasgowcycling.activities.SignInActivity;
 import com.fcd.glasgowcycling.activities.SignUpActivity;
-import com.fcd.glasgowcycling.api.AuthModel;
+import com.fcd.glasgowcycling.api.responses.AuthModel;
 import com.fcd.glasgowcycling.activities.UserOverviewActivity;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
@@ -26,7 +26,6 @@ import retrofit.ErrorHandler;
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
-import retrofit.client.ApacheClient;
 import retrofit.client.Header;
 import retrofit.client.Request;
 import retrofit.client.Response;
@@ -66,6 +65,7 @@ public class ApiClientModule {
     @Provides
     public GoCyclingApiInterface provideClient() {
         Gson gson = new GsonBuilder()
+                .excludeFieldsWithoutExposeAnnotation()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                 .create();
 

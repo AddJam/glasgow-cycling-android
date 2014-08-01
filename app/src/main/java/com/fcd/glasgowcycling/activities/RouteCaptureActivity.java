@@ -3,10 +3,7 @@ package com.fcd.glasgowcycling.activities;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Color;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -17,11 +14,10 @@ import android.widget.TextView;
 import com.fcd.glasgowcycling.CyclingApplication;
 import com.fcd.glasgowcycling.R;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
+import com.fcd.glasgowcycling.api.responses.RouteCaptureResponse;
 import com.fcd.glasgowcycling.models.CaptureRoute;
-import com.fcd.glasgowcycling.models.User;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
@@ -30,6 +26,9 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.text.DecimalFormat;
 import java.util.concurrent.TimeUnit;
@@ -158,7 +157,7 @@ public class RouteCaptureActivity extends Activity {
             distanceInfo.setText(String.format("%.02f m", captureRoute.getDistance()));
 
             //use existing userlocation
-            if (captureRoute.getPointsArray().size() > 1) {
+            if (captureRoute.getPoints().size() > 1) {
                 map.addPolyline(new PolylineOptions()
                         .add(userLocation, new LatLng(location.getLatitude(), location.getLongitude()))
                         .width(10)
@@ -226,8 +225,24 @@ public class RouteCaptureActivity extends Activity {
 
     private void finishCapture(boolean submit){
         //if to submit Retrofit post
-        if (submit == true){
-            cyclingService.route(captureRoute.getPointsArray());
+        if (submit) {
+            Gson gson = new GsonBuilder()
+                    .excludeFieldsWithoutExposeAnnotation()
+                    .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                    .create();
+            String postJson = gson.toJson(captureRoute);
+
+            cyclingService.route(captureRoute, new Callback<RouteCaptureResponse>() {
+                @Override
+                public void success(RouteCaptureResponse routeCaptureResponse, Response response) {
+                    Log.d(TAG, "Submitted route successfully, id: " + routeCaptureResponse.getRouteId());
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Log.d(TAG, "Failed to submit route");
+                }
+            });
         }
         finish();
     }
