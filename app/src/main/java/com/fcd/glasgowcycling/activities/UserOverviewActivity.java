@@ -23,6 +23,8 @@ import android.widget.SearchView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.activeandroid.query.Delete;
+import com.activeandroid.query.Select;
 import com.fcd.glasgowcycling.CyclingApplication;
 import com.fcd.glasgowcycling.R;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
@@ -178,12 +180,28 @@ public class UserOverviewActivity extends Activity {
     }
 
     private void getDetails(){
+        // Check offline first
+        User existingUser = new Select().from(User.class).limit(1).executeSingle();
+        if (existingUser != null) {
+            mUser = existingUser;
+            populateFields();
+        }
+
+        // Load from API
         cyclingService.details(new Callback<User>() {
 
             @Override
             public void success(User user, Response response) {
                 Log.d(TAG, "retreived user details for " + user.getUserId());
+
+                // Delete existing users
+                new Delete().from(User.class).execute();
+
+                // Store
                 mUser = user;
+                mUser.getMonth().save();
+                mUser.save();
+
                 populateFields();
             }
 

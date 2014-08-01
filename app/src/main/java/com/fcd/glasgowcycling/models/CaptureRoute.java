@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 public class CaptureRoute {
 
-    private ArrayList<CapturePoints> pointsArray = new ArrayList<CapturePoints>();
+    private ArrayList<CapturePoint> pointsArray = new ArrayList<CapturePoint>();
     private long startTime;
     private float distance = 500;
     private double avgSpeed;
@@ -21,7 +21,7 @@ public class CaptureRoute {
     public void addRoutePoint(Location location){
         //increment distance and workout avg speed
         if (pointsArray.size() != 0) {
-            CapturePoints lastPoint = pointsArray.get(pointsArray.size() - 1);
+            CapturePoint lastPoint = pointsArray.get(pointsArray.size() - 1);
             float[] dist = new float[2];
 
             //for doing distanceTo()
@@ -42,7 +42,7 @@ public class CaptureRoute {
             avgSpeed = 0;
         }
 
-        CapturePoints newPoint = new CapturePoints();
+        CapturePoint newPoint = new CapturePoint();
         newPoint.setAltitude(location.getAltitude());
         newPoint.setCourse(location.getBearing());
         newPoint.setLat(location.getLatitude());
@@ -56,11 +56,11 @@ public class CaptureRoute {
 
     }
 
-    public ArrayList<CapturePoints> getPointsArray() {
+    public ArrayList<CapturePoint> getPointsArray() {
         return pointsArray;
     }
 
-    public void setPointsArray(ArrayList<CapturePoints> pointsArray) {
+    public void setPointsArray(ArrayList<CapturePoint> pointsArray) {
         this.pointsArray = pointsArray;
     }
 

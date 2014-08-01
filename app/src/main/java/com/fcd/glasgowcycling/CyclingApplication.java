@@ -6,6 +6,7 @@ import android.app.Application;
 import android.content.Intent;
 import android.util.Log;
 
+import com.activeandroid.ActiveAndroid;
 import com.fcd.glasgowcycling.activities.SignInActivity;
 import com.fcd.glasgowcycling.api.auth.CyclingAuthenticator;
 import com.fcd.glasgowcycling.api.http.ApiClientModule;
@@ -22,8 +23,14 @@ public class CyclingApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
+        ActiveAndroid.initialize(this);
         graph = ObjectGraph.create(getModules());
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        ActiveAndroid.dispose();
     }
 
     private Object[] getModules() {
