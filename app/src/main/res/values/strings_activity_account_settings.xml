@@ -3,8 +3,8 @@
 
     <!-- Strings related to login -->
     <string name="settings_prompt_first_name">Forename</string>
-    <string name="settings_up_prompt_last_name">Surname</string>
-    <string name="settings_up_prompt_email">Email</string>
+    <string name="settings_prompt_last_name">Surname</string>
+    <string name="settings_prompt_email">Email</string>
     <string name="settings_prompt_password">Password</string>
     <string name="settings_prompt_gender">Update Gender</string>
     <string name="settings_label_name">Name</string>
