@@ -1,39 +1,41 @@
 package com.fcd.glasgowcycling.models;
 
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
 import com.google.gson.annotations.Expose;
 
-@DatabaseTable(tableName = "User")
-public class User{
+@Table(name = "Users")
+public class User extends Model {
 
-    @Expose @DatabaseField(id = true)
+    @Expose @Column(name = "UserId")
     private String userId;
 
-    @Expose @DatabaseField
+    @Expose @Column(name = "FirstName")
     private String firstName;
 
-    @Expose @DatabaseField
+    @Expose @Column(name = "LastName")
     private String lastName;
 
-    @Expose
+    @Expose @Column(name = "Month")
     private Month month;
 
-    @Expose @DatabaseField
+    @Expose @Column(name = "Email")
     private String email;
 
-    @Expose @DatabaseField
+    @Expose @Column(name = "Gender")
     private String gender;
 
-    @Expose @DatabaseField
+    @Expose @Column(name = "ProfilePic")
     private String profilePic;
 
-    // Need this for ormlite
+    // Need this for orm
     public User() {
-
+        super();
     }
 
     public User(String firstName, String lastName, Month month, String email, String gender, String profilePic){
+        super();
         this.firstName = firstName;
         this.lastName = lastName;
         this.month = month;

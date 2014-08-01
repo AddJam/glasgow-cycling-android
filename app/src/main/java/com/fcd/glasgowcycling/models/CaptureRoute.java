@@ -10,7 +10,7 @@ import java.util.ArrayList;
  */
 public class CaptureRoute {
 
-    private ArrayList<CapturePoints> pointsArray = new ArrayList<CapturePoints>();
+    private ArrayList<CapturePoint> pointsArray = new ArrayList<CapturePoint>();
     private long startTime;
     private float distance = 0;
     private double avgSpeed;
@@ -22,8 +22,9 @@ public class CaptureRoute {
 
     public void addRoutePoint(Location location, String streetname){
         //increment distance and workout avg speed
+        double combinedSpeed = 0;
         if (pointsArray.size() != 0) {
-            CapturePoints lastPoint = pointsArray.get(pointsArray.size() - 1);
+            CapturePoint lastPoint = pointsArray.get(pointsArray.size() - 1);
 
             //for doing distanceTo()
             //TODO look into accuracy being high before incrementing
@@ -33,18 +34,18 @@ public class CaptureRoute {
 
             Log.d(TAG, "Location with accuracy " + location.getAccuracy() + " and time " + location.getTime() + " and speed " + location.getSpeed());
             distance = distance + source.distanceTo(location);
-            avgSpeed = 0;
+            combinedSpeed = 0;
             for (int i = 0; i < pointsArray.size(); i++) {
-                avgSpeed = avgSpeed + pointsArray.get(i).getKph();
+                combinedSpeed = combinedSpeed + pointsArray.get(i).getKph();
             }
         }
-        avgSpeed = avgSpeed/pointsArray.size();
+        avgSpeed = combinedSpeed/pointsArray.size();
         //if avgSpeed is too low set to 0, stop minus speed showing
-        if (avgSpeed < 1){
+        if (avgSpeed < 0 || pointsArray.size() == 0){
             avgSpeed = 0;
         }
 
-        CapturePoints newPoint = new CapturePoints();
+        CapturePoint newPoint = new CapturePoint();
         newPoint.setAltitude(location.getAltitude());
         newPoint.setCourse(location.getBearing());
         newPoint.setLat(location.getLatitude());
@@ -59,11 +60,11 @@ public class CaptureRoute {
 
     }
 
-    public ArrayList<CapturePoints> getPointsArray() {
+    public ArrayList<CapturePoint> getPointsArray() {
         return pointsArray;
     }
 
-    public void setPointsArray(ArrayList<CapturePoints> pointsArray) {
+    public void setPointsArray(ArrayList<CapturePoint> pointsArray) {
         this.pointsArray = pointsArray;
     }
 

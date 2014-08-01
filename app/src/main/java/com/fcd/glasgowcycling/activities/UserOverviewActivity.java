@@ -1,7 +1,9 @@
 package com.fcd.glasgowcycling.activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.SearchManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,6 +13,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
@@ -23,12 +26,17 @@ import android.widget.SearchView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.activeandroid.query.Delete;
+import com.activeandroid.query.Select;
 import com.fcd.glasgowcycling.CyclingApplication;
 import com.fcd.glasgowcycling.R;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgowcycling.models.Month;
 import com.fcd.glasgowcycling.models.User;
 import com.fcd.glasgowcycling.models.Weather;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -80,6 +88,13 @@ public class UserOverviewActivity extends Activity {
 
         ((CyclingApplication) getApplication()).inject(this);
         ButterKnife.inject(this);
+
+        // Check play services
+        int isAvailable = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        if (isAvailable != ConnectionResult.SUCCESS) {
+            noPlayServicesDialog();
+            return;
+        }
 
         // Show map
         map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
@@ -178,12 +193,28 @@ public class UserOverviewActivity extends Activity {
     }
 
     private void getDetails(){
+        // Check offline first
+        User existingUser = new Select().from(User.class).limit(1).executeSingle();
+        if (existingUser != null) {
+            mUser = existingUser;
+            populateFields();
+        }
+
+        // Load from API
         cyclingService.details(new Callback<User>() {
 
             @Override
             public void success(User user, Response response) {
                 Log.d(TAG, "retreived user details for " + user.getUserId());
+
+                // Delete existing users
+                new Delete().from(User.class).execute();
+
+                // Store
                 mUser = user;
+                mUser.getMonth().save();
+                mUser.save();
+
                 populateFields();
             }
 
@@ -249,12 +280,35 @@ public class UserOverviewActivity extends Activity {
     }
 
     private void getWeather(){
+        // Load offline
+        Weather weather = new Select().from(Weather.class).limit(1).executeSingle();
+        if (weather != null) {
+            mWeather = weather;
+            setWeather();
+        }
+
+        int currentTime = (int) (System.currentTimeMillis() / 1000L);
+        int sinceLastHour = currentTime % 3600;
+        int lastHourMark = currentTime - sinceLastHour;
+
+        if (mWeather != null && mWeather.getTime() >= lastHourMark) {
+            Log.d(TAG, "Not updating weather, using cache");
+            return;
+        }
+
+        // Load from API
         cyclingService.getWeather(new Callback<Weather>() {
 
             @Override
             public void success(Weather weather, Response response) {
                 Log.d(TAG, "retreived weather for period" + weather.getTime());
+                // Delete existing weathers
+                new Delete().from(Weather.class).execute();
+
+                // Store
                 mWeather = weather;
+                mWeather.save();
+
                 weatherArea.setVisibility(View.VISIBLE);
                 setWeather();
             }
@@ -281,4 +335,25 @@ public class UserOverviewActivity extends Activity {
         weatherIcon.setImageDrawable(icon);
     }
 
+    private void noPlayServicesDialog(){
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+        builder1.setTitle("Google Play Services Required");
+        builder1.setMessage("Google Play Services from the Play store is required to record a route. Please download from the Play Store?");
+        builder1.setCancelable(true);
+        builder1.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        finish();
+                    }
+                });
+        builder1.setPositiveButton("Download",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.gms&hl=en"));
+                        startActivity(intent);
+                    }
+                });
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
+    }
 }

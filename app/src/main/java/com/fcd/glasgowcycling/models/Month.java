@@ -1,17 +1,25 @@
 package com.fcd.glasgowcycling.models;
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
 import com.google.gson.annotations.Expose;
 
 /**
  * Created by michaelhayes on 03/07/2014.
  */
-public class Month {
+@Table(name = "Months")
+public class Month extends Model {
 
-    @Expose
+    @Expose @Column(name = "Total")
     private Integer total;
-    @Expose
+    @Expose @Column(name = "Km")
     private Double km;
-    @Expose
+    @Expose @Column(name = "Seconds")
     private Integer seconds;
+
+    public Month() {
+        super();
+    }
 
     public Integer getTotal() {
         return total;

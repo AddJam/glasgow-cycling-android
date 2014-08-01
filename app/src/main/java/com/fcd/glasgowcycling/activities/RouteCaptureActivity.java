@@ -68,7 +68,8 @@ public class RouteCaptureActivity extends Activity {
         ((CyclingApplication) getApplication()).inject(this);
         ButterKnife.inject(this);
 
-        startLocationTracking();
+        mLocationClient = new LocationClient(this, mConnectionCallbacks, mConnectionFailedListener);
+        mLocationClient.connect();
         captureRoute.setStartTime(System.currentTimeMillis());
 
         // Show map
@@ -107,18 +108,6 @@ public class RouteCaptureActivity extends Activity {
         t.start();
 
         finishButton.setOnClickListener(new FinishListener());
-    }
-
-    protected void startLocationTracking() {
-        int isAvailable = GooglePlayServicesUtil
-                .isGooglePlayServicesAvailable(this);
-        if (isAvailable == ConnectionResult.SUCCESS) {
-            mLocationClient = new LocationClient(this, mConnectionCallbacks, mConnectionFailedListener);
-            mLocationClient.connect();
-        }
-        else{
-            noPlayServicesDialog();
-        }
     }
 
     private GooglePlayServicesClient.ConnectionCallbacks mConnectionCallbacks = new GooglePlayServicesClient.ConnectionCallbacks() {
@@ -242,28 +231,6 @@ public class RouteCaptureActivity extends Activity {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
-                    }
-                });
-        AlertDialog alert11 = builder1.create();
-        alert11.show();
-    }
-
-    private void noPlayServicesDialog(){
-        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
-        builder1.setTitle("Google Play Services Required");
-        builder1.setMessage("Google Play Services from the Play store is required to record a route. Please download from the Play Store?");
-        builder1.setCancelable(true);
-        builder1.setPositiveButton("Cancel",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        finishCapture(false);
-                    }
-                });
-        builder1.setNegativeButton("Download",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.gms&hl=en"));
-                        startActivity(intent);
                     }
                 });
         AlertDialog alert11 = builder1.create();
