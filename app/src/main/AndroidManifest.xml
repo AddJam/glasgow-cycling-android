@@ -9,8 +9,12 @@
         android:icon="@drawable/logo"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-        <meta-data android:name="AA_DB_NAME" android:value="GlasgowCycling.db" />
-        <meta-data android:name="AA_DB_VERSION" android:value="1" />
+        <meta-data
+            android:name="AA_DB_NAME"
+            android:value="GlasgowCycling.db" />
+        <meta-data
+            android:name="AA_DB_VERSION"
+            android:value="1" />
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyDLoQyGQtDTQQkoqg8IkiZxvmwa4OxNcbY" />
@@ -61,7 +65,7 @@
             android:name=".activities.RouteOverviewActivity"
             android:label="@string/title_activity_route_overview"
             android:parentActivityName=".activities.RouteListActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="RouteListActivity" />
@@ -78,16 +82,18 @@
         <activity
             android:name=".activities.SearchActivity"
             android:label="@string/title_activity_search"
-            android:screenOrientation="portrait"
             android:launchMode="singleTop"
-            android:parentActivityName=".activities.UserOverviewActivity">
+            android:parentActivityName=".activities.UserOverviewActivity"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
+
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
         </activity>
+
         <service
             android:name=".api.auth.AuthenticatorService"
             android:exported="false" >
@@ -99,6 +105,11 @@
                 android:name="android.accounts.AccountAuthenticator"
                 android:resource="@xml/authenticator" />
         </service>
+
+        <activity
+            android:name=".activities.AccountSettings"
+            android:label="@string/title_activity_account_settings" >
+        </activity>
     </application>
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
@@ -113,5 +124,6 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
-    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+
 </manifest>

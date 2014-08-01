@@ -11,5 +11,6 @@
     <string name="search">Search Routes</string>
     <string name="title_activity_search">Cycle Route Search</string>
     <string name="title_activity_route_overview">Route</string>
+    <string name="title_activity_account_settings">Update Account Settings</string>
 
 </resources>
