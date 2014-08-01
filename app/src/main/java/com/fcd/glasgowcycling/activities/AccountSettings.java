@@ -1,5 +1,7 @@
 package com.fcd.glasgowcycling.activities;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
@@ -16,19 +18,28 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.activeandroid.query.Select;
 import com.fcd.glasgowcycling.R;
+import com.fcd.glasgowcycling.api.AuthModel;
+import com.fcd.glasgowcycling.api.SignupRequest;
+import com.fcd.glasgowcycling.api.auth.CyclingAuthenticator;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
+import com.fcd.glasgowcycling.models.Month;
 import com.fcd.glasgowcycling.models.User;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 import javax.inject.Inject;
 
 import butterknife.InjectView;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class AccountSettings extends Activity {
 
@@ -39,7 +50,7 @@ public class AccountSettings extends Activity {
     @InjectView(R.id.settings_last_name) EditText firstNameField;
     @InjectView(R.id.settings_first_name) EditText lastNameField;
     @InjectView(R.id.settings_email) EditText emailField;
-    @InjectView(R.id.settings_picture_button) Button pictureButton;
+    @InjectView(R.id.settings_picture_button) ImageView pictureButton;
     @InjectView(R.id.gender_button) Button genderButton;
     @InjectView(R.id.settings_submit_button) Button submitButton;
     @InjectView(R.id.settings_logout_button) Button logoutButton;
@@ -47,6 +58,7 @@ public class AccountSettings extends Activity {
     private User mUser;
 
     private static final int SELECT_PHOTO = 100;
+    private boolean pictureUpdate = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +74,7 @@ public class AccountSettings extends Activity {
         if (mUser.getProfilePic() != null){
             byte[] decodedString = Base64.decode(mUser.getProfilePic(), Base64.DEFAULT);
             Bitmap decodedImage = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-            Drawable drawableImage = new BitmapDrawable(getResources(),decodedImage);
-            pictureButton.setBackground(drawableImage);
+            pictureButton.setImageBitmap(decodedImage);
         }
         genderButton.setText(mUser.getGender());
 
@@ -180,7 +191,34 @@ public class AccountSettings extends Activity {
                     }
                     Drawable drawableImage = new BitmapDrawable(getResources(), userSelectedImage);
                     pictureButton.setBackground(drawableImage);
+                    pictureUpdate = true;
                 }
         }
+    }
+
+    private void submitAccountDetails(){
+        mUser.setFirstName(firstNameField.getText().toString());
+        mUser.setLastName(lastNameField.getText().toString());
+        mUser.setEmail(emailField.getText().toString());
+        mUser.setGender(genderButton.getText().toString());
+        if (pictureUpdate){
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            ((BitmapDrawable)pictureButton.getDrawable()).getBitmap().compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+            byte[] byteArray = byteArrayOutputStream.toByteArray();
+            mUser.setProfilePic(Base64.encodeToString(byteArray, Base64.DEFAULT));
+        }
+        
+        cyclingService.updateDetails(mUser, new Callback<User>() {
+                    @Override
+                    public void success(User user, Response response) {
+                        Log.d(TAG, "User details updated");
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        Log.d(TAG, "Failed to update user details");
+                    }
+                }
+        );
     }
 }
