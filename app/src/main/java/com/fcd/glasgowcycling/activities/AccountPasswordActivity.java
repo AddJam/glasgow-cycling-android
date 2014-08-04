@@ -59,24 +59,28 @@ public class AccountPasswordActivity extends Activity {
         if (!newPassword.equals(repeatPassword)){
             Toast.makeText(getApplicationContext(),"New password fields do not match", Toast.LENGTH_LONG).show();
             submitButton.setEnabled(true);
+            Log.d(TAG, "Passwords don't match");
             return;
         }
 
         if (newPassword.equals(currentPassword)){
             Toast.makeText(getApplicationContext(),"Your old password and new password are the same", Toast.LENGTH_LONG).show();
             submitButton.setEnabled(true);
+            Log.d(TAG, "New and old password the same");
             return;
         }
 
         if (newPassword.length() < 8){
             Toast.makeText(getApplicationContext(),"Password must be longer than 8 characters", Toast.LENGTH_LONG).show();
             submitButton.setEnabled(true);
+            Log.d(TAG, "Password too short");
             return;
         }
 
         cyclingService.resetPassword(currentPassword,newPassword, new Callback<AuthModel>() {
             @Override
             public void success(AuthModel authModel, Response response) {
+                Log.d(TAG, "Success password updated");
                 finish();
             }
 
@@ -84,6 +88,7 @@ public class AccountPasswordActivity extends Activity {
             public void failure(RetrofitError error) {
                 Toast.makeText(getApplicationContext(),"Unable to reset password, ensure current password is correct", Toast.LENGTH_LONG).show();
                 submitButton.setEnabled(true);
+                Log.d(TAG, "Failed to update password");
             }
         });
     }
