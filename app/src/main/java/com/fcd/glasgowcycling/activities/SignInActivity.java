@@ -58,9 +58,6 @@ public class SignInActivity extends AccountAuthenticatorActivity {
         fromAccountManager = getIntent().getBooleanExtra(ARG_IS_ADDING_NEW_ACCOUNT, false);
         Log.d(TAG, "From account manager: " + (fromAccountManager ? "YES" : "NO"));
 
-        emailField.setText("test@user.com");
-        passwordField.setText("password");
-
         mAccountManager = AccountManager.get(this);
 
         passwordField.setOnKeyListener(new View.OnKeyListener() {
