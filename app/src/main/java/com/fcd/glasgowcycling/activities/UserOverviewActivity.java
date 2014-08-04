@@ -148,8 +148,8 @@ public class UserOverviewActivity extends Activity {
             public void onClick(View v) {
                 Intent userRoutesIntent = new Intent(getBaseContext(), RouteListActivity.class);
                 Bundle extras = new Bundle();
-                extras.putDouble("source_lat", mUserLocation.latitude);
-                extras.putDouble("source_long", mUserLocation.longitude);
+                extras.putFloat("source_lat", (float)mUserLocation.latitude);
+                extras.putFloat("source_long", (float)mUserLocation.longitude);
                 userRoutesIntent.putExtras(extras);
                 startActivity(userRoutesIntent);
             }
