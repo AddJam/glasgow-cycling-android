@@ -54,5 +54,5 @@ public interface GoCyclingApiInterface {
     void getWeather(Callback<Weather> weather);
 
     @PUT("/details")
-    void updateDetails(@Body String userJson, Callback<User> callback);
+    void updateDetails(@Query("first_name") String firstName, @Query("last_name") String lastName, @Query("profile_pic") String profilePic, @Query("email") String email, @Query("gender") String gender, Callback<User> callback);
 }

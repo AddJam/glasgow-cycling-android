@@ -223,7 +223,7 @@ public class AccountSettingsActivity extends Activity {
                 .create();
         String userJson = gson.toJson(mUser);
 
-        cyclingService.updateDetails(userJson, new Callback<User>() {
+        cyclingService.updateDetails(mUser.getFirstName(), mUser.getLastName(), mUser.getProfilePic(), mUser.getEmail(), mUser.getGender(), new Callback<User>() {
                     @Override
                     public void success(User user, Response response) {
                         Log.d(TAG, "User details updated");

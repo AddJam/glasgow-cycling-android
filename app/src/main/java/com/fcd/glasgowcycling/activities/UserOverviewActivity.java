@@ -117,12 +117,6 @@ public class UserOverviewActivity extends Activity {
         sLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000,
                 Criteria.ACCURACY_COARSE, new JCLocationListener());
 
-        // Load user details
-        getDetails();
-
-        //Get and set weather
-        getWeather();
-
         // Stats
         statsButton.setOnClickListener(new StatsListener());
         captureButton.setOnClickListener(new CaptureListener());
@@ -154,6 +148,12 @@ public class UserOverviewActivity extends Activity {
                 startActivity(userRoutesIntent);
             }
         });
+    }
+
+    protected void onResume() {
+        super.onResume();
+        getDetails();
+        getWeather();
     }
 
     private void setupFunction(View view, int iconResource, String text) {
