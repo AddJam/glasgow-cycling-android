@@ -22,7 +22,6 @@ import com.google.gson.GsonBuilder;
 import com.squareup.okhttp.OkHttpClient;
 
 import org.apache.http.conn.ssl.AllowAllHostnameVerifier;
-import org.apache.http.conn.ssl.X509HostnameVerifier;
 
 import java.io.IOException;
 import java.io.InputStream;
