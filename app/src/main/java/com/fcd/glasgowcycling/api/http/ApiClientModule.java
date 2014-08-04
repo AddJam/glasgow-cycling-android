@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.fcd.glasgowcycling.CyclingApplication;
+import com.fcd.glasgowcycling.activities.AccountForgottenActivity;
 import com.fcd.glasgowcycling.activities.AccountPasswordActivity;
 import com.fcd.glasgowcycling.activities.AccountSettingsActivity;
 import com.fcd.glasgowcycling.activities.RouteCaptureActivity;
@@ -47,13 +48,14 @@ import retrofit.converter.GsonConverter;
         SearchActivity.class,
         RouteOverviewActivity.class,
         AccountSettingsActivity.class,
-        AccountPasswordActivity.class
+        AccountPasswordActivity.class,
+        AccountForgottenActivity.class
 })
 public class ApiClientModule {
 
     private final String TAG = "ApiClientModule";
 
-    private final String ENDPOINT = "http://172.20.10.4:3000"; // "http://10.0.2.2:3000" == Localhost (for simulator)
+    private final String ENDPOINT = "https://activetravel.cloudapp.net"; // http://172.20.10.4:3000"; // "http://10.0.2.2:3000" == Localhost (for simulator)
     private Context mContext;
     private CyclingApplication mApplication;
     private AuthModel mAuthModel;

@@ -115,7 +115,7 @@
         </activity>
         <activity
             android:name=".activities.AccountForgottenActivity"
-            android:label="@string/title_activity_account_reset" >
+            android:label="@string/title_activity_account_forgotten" >
         </activity>
     </application>
 

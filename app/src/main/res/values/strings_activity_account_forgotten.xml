@@ -1,5 +1,5 @@
 <resources>
-    <string name="title_activity_reset">Reset User Password</string>
+    <string name="title_activity_account_forgotten">Reset User Password</string>
 
     <!-- Strings related to login -->
     <string name="reset_label">Enter Registered Email Address</string>
