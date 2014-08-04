@@ -80,6 +80,7 @@ public class SignInActivity extends AccountAuthenticatorActivity {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Sign In clicked");
+                loadingView.startAnimating();
                 new LoginTask().execute();
             }
         });
@@ -187,6 +188,7 @@ public class SignInActivity extends AccountAuthenticatorActivity {
         @Override
         protected void onPostExecute(Intent intent) {
             if (intent != null) {
+                loadingView.stopAnimating();
                 finishLogin(intent);
             }
         }
