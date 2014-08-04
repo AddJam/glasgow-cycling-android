@@ -1,4 +1,4 @@
-package com.fcd.glasgowcycling.api;
+package com.fcd.glasgowcycling.api.responses;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;

@@ -11,8 +11,8 @@ import android.widget.Toast;
 
 import com.fcd.glasgowcycling.CyclingApplication;
 import com.fcd.glasgowcycling.R;
-import com.fcd.glasgowcycling.api.AuthModel;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
+import com.fcd.glasgowcycling.api.responses.AuthModel;
 
 import javax.inject.Inject;
 

@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.fcd.glasgowcycling.activities.UserOverviewActivity">
+    tools:context="com.fcd.glasgowcycling.activities.UserOverviewActivity"
+    android:background="@color/jcBlueColor">
 
     <ScrollView
         android:id="@+id/overivew_scroll"

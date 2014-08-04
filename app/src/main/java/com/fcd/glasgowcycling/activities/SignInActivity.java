@@ -11,19 +11,18 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.fcd.glasgowcycling.CyclingApplication;
+import com.fcd.glasgowcycling.LoadingView;
 import com.fcd.glasgowcycling.R;
-import com.fcd.glasgowcycling.api.AuthModel;
+import com.fcd.glasgowcycling.api.http.ApiClientModule;
+import com.fcd.glasgowcycling.api.responses.AuthModel;
 import com.fcd.glasgowcycling.api.auth.CyclingAuthenticator;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
-import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -43,10 +42,10 @@ public class SignInActivity extends AccountAuthenticatorActivity {
 
     @InjectView(R.id.sign_in_button) Button signInButton;
     @InjectView(R.id.sign_up_button) Button signUpButton;
-    @InjectView(R.id.signin_image) ImageView signinImageView;
+    @InjectView(R.id.loading_view) LoadingView loadingView;
 
     // API
-    @Inject GoCyclingApiInterface sCyclingService;
+    GoCyclingApiInterface sCyclingService;
     AccountManager mAccountManager;
     private boolean fromAccountManager;
 
@@ -55,8 +54,7 @@ public class SignInActivity extends AccountAuthenticatorActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
         ButterKnife.inject(this);
-        ((CyclingApplication) getApplication()).inject(this);
-
+        sCyclingService = new ApiClientModule(this, (CyclingApplication)getApplication()).provideAuthClient();
         fromAccountManager = getIntent().getBooleanExtra(ARG_IS_ADDING_NEW_ACCOUNT, false);
         Log.d(TAG, "From account manager: " + (fromAccountManager ? "YES" : "NO"));
 
@@ -69,6 +67,8 @@ public class SignInActivity extends AccountAuthenticatorActivity {
             public boolean onKey(View view, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_UP &&
                         keyCode == KeyEvent.KEYCODE_ENTER) {
+                    signInButton.setEnabled(false);
+                    loadingView.startAnimating();
                     new LoginTask().execute();
                     return true;
                 } else {
@@ -81,14 +81,23 @@ public class SignInActivity extends AccountAuthenticatorActivity {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Sign In clicked");
+                signInButton.setEnabled(false);
+                loadingView.startAnimating();
                 new LoginTask().execute();
             }
         });
+
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Sign Up clicked");
-                startActivity(new Intent(getApplicationContext(), SignUpActivity.class));
+                Intent signUpIntent = new Intent(getBaseContext(), SignUpActivity.class);
+                if (!emailField.getText().toString().isEmpty()) {
+                    Bundle extras = new Bundle();
+                    extras.putString("email", emailField.getText().toString());
+                    signUpIntent.putExtras(extras);
+                }
+                startActivity(signUpIntent);
             }
         });
     }
@@ -135,10 +144,37 @@ public class SignInActivity extends AccountAuthenticatorActivity {
 
         if (!fromAccountManager) {
             // Load user overview
-            startActivity(new Intent(this, UserOverviewActivity.class));
+            Intent userIntent = new Intent(getBaseContext(), UserOverviewActivity.class);
+            userIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(userIntent);
         }
 
         finish();
+    }
+
+    public void showToast(final String message, final int length) {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                Toast.makeText(SignInActivity.this, message, length).show();
+            }
+        });
+    }
+
+    public void loginFailed() {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                signInButton.setEnabled(true);
+                endLoading();
+            }
+        });
+    }
+
+    public void endLoading() {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                loadingView.stopAnimating();
+            }
+        });
     }
 
     private class LoginTask extends AsyncTask<Void, Void, Intent> {
@@ -161,10 +197,15 @@ public class SignInActivity extends AccountAuthenticatorActivity {
                 Log.d(TAG, "Retrofit error");
                 if (error.isNetworkError()) {
                     Log.d(TAG, "Network error");
+                    showToast("Check your connection and try again", Toast.LENGTH_SHORT);
                 } else if (error.getResponse().getStatus() == 401) {
                     // Unauthorized
                     Log.d(TAG, "Invalid details");
+                    showToast("The details you entered were incorrect", Toast.LENGTH_LONG);
+                } else {
+                    showToast("Login failed, try again", Toast.LENGTH_SHORT);
                 }
+                loginFailed();
                 return null;
             }
             if (authModel != null) {
@@ -179,6 +220,8 @@ public class SignInActivity extends AccountAuthenticatorActivity {
                 return res;
             } else {
                 Log.d(TAG, "Login failed");
+                showToast("Failed to login", Toast.LENGTH_SHORT);
+                loginFailed();
                 return null;
             }
         }

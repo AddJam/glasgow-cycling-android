@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -18,10 +17,10 @@ import android.widget.TextView;
 import com.fcd.glasgowcycling.CyclingApplication;
 import com.fcd.glasgowcycling.R;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
+import com.fcd.glasgowcycling.api.responses.RouteCaptureResponse;
 import com.fcd.glasgowcycling.models.CaptureRoute;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
@@ -30,6 +29,9 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
 import java.util.List;
@@ -39,6 +41,9 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 import static com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
 
@@ -173,7 +178,7 @@ public class RouteCaptureActivity extends Activity {
             distanceInfo.setText(String.format("%.02f m", captureRoute.getDistance()));
 
             //use existing userlocation
-            if (captureRoute.getPointsArray().size() > 1) {
+            if (captureRoute.getPoints().size() > 1) {
                 map.addPolyline(new PolylineOptions()
                         .add(lastUserLocation, currentLocation)
                         .width(10)
@@ -239,8 +244,18 @@ public class RouteCaptureActivity extends Activity {
 
     private void finishCapture(boolean submit){
         //if to submit Retrofit post
-        if (submit == true){
-            cyclingService.route(captureRoute.getPointsArray());
+        if (submit) {
+            cyclingService.route(captureRoute, new Callback<RouteCaptureResponse>() {
+                @Override
+                public void success(RouteCaptureResponse routeCaptureResponse, Response response) {
+                    Log.d(TAG, "Submitted route successfully, id: " + routeCaptureResponse.getRouteId());
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Log.d(TAG, "Failed to submit route");
+                }
+            });
         }
         finish();
     }

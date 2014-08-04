@@ -26,8 +26,6 @@ import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 import com.fcd.glasgowcycling.CyclingApplication;
 import com.fcd.glasgowcycling.R;
-import com.fcd.glasgowcycling.api.AuthModel;
-import com.fcd.glasgowcycling.api.SignupRequest;
 import com.fcd.glasgowcycling.api.auth.CyclingAuthenticator;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgowcycling.models.Month;

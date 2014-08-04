@@ -3,6 +3,7 @@ package com.fcd.glasgowcycling.activities;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.ListView;
 
 import com.fcd.glasgowcycling.CyclingApplication;
@@ -66,8 +67,8 @@ public class RouteListActivity extends Activity {
         Bundle bundle = getIntent().getExtras();
         if (bundle.containsKey("user_only") || bundle.containsKey("source_lat") || bundle.containsKey("source_long")) {
             boolean userOnly = bundle.getBoolean("user_only");
-            float sourceLat = bundle.getFloat("source_lat");
-            float sourceLong = bundle.getFloat("source_long");
+            float sourceLat = bundle.getFloat("source_lat", 0.0f);
+            float sourceLong = bundle.getFloat("source_long", 0.0f);
             search(userOnly, sourceLat, sourceLong);
 
             if (userOnly) {
@@ -88,6 +89,17 @@ public class RouteListActivity extends Activity {
         } else {
             cyclingService.searchRoutes(sourceLat, sourceLong, perPage, pageNum, mSearchCallback);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                finish();
+                return (true);
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }

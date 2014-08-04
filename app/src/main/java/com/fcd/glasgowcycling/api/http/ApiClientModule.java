@@ -12,7 +12,7 @@ import com.fcd.glasgowcycling.activities.SearchActivity;
 import com.fcd.glasgowcycling.activities.RouteOverviewActivity;
 import com.fcd.glasgowcycling.activities.SignInActivity;
 import com.fcd.glasgowcycling.activities.SignUpActivity;
-import com.fcd.glasgowcycling.api.AuthModel;
+import com.fcd.glasgowcycling.api.responses.AuthModel;
 import com.fcd.glasgowcycling.activities.UserOverviewActivity;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
@@ -69,6 +69,7 @@ public class ApiClientModule {
     @Provides
     public GoCyclingApiInterface provideClient() {
         Gson gson = new GsonBuilder()
+                .excludeFieldsWithoutExposeAnnotation()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                 .create();
 
@@ -86,7 +87,7 @@ public class ApiClientModule {
     /*
      * Client which doesn't handle errors, for requests which shouldn't result in logout on 401
      */
-    private GoCyclingApiInterface provideAuthClient() {
+    public GoCyclingApiInterface provideAuthClient() {
         Gson gson = new GsonBuilder()
                 .excludeFieldsWithoutExposeAnnotation()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
@@ -122,10 +123,10 @@ public class ApiClientModule {
             if (cause.isNetworkError()) {
                 Log.d(TAG, "Network error making request: " + cause.getUrl());
             } else if (cause.getResponse() == null) {
-                Log.d(TAG, "Error with request");
+                Log.d(TAG, "Error making request");
             } else if (cause.getResponse().getStatus() == 401) {
                 // Refresh token and try again
-                Log.d(TAG, "Unauthorized error making request");
+                Log.d(TAG, "Unauthorized error making request, logging out");
                 mApplication.logout();
             }
             return cause;

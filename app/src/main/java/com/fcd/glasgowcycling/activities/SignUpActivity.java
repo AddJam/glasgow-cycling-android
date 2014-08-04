@@ -16,12 +16,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.NumberPicker;
+import android.widget.Toast;
 
 import com.fcd.glasgowcycling.CyclingApplication;
+import com.fcd.glasgowcycling.LoadingView;
 import com.fcd.glasgowcycling.R;
-import com.fcd.glasgowcycling.api.AuthModel;
-import com.fcd.glasgowcycling.api.SignupRequest;
+import com.fcd.glasgowcycling.api.responses.AuthModel;
+import com.fcd.glasgowcycling.api.requests.SignupRequest;
 import com.fcd.glasgowcycling.api.auth.CyclingAuthenticator;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 
@@ -50,8 +53,9 @@ public class SignUpActivity extends Activity {
     @InjectView(R.id.password) EditText passwordField;
     @InjectView(R.id.gender_button) Button genderButton;
     @InjectView(R.id.year_of_birth_button) Button yearOfBirthButton;
-    @InjectView(R.id.picture_button) Button pictureButton;
+    @InjectView(R.id.picture_button) ImageView pictureButton;
     @InjectView(R.id.submit_button) Button submitButton;
+    @InjectView(R.id.loading_view) LoadingView loadingView;
 
     private static final int SELECT_PHOTO = 100;
 
@@ -71,6 +75,15 @@ public class SignUpActivity extends Activity {
 
         mAccountManager = AccountManager.get(this);
 
+        loadingView.setBlue(true);
+
+        // Check for email from sign in form
+        Bundle extras = getIntent().getExtras();
+        if (extras.containsKey("email")) {
+            emailField.setText(extras.getString("email"));
+        }
+
+        // Pickers
         genderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,14 +100,6 @@ public class SignUpActivity extends Activity {
             }
         });
 
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "Submit sign up clicked");
-                submitSignup();
-            }
-        });
-
         pictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,6 +110,16 @@ public class SignUpActivity extends Activity {
             }
         });
 
+        // Submit
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "Submit sign up clicked");
+                submitButton.setEnabled(false);
+                loadingView.startAnimating();
+                submitSignup();
+            }
+        });
     }
 
     public void genderPicker(){
@@ -205,9 +220,34 @@ public class SignUpActivity extends Activity {
                         userSelectedImage = Bitmap.createBitmap(userSelectedImage, (userSelectedImage.getWidth() / 2) - 200, (userSelectedImage.getHeight() / 2) - 200, 400, 400);
                     }
                     Drawable drawableImage = new BitmapDrawable(getResources(), userSelectedImage);
-                    pictureButton.setBackground(drawableImage);
+                    pictureButton.setImageDrawable(drawableImage);
                 }
         }
+    }
+
+    public void showToast(final String message, final int length) {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                Toast.makeText(SignUpActivity.this, message, length).show();
+            }
+        });
+    }
+
+    public void signupFailed() {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                submitButton.setEnabled(true);
+                endLoading();
+            }
+        });
+    }
+
+    public void endLoading() {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                loadingView.stopAnimating();
+            }
+        });
     }
 
     private void submitSignup(){
@@ -229,13 +269,17 @@ public class SignUpActivity extends Activity {
                 new Callback<AuthModel>() {
             @Override
             public void success(AuthModel authModel, Response response) {
+                endLoading();
                 final Account account = new Account(email, CyclingAuthenticator.ACCOUNT_TYPE);
                 // Creating the account on the device and setting the auth token we got
                 // (Not setting the auth token will cause another call to the server to authenticate the user)
                 mAccountManager.addAccountExplicitly(account, password, null);
                 mAccountManager.setAuthToken(account, AccountManager.KEY_AUTHTOKEN, authModel.getUserToken());
                 mAccountManager.setAuthToken(account, CyclingAuthenticator.KEY_REFRESH_TOKEN, authModel.getRefreshToken());
-                startActivity(new Intent(getBaseContext(), UserOverviewActivity.class));
+
+                Intent userIntent = new Intent(getBaseContext(), UserOverviewActivity.class);
+                userIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(userIntent);
                 finish();
             }
 
@@ -244,10 +288,14 @@ public class SignUpActivity extends Activity {
                 Log.d(TAG, "Retrofit error");
                 if (error.isNetworkError()) {
                     Log.d(TAG, "Network error");
+                    showToast("Check your connection and try again", Toast.LENGTH_SHORT);
                 } else if (error.getResponse().getStatus() == 401) {
                     // Unauthorized
                     Log.d(TAG, "Invalid details");
+                } else {
+                    showToast("Sign up failed - are you already signed up?", Toast.LENGTH_LONG);
                 }
+                signupFailed();
             }
         });
     }

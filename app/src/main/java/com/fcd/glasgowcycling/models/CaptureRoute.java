@@ -3,14 +3,19 @@ package com.fcd.glasgowcycling.models;
 import android.location.Location;
 import android.util.Log;
 
+import com.google.gson.annotations.Expose;
+
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by michaelhayes on 10/07/2014.
  */
 public class CaptureRoute {
 
-    private ArrayList<CapturePoint> pointsArray = new ArrayList<CapturePoint>();
+    @Expose
+    private List<CapturePoint> points = new ArrayList<CapturePoint>();
+
     private long startTime;
     private float distance = 0;
     private double avgSpeed;
@@ -23,11 +28,8 @@ public class CaptureRoute {
     public void addRoutePoint(Location location, String streetname){
         //increment distance and workout avg speed
         double combinedSpeed = 0;
-        if (pointsArray.size() != 0) {
-            CapturePoint lastPoint = pointsArray.get(pointsArray.size() - 1);
-
-            //for doing distanceTo()
-            //TODO look into accuracy being high before incrementing
+        if (points.size() != 0) {
+            CapturePoint lastPoint = points.get(points.size() - 1);
             Location source = new Location("fcd");
             source.setLatitude(lastPoint.getLat());
             source.setLongitude(lastPoint.getLng());
@@ -35,13 +37,13 @@ public class CaptureRoute {
             Log.d(TAG, "Location with accuracy " + location.getAccuracy() + " and time " + location.getTime() + " and speed " + location.getSpeed());
             distance = distance + source.distanceTo(location);
             combinedSpeed = 0;
-            for (int i = 0; i < pointsArray.size(); i++) {
-                combinedSpeed = combinedSpeed + pointsArray.get(i).getKph();
+            for (int i = 0; i < points.size(); i++) {
+                combinedSpeed = combinedSpeed + points.get(i).getKph();
             }
         }
-        avgSpeed = combinedSpeed/pointsArray.size();
+        avgSpeed = combinedSpeed/ points.size();
         //if avgSpeed is too low set to 0, stop minus speed showing
-        if (avgSpeed < 0 || pointsArray.size() == 0){
+        if (avgSpeed < 0 || points.size() == 0){
             avgSpeed = 0;
         }
 
@@ -50,22 +52,22 @@ public class CaptureRoute {
         newPoint.setCourse(location.getBearing());
         newPoint.setLat(location.getLatitude());
         newPoint.setLng(location.getLongitude());
-        newPoint.setTime(System.currentTimeMillis());
+        newPoint.setTime(System.currentTimeMillis() / 1000L);
         newPoint.setHorizontalAccuracy(location.getAccuracy());
         newPoint.setVerticalAccuracy(-1); // iOS gives this Android doesnt, set to minus 1 here
         newPoint.setKph(location.getSpeed());
         newPoint.setStreet_name(streetname);
 
-        pointsArray.add(newPoint);
+        points.add(newPoint);
 
     }
 
-    public ArrayList<CapturePoint> getPointsArray() {
-        return pointsArray;
+    public List<CapturePoint> getPoints() {
+        return points;
     }
 
-    public void setPointsArray(ArrayList<CapturePoint> pointsArray) {
-        this.pointsArray = pointsArray;
+    public void setPoints(List<CapturePoint> points) {
+        this.points = points;
     }
 
     public long getStartTime() {
