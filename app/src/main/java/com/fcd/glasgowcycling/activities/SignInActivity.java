@@ -80,6 +80,7 @@ public class SignInActivity extends AccountAuthenticatorActivity {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Sign In clicked");
+                signInButton.setEnabled(false);
                 loadingView.startAnimating();
                 new LoginTask().execute();
             }
@@ -167,6 +168,7 @@ public class SignInActivity extends AccountAuthenticatorActivity {
                     // Unauthorized
                     Log.d(TAG, "Invalid details");
                 }
+                signInButton.setEnabled(true);
                 return null;
             }
             if (authModel != null) {
@@ -181,6 +183,7 @@ public class SignInActivity extends AccountAuthenticatorActivity {
                 return res;
             } else {
                 Log.d(TAG, "Login failed");
+                signInButton.setEnabled(true);
                 return null;
             }
         }
