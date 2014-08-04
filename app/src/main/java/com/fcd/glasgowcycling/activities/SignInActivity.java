@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.fcd.glasgowcycling.CyclingApplication;
+import com.fcd.glasgowcycling.LoadingView;
 import com.fcd.glasgowcycling.R;
 import com.fcd.glasgowcycling.api.responses.AuthModel;
 import com.fcd.glasgowcycling.api.auth.CyclingAuthenticator;
@@ -41,7 +42,7 @@ public class SignInActivity extends AccountAuthenticatorActivity {
 
     @InjectView(R.id.sign_in_button) Button signInButton;
     @InjectView(R.id.sign_up_button) Button signUpButton;
-    @InjectView(R.id.signin_image) ImageView signinImageView;
+    @InjectView(R.id.loading_view) LoadingView loadingView;
 
     // API
     @Inject GoCyclingApiInterface sCyclingService;
@@ -79,6 +80,7 @@ public class SignInActivity extends AccountAuthenticatorActivity {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Sign In clicked");
+                loadingView.startAnimating();
                 new LoginTask().execute();
             }
         });
@@ -186,6 +188,7 @@ public class SignInActivity extends AccountAuthenticatorActivity {
         @Override
         protected void onPostExecute(Intent intent) {
             if (intent != null) {
+                loadingView.stopAnimating();
                 finishLogin(intent);
             }
         }

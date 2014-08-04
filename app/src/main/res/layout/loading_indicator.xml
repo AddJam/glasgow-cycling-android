@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="160dp"
+    android:layout_height="124dp">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="114dp"
+        android:paddingTop="0dp"
+        android:paddingLeft="26dp"
+        android:paddingBottom="15dp"
+        android:paddingRight="28dp"
+        android:id="@+id/bike"
+        android:src="@drawable/bike_rider" />
+
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:id="@+id/back_wheel"
+        android:src="@drawable/wheel"
+        android:layout_marginTop="61dp"
+        android:layout_marginLeft="10dp"/>
+
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:id="@+id/front_wheel"
+        android:src="@drawable/wheel"
+        android:layout_marginTop="61dp"
+        android:layout_marginLeft="90dp"
+        />
+
+</RelativeLayout>
