@@ -51,7 +51,7 @@ public class Averages implements Serializable {
             if (minutes == 1) {
                 descriptor = "minute";
             }
-            return String.format("%02d:%02d %s", descriptor, minutes, seconds);
+            return String.format("%02d:%02d %s", minutes, seconds, descriptor);
         } else {
             return String.format("%02d seconds", seconds);
         }
