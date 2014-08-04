@@ -14,6 +14,7 @@ import retrofit.Callback;
 import retrofit.http.Body;
 import retrofit.http.GET;
 import retrofit.http.POST;
+import retrofit.http.PUT;
 import retrofit.http.Path;
 import retrofit.http.Query;
 
@@ -51,4 +52,11 @@ public interface GoCyclingApiInterface {
 
     @GET("/weather.json")
     void getWeather(Callback<Weather> weather);
+
+    @PUT("/details.json")
+    void updateDetails(@Query("first_name") String firstName, @Query("last_name") String lastName, @Query("profile_pic") String profilePic, @Query("email") String email, @Query("gender") String gender, Callback<User> callback);
+
+    @POST("/reset_password.json")
+    void resetPassword(@Query("old_password") String oldPassword, @Query("new_password") String newPassword, Callback<AuthModel> callback);
+
 }
