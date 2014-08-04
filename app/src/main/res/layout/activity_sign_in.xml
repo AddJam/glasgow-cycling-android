@@ -16,8 +16,8 @@
             android:orientation="vertical"
             android:background="@color/jcBlueColor">
 
-            <ImageView
-                android:id="@+id/signin_image"
+            <com.fcd.glasgowcycling.LoadingView
+                android:id="@+id/loading_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/cyclist"
