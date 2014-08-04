@@ -14,15 +14,15 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.fcd.glasgowcycling.CyclingApplication;
 import com.fcd.glasgowcycling.LoadingView;
 import com.fcd.glasgowcycling.R;
+import com.fcd.glasgowcycling.api.http.ApiClientModule;
 import com.fcd.glasgowcycling.api.responses.AuthModel;
 import com.fcd.glasgowcycling.api.auth.CyclingAuthenticator;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
-import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -45,7 +45,7 @@ public class SignInActivity extends AccountAuthenticatorActivity {
     @InjectView(R.id.loading_view) LoadingView loadingView;
 
     // API
-    @Inject GoCyclingApiInterface sCyclingService;
+    GoCyclingApiInterface sCyclingService;
     AccountManager mAccountManager;
     private boolean fromAccountManager;
 
@@ -54,8 +54,7 @@ public class SignInActivity extends AccountAuthenticatorActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
         ButterKnife.inject(this);
-        ((CyclingApplication) getApplication()).inject(this);
-
+        sCyclingService = new ApiClientModule(this, (CyclingApplication)getApplication()).provideAuthClient();
         fromAccountManager = getIntent().getBooleanExtra(ARG_IS_ADDING_NEW_ACCOUNT, false);
         Log.d(TAG, "From account manager: " + (fromAccountManager ? "YES" : "NO"));
 
@@ -68,6 +67,8 @@ public class SignInActivity extends AccountAuthenticatorActivity {
             public boolean onKey(View view, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_UP &&
                         keyCode == KeyEvent.KEYCODE_ENTER) {
+                    signInButton.setEnabled(false);
+                    loadingView.startAnimating();
                     new LoginTask().execute();
                     return true;
                 } else {
@@ -144,6 +145,23 @@ public class SignInActivity extends AccountAuthenticatorActivity {
         finish();
     }
 
+    public void showToast(final String message, final int length) {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                Toast.makeText(SignInActivity.this, message, length).show();
+            }
+        });
+    }
+
+    public void loginFailed() {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                signInButton.setEnabled(true);
+                loadingView.stopAnimating();
+            }
+        });
+    }
+
     private class LoginTask extends AsyncTask<Void, Void, Intent> {
         @Override
         protected Intent doInBackground(Void... params) {
@@ -164,11 +182,13 @@ public class SignInActivity extends AccountAuthenticatorActivity {
                 Log.d(TAG, "Retrofit error");
                 if (error.isNetworkError()) {
                     Log.d(TAG, "Network error");
+                    showToast("Check your connection and try again", Toast.LENGTH_SHORT);
                 } else if (error.getResponse().getStatus() == 401) {
                     // Unauthorized
                     Log.d(TAG, "Invalid details");
+                    showToast("The details you entered were incorrect", Toast.LENGTH_LONG);
                 }
-                signInButton.setEnabled(true);
+                loginFailed();
                 return null;
             }
             if (authModel != null) {
@@ -183,7 +203,8 @@ public class SignInActivity extends AccountAuthenticatorActivity {
                 return res;
             } else {
                 Log.d(TAG, "Login failed");
-                signInButton.setEnabled(true);
+                showToast("Failed to login", Toast.LENGTH_SHORT);
+                loginFailed();
                 return null;
             }
         }

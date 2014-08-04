@@ -83,7 +83,7 @@ public class ApiClientModule {
     /*
      * Client which doesn't handle errors, for requests which shouldn't result in logout on 401
      */
-    private GoCyclingApiInterface provideAuthClient() {
+    public GoCyclingApiInterface provideAuthClient() {
         Gson gson = new GsonBuilder()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                 .create();
@@ -121,7 +121,7 @@ public class ApiClientModule {
                 Log.d(TAG, "Error making request");
             } else if (cause.getResponse().getStatus() == 401) {
                 // Refresh token and try again
-                Log.d(TAG, "Unauthorized error making request");
+                Log.d(TAG, "Unauthorized error making request, logging out");
                 mApplication.logout();
             }
             return cause;
