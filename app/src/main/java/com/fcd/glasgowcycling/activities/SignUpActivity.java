@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.Toast;
 
@@ -52,7 +53,7 @@ public class SignUpActivity extends Activity {
     @InjectView(R.id.password) EditText passwordField;
     @InjectView(R.id.gender_button) Button genderButton;
     @InjectView(R.id.year_of_birth_button) Button yearOfBirthButton;
-    @InjectView(R.id.picture_button) Button pictureButton;
+    @InjectView(R.id.picture_button) ImageView pictureButton;
     @InjectView(R.id.submit_button) Button submitButton;
     @InjectView(R.id.loading_view) LoadingView loadingView;
 
@@ -219,7 +220,7 @@ public class SignUpActivity extends Activity {
                         userSelectedImage = Bitmap.createBitmap(userSelectedImage, (userSelectedImage.getWidth() / 2) - 200, (userSelectedImage.getHeight() / 2) - 200, 400, 400);
                     }
                     Drawable drawableImage = new BitmapDrawable(getResources(), userSelectedImage);
-                    pictureButton.setBackground(drawableImage);
+                    pictureButton.setImageDrawable(drawableImage);
                 }
         }
     }
