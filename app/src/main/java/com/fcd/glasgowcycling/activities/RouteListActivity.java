@@ -1,12 +1,14 @@
 package com.fcd.glasgowcycling.activities;
 
 import android.app.Activity;
+import android.app.ListActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ListView;
 
 import com.fcd.glasgowcycling.CyclingApplication;
+import com.fcd.glasgowcycling.LoadingView;
 import com.fcd.glasgowcycling.R;
 import com.fcd.glasgowcycling.adapters.RouteClickListener;
 import com.fcd.glasgowcycling.adapters.RouteAdapter;
@@ -24,14 +26,15 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class RouteListActivity extends Activity {
+public class RouteListActivity extends ListActivity {
 
     private final String TAG = "RouteList";
 
     private RouteClickListener mRouteClickListener;
     private List<Route> routes;
     private Callback<RouteList> mSearchCallback;
-    @InjectView(R.id.route_list) ListView routesList;
+    private ListView routesList;
+    private LoadingView loadingView;
     @Inject GoCyclingApiInterface cyclingService;
 
     @Override
@@ -39,7 +42,11 @@ public class RouteListActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.route_list);
         ((CyclingApplication) getApplication()).inject(this);
-        ButterKnife.inject(this);
+
+        // Empty list view
+        routesList = getListView();
+        loadingView = (LoadingView) getListView().getEmptyView();
+        loadingView.setBlue(true);
 
         // Search callback
         mSearchCallback = new Callback<RouteList>() {
@@ -47,11 +54,14 @@ public class RouteListActivity extends Activity {
             public void success(RouteList routeList, Response response) {
                 Log.d(TAG, "Got routes - total: " + routeList.getRoutes().size());
                 mRouteClickListener.setRoutes(routeList.getRoutes());
-                routesList.setAdapter(new RouteAdapter(getBaseContext(), R.layout.route_cell, routeList.getRoutes()));                }
+                routesList.setAdapter(new RouteAdapter(getBaseContext(), R.layout.route_cell, routeList.getRoutes()));
+                searchFinished();
+            }
 
             @Override
             public void failure(RetrofitError error) {
                 Log.d(TAG, "Failed to get routes");
+                searchFinished();
             }
         };
 
@@ -84,11 +94,16 @@ public class RouteListActivity extends Activity {
     public void search(boolean userOnly, float sourceLat, float sourceLong) {
         int perPage = 1000;
         int pageNum = 1;
+        loadingView.startAnimating();
         if (userOnly) {
             cyclingService.routes(userOnly, perPage, pageNum, mSearchCallback);
         } else {
             cyclingService.searchRoutes(sourceLat, sourceLong, perPage, pageNum, mSearchCallback);
         }
+    }
+
+    private void searchFinished() {
+        loadingView.stopAnimating();
     }
 
     @Override
