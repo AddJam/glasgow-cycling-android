@@ -71,6 +71,13 @@ public class SignUpActivity extends Activity {
 
         mAccountManager = AccountManager.get(this);
 
+        // Check for email from sign in form
+        Bundle extras = getIntent().getExtras();
+        if (extras.containsKey("email")) {
+            emailField.setText(extras.getString("email"));
+        }
+
+        // Pickers
         genderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,14 +94,6 @@ public class SignUpActivity extends Activity {
             }
         });
 
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "Submit sign up clicked");
-                submitSignup();
-            }
-        });
-
         pictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,6 +104,14 @@ public class SignUpActivity extends Activity {
             }
         });
 
+        // Submit
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "Submit sign up clicked");
+                submitSignup();
+            }
+        });
     }
 
     public void genderPicker(){

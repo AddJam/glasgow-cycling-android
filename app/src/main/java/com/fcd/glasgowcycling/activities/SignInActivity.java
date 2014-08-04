@@ -86,11 +86,18 @@ public class SignInActivity extends AccountAuthenticatorActivity {
                 new LoginTask().execute();
             }
         });
+
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Sign Up clicked");
-                startActivity(new Intent(getBaseContext(), SignUpActivity.class));
+                Intent signUpIntent = new Intent(getBaseContext(), SignUpActivity.class);
+                if (!emailField.getText().toString().isEmpty()) {
+                    Bundle extras = new Bundle();
+                    extras.putString("email", emailField.getText().toString());
+                    signUpIntent.putExtras(extras);
+                }
+                startActivity(signUpIntent);
             }
         });
     }
