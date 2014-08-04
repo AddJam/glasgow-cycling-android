@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
@@ -107,6 +108,7 @@ public class AccountSettingsActivity extends Activity {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                deactivateButtons();
                 Log.d(TAG, "Submit settings clicked");
                 //submit settings
                 submitAccountDetails();
@@ -116,6 +118,7 @@ public class AccountSettingsActivity extends Activity {
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                deactivateButtons();
                 Log.d(TAG, "Submit sign up clicked");
                 ((CyclingApplication)getApplication()).logout();
             }
@@ -136,7 +139,7 @@ public class AccountSettingsActivity extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_change_password) {
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -239,8 +242,24 @@ public class AccountSettingsActivity extends Activity {
                     @Override
                     public void failure(RetrofitError error) {
                         Log.d(TAG, "Failed to update user details");
+                        activateButtons();
+                        Toast.makeText(getApplicationContext(), "Sorry, failed to update your details", Toast.LENGTH_LONG).show();
                     }
                 }
         );
+    }
+
+    public void activateButtons(){
+        submitButton.setEnabled(true);
+        logoutButton.setEnabled(true);
+        genderButton.setEnabled(true);
+        pictureButton.setEnabled(true);
+    }
+
+    public void deactivateButtons(){
+        submitButton.setEnabled(false);
+        logoutButton.setEnabled(false);
+        genderButton.setEnabled(false);
+        pictureButton.setEnabled(false);
     }
 }
