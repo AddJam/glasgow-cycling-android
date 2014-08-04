@@ -203,7 +203,7 @@ public class AccountSettingsActivity extends Activity {
                         userSelectedImage = Bitmap.createBitmap(userSelectedImage, (userSelectedImage.getWidth() / 2) - 200, (userSelectedImage.getHeight() / 2) - 200, 400, 400);
                     }
                     Drawable drawableImage = new BitmapDrawable(getResources(), userSelectedImage);
-                    pictureButton.setBackground(drawableImage);
+                    pictureButton.setImageDrawable(drawableImage);
                     pictureUpdate = true;
                 }
         }
