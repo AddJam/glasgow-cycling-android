@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.fcd.glasgowcycling.CyclingApplication;
 import com.fcd.glasgowcycling.R;
+import com.fcd.glasgowcycling.api.http.ApiClientModule;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgowcycling.api.responses.AuthModel;
 
@@ -28,17 +29,15 @@ public class AccountPasswordActivity extends Activity {
     @InjectView(R.id.password_new) EditText newField;
     @InjectView(R.id.password_repeat) EditText repeatField;
     @InjectView(R.id.password_submit_button) Button submitButton;
-
-    @Inject
-    GoCyclingApiInterface cyclingService;
+    private GoCyclingApiInterface cyclingService;
     private final String TAG = "Password";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_password);
-        ((CyclingApplication) getApplication()).inject(this);
         ButterKnife.inject(this);
+        cyclingService = new ApiClientModule(this, (CyclingApplication)getApplication()).provideAuthClient();
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,8 +62,14 @@ public class AccountPasswordActivity extends Activity {
             return;
         }
 
-        if (!newPassword.equals(currentPassword)){
+        if (newPassword.equals(currentPassword)){
             Toast.makeText(getApplicationContext(),"Your old password and new password are the same", Toast.LENGTH_LONG).show();
+            submitButton.setEnabled(true);
+            return;
+        }
+
+        if (newPassword.length() < 8){
+            Toast.makeText(getApplicationContext(),"Password must be longer than 8 characters", Toast.LENGTH_LONG).show();
             submitButton.setEnabled(true);
             return;
         }
@@ -72,7 +77,7 @@ public class AccountPasswordActivity extends Activity {
         cyclingService.resetPassword(currentPassword,newPassword, new Callback<AuthModel>() {
             @Override
             public void success(AuthModel authModel, Response response) {
-
+                finish();
             }
 
             @Override
