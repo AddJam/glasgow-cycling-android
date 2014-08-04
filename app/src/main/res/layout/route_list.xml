@@ -5,8 +5,16 @@
     tools:context="com.fcd.glasgowcycling.activities.RouteListActivity">
 
     <ListView
-        android:id="@+id/route_list"
+        android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+
+    <com.fcd.glasgowcycling.LoadingView
+        android:id="@android:id/empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/cyclist"
+        android:layout_centerInParent="true"
+        android:paddingTop="15dp"/>
 
 </RelativeLayout>
