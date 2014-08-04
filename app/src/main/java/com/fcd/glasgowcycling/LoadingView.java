@@ -10,6 +10,7 @@ import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 public class LoadingView extends RelativeLayout {
 
@@ -17,6 +18,7 @@ public class LoadingView extends RelativeLayout {
     private View mLoadingIndicator;
     private ImageView mBackWheel;
     private ImageView mFrontWheel;
+    private TextView mMessage;
     private RotateAnimation mWheelAnimation;
 
     public LoadingView(Context context) {
@@ -56,16 +58,19 @@ public class LoadingView extends RelativeLayout {
         mLoadingIndicator = mInflater.inflate(R.layout.loading_indicator, this, true);
         mBackWheel = (ImageView)findViewById(R.id.back_wheel);
         mFrontWheel = (ImageView)findViewById(R.id.front_wheel);
+        mMessage = (TextView)findViewById(R.id.message);
 
         ImageView bike = (ImageView)findViewById(R.id.bike);
         if (isBlue) {
             bike.setImageResource(R.drawable.bike_rider_blue);
             mBackWheel.setImageResource(R.drawable.wheel_blue);
             mFrontWheel.setImageResource(R.drawable.wheel_blue);
+            mMessage.setTextColor(getResources().getColor(R.color.jcBlueColor));
         } else {
             bike.setImageResource(R.drawable.bike_rider);
             mBackWheel.setImageResource(R.drawable.wheel);
             mFrontWheel.setImageResource(R.drawable.wheel);
+            mMessage.setTextColor(getResources().getColor(R.color.jcWhiteColor));
         }
     }
 
@@ -77,6 +82,16 @@ public class LoadingView extends RelativeLayout {
     public void stopAnimating() {
         mWheelAnimation.cancel();
         mWheelAnimation.reset();
+    }
+
+    public void setMessage(String message) {
+        mMessage.setText(message);
+        mMessage.setVisibility(VISIBLE);
+    }
+
+    public void hideMessage() {
+        mMessage.setText("");
+        mMessage.setVisibility(GONE);
     }
 
     @Override

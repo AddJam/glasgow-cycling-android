@@ -37,6 +37,11 @@ public class RouteListActivity extends ListActivity {
     private LoadingView loadingView;
     @Inject GoCyclingApiInterface cyclingService;
 
+    // Messages
+    public String mLoadingMessage = "Loading routes";
+    public String mEmptyMessage = "No routes found";
+    public String mErrorMessage = "Error retrieving routes";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,16 +57,21 @@ public class RouteListActivity extends ListActivity {
         mSearchCallback = new Callback<RouteList>() {
             @Override
             public void success(RouteList routeList, Response response) {
-                Log.d(TAG, "Got routes - total: " + routeList.getRoutes().size());
-                mRouteClickListener.setRoutes(routeList.getRoutes());
-                routesList.setAdapter(new RouteAdapter(getBaseContext(), R.layout.route_cell, routeList.getRoutes()));
-                searchFinished();
+                List<Route> retrievedRoutes = routeList.getRoutes();
+                Log.d(TAG, "Got routes - total: " + retrievedRoutes.size());
+                mRouteClickListener.setRoutes(retrievedRoutes);
+                routesList.setAdapter(new RouteAdapter(getBaseContext(), R.layout.route_cell, retrievedRoutes));
+                if (retrievedRoutes.size() == 0) {
+                    searchFinished(mEmptyMessage);
+                } else {
+                    searchFinished(null);
+                }
             }
 
             @Override
             public void failure(RetrofitError error) {
                 Log.d(TAG, "Failed to get routes");
-                searchFinished();
+                searchFinished(mErrorMessage);
             }
         };
 
@@ -94,6 +104,7 @@ public class RouteListActivity extends ListActivity {
     public void search(boolean userOnly, float sourceLat, float sourceLong) {
         int perPage = 1000;
         int pageNum = 1;
+        loadingView.setMessage(mLoadingMessage);
         loadingView.startAnimating();
         if (userOnly) {
             cyclingService.routes(userOnly, perPage, pageNum, mSearchCallback);
@@ -102,8 +113,17 @@ public class RouteListActivity extends ListActivity {
         }
     }
 
-    private void searchFinished() {
-        loadingView.stopAnimating();
+    private void searchFinished(final String message) {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                loadingView.stopAnimating();
+                if (message.isEmpty()) {
+                    loadingView.hideMessage();
+                } else {
+                    loadingView.setMessage(message);
+                }
+            }
+        });
     }
 
     @Override
