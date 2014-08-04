@@ -4,6 +4,8 @@ import android.content.Context;
 import android.util.Log;
 
 import com.fcd.glasgowcycling.CyclingApplication;
+import com.fcd.glasgowcycling.activities.AccountPasswordActivity;
+import com.fcd.glasgowcycling.activities.AccountSettingsActivity;
 import com.fcd.glasgowcycling.activities.RouteCaptureActivity;
 import com.fcd.glasgowcycling.activities.RouteListActivity;
 import com.fcd.glasgowcycling.activities.SearchActivity;
@@ -43,7 +45,9 @@ import retrofit.converter.GsonConverter;
         RouteCaptureActivity.class,
         SignUpActivity.class,
         SearchActivity.class,
-        RouteOverviewActivity.class
+        RouteOverviewActivity.class,
+        AccountSettingsActivity.class,
+        AccountPasswordActivity.class
 })
 public class ApiClientModule {
 
@@ -85,6 +89,7 @@ public class ApiClientModule {
      */
     public GoCyclingApiInterface provideAuthClient() {
         Gson gson = new GsonBuilder()
+                .excludeFieldsWithoutExposeAnnotation()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                 .create();
 

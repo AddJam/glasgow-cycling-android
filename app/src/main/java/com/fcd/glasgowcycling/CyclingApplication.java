@@ -7,9 +7,12 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.activeandroid.ActiveAndroid;
+import com.activeandroid.query.Delete;
 import com.fcd.glasgowcycling.activities.SignInActivity;
 import com.fcd.glasgowcycling.api.auth.CyclingAuthenticator;
 import com.fcd.glasgowcycling.api.http.ApiClientModule;
+import com.fcd.glasgowcycling.models.Month;
+import com.fcd.glasgowcycling.models.User;
 
 import dagger.ObjectGraph;
 
@@ -44,7 +47,7 @@ public class CyclingApplication extends Application {
     public void logout() {
         Log.d(TAG, "Logging out");
 
-        // Remote account
+        // Remove account
         AccountManager accountManager = AccountManager.get(getApplicationContext());
         Account[] accounts = accountManager.getAccountsByType(CyclingAuthenticator.ACCOUNT_TYPE);
         if (accounts.length > 0) {
@@ -52,10 +55,13 @@ public class CyclingApplication extends Application {
             accountManager.removeAccount(account, null, null);
         }
 
+        // Delete stored details
+        new Delete().from(User.class).execute();
+        new Delete().from(Month.class).execute();
+
         // Start sign in activity
         Intent startSignIn = new Intent(this, SignInActivity.class);
-        startSignIn.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+        startSignIn.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(startSignIn);
     }
 }

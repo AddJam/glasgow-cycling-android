@@ -118,12 +118,6 @@ public class UserOverviewActivity extends Activity {
         sLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000,
                 Criteria.ACCURACY_COARSE, new JCLocationListener());
 
-        // Load user details
-        getDetails();
-
-        //Get and set weather
-        getWeather();
-
         // Stats
         statsButton.setOnClickListener(new StatsListener());
         captureButton.setOnClickListener(new CaptureListener());
@@ -164,6 +158,12 @@ public class UserOverviewActivity extends Activity {
         });
     }
 
+    protected void onResume() {
+        super.onResume();
+        getDetails();
+        getWeather();
+    }
+
     private void setupFunction(View view, int iconResource, String text) {
         ImageView iconView = (ImageView) view.findViewById(R.id.icon);
         iconView.setImageResource(iconResource);
@@ -194,9 +194,15 @@ public class UserOverviewActivity extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_account_settings) {
+            startActivity(new Intent(getApplicationContext(), AccountSettingsActivity.class));
             return true;
         }
+        if (id == R.id.action_change_password) {
+            startActivity(new Intent(getApplicationContext(), AccountPasswordActivity.class));
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 

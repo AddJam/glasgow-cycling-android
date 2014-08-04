@@ -1,0 +1,17 @@
+<resources>
+    <string name="title_activity_settings">Update Profile</string>
+
+    <!-- Strings related to login -->
+    <string name="settings_prompt_first_name">Forename</string>
+    <string name="settings_prompt_last_name">Surname</string>
+    <string name="settings_prompt_email">Email</string>
+    <string name="settings_prompt_password">Password</string>
+    <string name="settings_prompt_gender">Update Gender</string>
+    <string name="settings_label_name">Name</string>
+    <string name="settings_label_password">Password</string>
+    <string name="settings_label_email">Email</string>
+    <string name="settings_label_gender">Gender</string>
+    <string name="settings_save_button">Save Settings</string>
+    <string name="settings_logout_button">Logout</string>
+
+</resources>
