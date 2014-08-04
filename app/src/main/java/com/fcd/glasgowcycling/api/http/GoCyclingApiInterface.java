@@ -59,4 +59,6 @@ public interface GoCyclingApiInterface {
     @POST("/reset_password.json")
     void resetPassword(@Query("old_password") String oldPassword, @Query("new_password") String newPassword, Callback<AuthModel> callback);
 
+    @POST("forgotten_password.json")
+    void forgottenPassword();
 }
