@@ -191,7 +191,7 @@ public class UserOverviewActivity extends Activity {
             return true;
         }
         if (id == R.id.action_change_password) {
-            startActivity(new Intent(getApplicationContext(), AccountSettingsActivity.class));
+            startActivity(new Intent(getApplicationContext(), AccountPasswordActivity.class));
             return true;
         }
 

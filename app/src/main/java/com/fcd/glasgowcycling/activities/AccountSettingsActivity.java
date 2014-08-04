@@ -119,7 +119,7 @@ public class AccountSettingsActivity extends Activity {
             @Override
             public void onClick(View v) {
                 deactivateButtons();
-                Log.d(TAG, "Submit sign up clicked");
+                Log.d(TAG, "Logout clicked");
                 ((CyclingApplication)getApplication()).logout();
             }
         });
@@ -140,6 +140,7 @@ public class AccountSettingsActivity extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_change_password) {
+            startActivity(new Intent(getApplicationContext(), AccountPasswordActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);
