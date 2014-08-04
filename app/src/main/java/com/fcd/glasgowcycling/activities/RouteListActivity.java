@@ -117,7 +117,7 @@ public class RouteListActivity extends ListActivity {
         runOnUiThread(new Runnable() {
             public void run() {
                 loadingView.stopAnimating();
-                if (message.isEmpty()) {
+                if (message == null || message.isEmpty()) {
                     loadingView.hideMessage();
                 } else {
                     loadingView.setMessage(message);
