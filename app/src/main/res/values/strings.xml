@@ -13,5 +13,6 @@
     <string name="title_activity_account_settings">Update Account Settings</string>
     <string name="title_activity_account_password">AccountPasswordActivity</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_account_reset">AccountResetActivity</string>
 
 </resources>
