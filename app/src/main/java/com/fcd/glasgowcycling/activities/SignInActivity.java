@@ -164,6 +164,14 @@ public class SignInActivity extends AccountAuthenticatorActivity {
         runOnUiThread(new Runnable() {
             public void run() {
                 signInButton.setEnabled(true);
+                endLoading();
+            }
+        });
+    }
+
+    public void endLoading() {
+        runOnUiThread(new Runnable() {
+            public void run() {
                 loadingView.stopAnimating();
             }
         });
@@ -194,6 +202,8 @@ public class SignInActivity extends AccountAuthenticatorActivity {
                     // Unauthorized
                     Log.d(TAG, "Invalid details");
                     showToast("The details you entered were incorrect", Toast.LENGTH_LONG);
+                } else {
+                    showToast("Login failed, try again", Toast.LENGTH_SHORT);
                 }
                 loginFailed();
                 return null;
@@ -219,7 +229,6 @@ public class SignInActivity extends AccountAuthenticatorActivity {
         @Override
         protected void onPostExecute(Intent intent) {
             if (intent != null) {
-                loadingView.stopAnimating();
                 finishLogin(intent);
             }
         }

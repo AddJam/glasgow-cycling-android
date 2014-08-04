@@ -57,12 +57,15 @@ public class LoadingView extends RelativeLayout {
         mBackWheel = (ImageView)findViewById(R.id.back_wheel);
         mFrontWheel = (ImageView)findViewById(R.id.front_wheel);
 
+        ImageView bike = (ImageView)findViewById(R.id.bike);
         if (isBlue) {
-            ImageView bike = (ImageView)findViewById(R.id.bike);
-
             bike.setImageResource(R.drawable.bike_rider_blue);
             mBackWheel.setImageResource(R.drawable.wheel_blue);
             mFrontWheel.setImageResource(R.drawable.wheel_blue);
+        } else {
+            bike.setImageResource(R.drawable.bike_rider);
+            mBackWheel.setImageResource(R.drawable.wheel);
+            mFrontWheel.setImageResource(R.drawable.wheel);
         }
     }
 

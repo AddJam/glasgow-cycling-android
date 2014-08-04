@@ -17,8 +17,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
+import android.widget.Toast;
 
 import com.fcd.glasgowcycling.CyclingApplication;
+import com.fcd.glasgowcycling.LoadingView;
 import com.fcd.glasgowcycling.R;
 import com.fcd.glasgowcycling.api.responses.AuthModel;
 import com.fcd.glasgowcycling.api.requests.SignupRequest;
@@ -52,6 +54,7 @@ public class SignUpActivity extends Activity {
     @InjectView(R.id.year_of_birth_button) Button yearOfBirthButton;
     @InjectView(R.id.picture_button) Button pictureButton;
     @InjectView(R.id.submit_button) Button submitButton;
+    @InjectView(R.id.loading_view) LoadingView loadingView;
 
     private static final int SELECT_PHOTO = 100;
 
@@ -70,6 +73,8 @@ public class SignUpActivity extends Activity {
         ((CyclingApplication) getApplication()).inject(this);
 
         mAccountManager = AccountManager.get(this);
+
+        loadingView.setBlue(true);
 
         // Check for email from sign in form
         Bundle extras = getIntent().getExtras();
@@ -109,6 +114,8 @@ public class SignUpActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Submit sign up clicked");
+                submitButton.setEnabled(false);
+                loadingView.startAnimating();
                 submitSignup();
             }
         });
@@ -217,6 +224,31 @@ public class SignUpActivity extends Activity {
         }
     }
 
+    public void showToast(final String message, final int length) {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                Toast.makeText(SignUpActivity.this, message, length).show();
+            }
+        });
+    }
+
+    public void signupFailed() {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                submitButton.setEnabled(true);
+                endLoading();
+            }
+        });
+    }
+
+    public void endLoading() {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                loadingView.stopAnimating();
+            }
+        });
+    }
+
     private void submitSignup(){
         String firstName = firstNameField.getText().toString();
         String lastName = lastNameField.getText().toString();
@@ -236,6 +268,7 @@ public class SignUpActivity extends Activity {
                 new Callback<AuthModel>() {
             @Override
             public void success(AuthModel authModel, Response response) {
+                endLoading();
                 final Account account = new Account(email, CyclingAuthenticator.ACCOUNT_TYPE);
                 // Creating the account on the device and setting the auth token we got
                 // (Not setting the auth token will cause another call to the server to authenticate the user)
@@ -254,10 +287,14 @@ public class SignUpActivity extends Activity {
                 Log.d(TAG, "Retrofit error");
                 if (error.isNetworkError()) {
                     Log.d(TAG, "Network error");
+                    showToast("Check your connection and try again", Toast.LENGTH_SHORT);
                 } else if (error.getResponse().getStatus() == 401) {
                     // Unauthorized
                     Log.d(TAG, "Invalid details");
+                } else {
+                    showToast("Sign up failed - are you already signed up?", Toast.LENGTH_LONG);
                 }
+                signupFailed();
             }
         });
     }
