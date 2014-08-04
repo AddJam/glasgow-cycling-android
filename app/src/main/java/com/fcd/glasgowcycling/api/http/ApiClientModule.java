@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.fcd.glasgowcycling.CyclingApplication;
+import com.fcd.glasgowcycling.R;
 import com.fcd.glasgowcycling.activities.AccountPasswordActivity;
 import com.fcd.glasgowcycling.activities.AccountSettingsActivity;
 import com.fcd.glasgowcycling.activities.RouteCaptureActivity;
@@ -17,10 +18,20 @@ import com.fcd.glasgowcycling.activities.UserOverviewActivity;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.squareup.okhttp.OkHttpClient;
+
+import org.apache.http.conn.ssl.AllowAllHostnameVerifier;
+import org.apache.http.conn.ssl.X509HostnameVerifier;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.security.KeyStore;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManagerFactory;
 
 import dagger.Module;
 import dagger.Provides;
@@ -28,7 +39,9 @@ import retrofit.ErrorHandler;
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
+import retrofit.client.Client;
 import retrofit.client.Header;
+import retrofit.client.OkClient;
 import retrofit.client.Request;
 import retrofit.client.Response;
 import retrofit.client.UrlConnectionClient;
@@ -53,7 +66,7 @@ public class ApiClientModule {
 
     private final String TAG = "ApiClientModule";
 
-    private final String ENDPOINT = "http://172.20.10.4:3000"; // "http://10.0.2.2:3000" == Localhost (for simulator)
+    private final String ENDPOINT = "https://activetravel.cloudapp.net";// "http://172.20.10.4:3000"; // "http://10.0.2.2:3000" == Localhost (for simulator)
     private Context mContext;
     private CyclingApplication mApplication;
     private AuthModel mAuthModel;
@@ -68,6 +81,11 @@ public class ApiClientModule {
 
     @Provides
     public GoCyclingApiInterface provideClient() {
+        OkHttpClient httpClient = new OkHttpClient();
+        httpClient.setSslSocketFactory(getPinnedCertSslSocketFactory(mContext));
+        httpClient.setHostnameVerifier(new AllowAllHostnameVerifier());
+        CyclingClient client = new CyclingClient(httpClient);
+
         Gson gson = new GsonBuilder()
                 .excludeFieldsWithoutExposeAnnotation()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
@@ -78,7 +96,7 @@ public class ApiClientModule {
                 .setConverter(new GsonConverter(gson))
                 .setRequestInterceptor(new GoCyclingAPIRequestInterceptor())
                 .setErrorHandler(new GoCyclingAPIErrorHandler())
-                .setClient(new CyclingClient())
+                .setClient(client)
                 .build();
 
         return restAdapter.create(GoCyclingApiInterface.class);
@@ -88,6 +106,11 @@ public class ApiClientModule {
      * Client which doesn't handle errors, for requests which shouldn't result in logout on 401
      */
     public GoCyclingApiInterface provideAuthClient() {
+        OkHttpClient httpClient = new OkHttpClient();
+        httpClient.setSslSocketFactory(getPinnedCertSslSocketFactory(mContext));
+        httpClient.setHostnameVerifier(new AllowAllHostnameVerifier());
+        OkClient client = new OkClient(httpClient);
+
         Gson gson = new GsonBuilder()
                 .excludeFieldsWithoutExposeAnnotation()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
@@ -96,6 +119,7 @@ public class ApiClientModule {
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint(ENDPOINT)
                 .setConverter(new GsonConverter(gson))
+                .setClient(client)
                 .build();
 
         return restAdapter.create(GoCyclingApiInterface.class);
@@ -105,8 +129,10 @@ public class ApiClientModule {
 
         @Override
         public void intercept(RequestInterceptor.RequestFacade request) {
-            request.addQueryParam("client_id", "123");
-            request.addQueryParam("client_secret", "321");
+//            request.addQueryParam("client_id", "123");
+//            request.addQueryParam("client_secret", "321");
+            request.addQueryParam("client_id", "3db23ee6dfb278fafb78f6cd3c5f2140ebbce0f2cde3a3fb612f669bb879b0c4");
+            request.addQueryParam("client_secret", "8cb0159073b4df229a32f88e32ead76aa77608a606b3c69a77e36b4341ca2b6a");
 
             mAuthModel.updateTokens();
             String userToken = mAuthModel.getUserToken();
@@ -133,7 +159,11 @@ public class ApiClientModule {
         }
     }
 
-    private class CyclingClient extends UrlConnectionClient {
+    private class CyclingClient extends OkClient {
+        public CyclingClient(OkHttpClient client) {
+            super (client);
+        }
+
         @Override
         public Response execute(Request request) throws IOException {
             Response response = super.execute(request);
@@ -167,5 +197,22 @@ public class ApiClientModule {
                 return response;
             }
         }
+    }
+
+    private SSLSocketFactory getPinnedCertSslSocketFactory(Context context) {
+        try {
+            KeyStore trusted = KeyStore.getInstance("BKS");
+            InputStream in = context.getResources().openRawResource(R.raw.mytruststore);
+            trusted.load(in, "9oUHVSyZ8LYbY9M*4F2G".toCharArray());
+            SSLContext sslContext = SSLContext.getInstance("TLS");
+            TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(
+                    TrustManagerFactory.getDefaultAlgorithm());
+            trustManagerFactory.init(trusted);
+            sslContext.init(null, trustManagerFactory.getTrustManagers(), null);
+            return sslContext.getSocketFactory();
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
+        return null;
     }
 }
