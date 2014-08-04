@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -115,6 +116,13 @@ public class SignUpActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Submit sign up clicked");
+                // Dismiss keyboard
+                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                if(imm.isAcceptingText()) { // verify if the soft keyboard is open
+                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                }
+
+                // Submit
                 submitButton.setEnabled(false);
                 loadingView.startAnimating();
                 submitSignup();
