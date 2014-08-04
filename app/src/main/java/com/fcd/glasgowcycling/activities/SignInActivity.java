@@ -58,9 +58,6 @@ public class SignInActivity extends AccountAuthenticatorActivity {
         fromAccountManager = getIntent().getBooleanExtra(ARG_IS_ADDING_NEW_ACCOUNT, false);
         Log.d(TAG, "From account manager: " + (fromAccountManager ? "YES" : "NO"));
 
-        emailField.setText("test@user.com");
-        passwordField.setText("password");
-
         mAccountManager = AccountManager.get(this);
 
         passwordField.setOnKeyListener(new View.OnKeyListener() {
@@ -115,7 +112,8 @@ public class SignInActivity extends AccountAuthenticatorActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_forgotten_password) {
+            startActivity(new Intent(getApplicationContext(), AccountForgottenActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);

@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.fcd.glasgowcycling.CyclingApplication;
 import com.fcd.glasgowcycling.R;
+import com.fcd.glasgowcycling.activities.AccountForgottenActivity;
 import com.fcd.glasgowcycling.activities.AccountPasswordActivity;
 import com.fcd.glasgowcycling.activities.AccountSettingsActivity;
 import com.fcd.glasgowcycling.activities.RouteCaptureActivity;
@@ -60,7 +61,8 @@ import retrofit.converter.GsonConverter;
         SearchActivity.class,
         RouteOverviewActivity.class,
         AccountSettingsActivity.class,
-        AccountPasswordActivity.class
+        AccountPasswordActivity.class,
+        AccountForgottenActivity.class
 })
 public class ApiClientModule {
 

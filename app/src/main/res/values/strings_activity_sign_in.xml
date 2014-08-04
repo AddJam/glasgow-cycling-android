@@ -7,6 +7,6 @@
     <string name="welcome_label">Making Glasgow a Cycling city</string>
     <string name="action_sign_in">Sign In</string>
     <string name="action_sign_up">Sign Up</string>
-    <string name="action_resetpassword">Reset Password</string>
+    <string name="action_forgotten_password">Forgot Password</string>
 
 </resources>

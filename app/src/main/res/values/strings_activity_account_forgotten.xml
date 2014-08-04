@@ -1,0 +1,9 @@
+<resources>
+    <string name="title_activity_account_forgotten">Reset User Password</string>
+
+    <!-- Strings related to login -->
+    <string name="reset_label">Enter Registered Email Address</string>
+    <string name="reset_submit_button">Reset Password</string>
+    <string name="reset_info">Enter email above and check you email for reset instructions</string>
+
+</resources>
