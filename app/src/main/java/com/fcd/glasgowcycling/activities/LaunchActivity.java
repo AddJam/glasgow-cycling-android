@@ -34,17 +34,6 @@ public class LaunchActivity extends Activity {
     @Override
     public void onResume() {
         super.onResume();
-        checkForCrashes();
-        checkForUpdates();
-    }
-
-    private void checkForCrashes() {
         CrashManager.register(this, "31f27fc9f4a5e74f41ed1bfe0ab10860");
     }
-
-    private void checkForUpdates() {
-        // Remove this for store builds!
-        UpdateManager.register(this, "31f27fc9f4a5e74f41ed1bfe0ab10860");
-    }
 }
-
