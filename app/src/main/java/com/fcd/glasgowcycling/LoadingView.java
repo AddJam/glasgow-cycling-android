@@ -13,11 +13,11 @@ import android.widget.RelativeLayout;
 
 public class LoadingView extends RelativeLayout {
 
+    private boolean isBlue;
     private View mLoadingIndicator;
     private ImageView mBackWheel;
     private ImageView mFrontWheel;
     private RotateAnimation mWheelAnimation;
-    private RotateAnimation mFrontWheelAnimation;
 
     public LoadingView(Context context) {
         super(context);
@@ -35,11 +35,7 @@ public class LoadingView extends RelativeLayout {
     }
 
     private void init(AttributeSet attrs, int defStyle) {
-        // View
-        LayoutInflater mInflater = (LayoutInflater)super.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mLoadingIndicator = mInflater.inflate(R.layout.loading_indicator, this, true);
-        mBackWheel = (ImageView)findViewById(R.id.back_wheel);
-        mFrontWheel = (ImageView)findViewById(R.id.front_wheel);
+        loadView();
 
         // Animation
         mWheelAnimation = new RotateAnimation(180, 360, Animation.RELATIVE_TO_SELF,
@@ -48,6 +44,26 @@ public class LoadingView extends RelativeLayout {
         mWheelAnimation.setRepeatMode(Animation.RESTART);
         mWheelAnimation.setRepeatCount(Animation.INFINITE);
         mWheelAnimation.setInterpolator(new LinearInterpolator());
+    }
+
+    public void setBlue(boolean blue) {
+        isBlue = blue;
+        loadView();
+    }
+
+    private void loadView() {
+        LayoutInflater mInflater = (LayoutInflater)super.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mLoadingIndicator = mInflater.inflate(R.layout.loading_indicator, this, true);
+        mBackWheel = (ImageView)findViewById(R.id.back_wheel);
+        mFrontWheel = (ImageView)findViewById(R.id.front_wheel);
+
+        if (isBlue) {
+            ImageView bike = (ImageView)findViewById(R.id.bike);
+
+            bike.setImageResource(R.drawable.bike_rider_blue);
+            mBackWheel.setImageResource(R.drawable.wheel_blue);
+            mFrontWheel.setImageResource(R.drawable.wheel_blue);
+        }
     }
 
     public void startAnimating() {
