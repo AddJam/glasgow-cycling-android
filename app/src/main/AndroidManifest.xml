@@ -110,6 +110,10 @@
             android:name=".activities.AccountSettingsActivity"
             android:label="@string/title_activity_account_settings" >
         </activity>
+        <activity
+            android:name=".activities.AccountPasswordActivity"
+            android:label="@string/title_activity_account_password" >
+        </activity>
     </application>
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
