@@ -92,34 +92,6 @@ public class UserOverviewActivity extends Activity {
         ((CyclingApplication) getApplication()).inject(this);
         ButterKnife.inject(this);
 
-        // Check play services
-        int isAvailable = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-        if (isAvailable != ConnectionResult.SUCCESS) {
-            noPlayServicesDialog();
-            return;
-        }
-
-        // Show map
-        map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
-        map.getUiSettings().setMyLocationButtonEnabled(false);
-        map.getUiSettings().setZoomControlsEnabled(false);
-        map.getUiSettings().setAllGesturesEnabled(false);
-        map.setMyLocationEnabled(true);
-
-        sLocationManager = (LocationManager) this.getSystemService(this.LOCATION_SERVICE);
-        Criteria criteria = new Criteria();
-        String provider = sLocationManager.getBestProvider(criteria, false);
-        Location location = sLocationManager.getLastKnownLocation(provider);
-        if(location == null){
-            mUserLocation = new LatLng(55.8580, -4.259); // Glasgow
-        } else {
-            mUserLocation = new LatLng(location.getLatitude(), location.getLongitude());
-        }
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(mUserLocation, 13));
-
-        sLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000,
-                Criteria.ACCURACY_COARSE, new JCLocationListener());
-
         // Stats
         statsButton.setOnClickListener(new StatsListener());
         captureButton.setOnClickListener(new CaptureListener());
@@ -158,6 +130,8 @@ public class UserOverviewActivity extends Activity {
                 Toast.makeText(getBaseContext(), "The cycle map isn't available yet.", Toast.LENGTH_SHORT).show();
             }
         });
+
+        setupMap();
     }
 
     protected void onResume() {
@@ -165,6 +139,37 @@ public class UserOverviewActivity extends Activity {
         UpdateManager.register(this, "31f27fc9f4a5e74f41ed1bfe0ab10860");
         getDetails();
         getWeather();
+        setupMap();
+    }
+
+    private void setupMap() {
+        // Check play services
+        int isAvailable = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        if (isAvailable != ConnectionResult.SUCCESS) {
+            noPlayServicesDialog();
+            return;
+        }
+
+        // Show map
+        map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+        map.getUiSettings().setMyLocationButtonEnabled(false);
+        map.getUiSettings().setZoomControlsEnabled(false);
+        map.getUiSettings().setAllGesturesEnabled(false);
+        map.setMyLocationEnabled(true);
+
+        sLocationManager = (LocationManager) this.getSystemService(this.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        String provider = sLocationManager.getBestProvider(criteria, false);
+        Location location = sLocationManager.getLastKnownLocation(provider);
+        if(location == null){
+            mUserLocation = new LatLng(55.8580, -4.259); // Glasgow
+        } else {
+            mUserLocation = new LatLng(location.getLatitude(), location.getLongitude());
+        }
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(mUserLocation, 13));
+
+        sLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000,
+                Criteria.ACCURACY_COARSE, new JCLocationListener());
     }
 
     private void setupFunction(View view, int iconResource, String text) {
