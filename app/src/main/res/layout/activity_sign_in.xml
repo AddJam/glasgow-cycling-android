@@ -16,8 +16,8 @@
             android:orientation="vertical"
             android:background="@color/jcBlueColor">
 
-            <ImageView
-                android:id="@+id/signin_image"
+            <com.fcd.glasgowcycling.LoadingView
+                android:id="@+id/loading_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/cyclist"
@@ -31,10 +31,9 @@
                 android:textStyle="bold"
                 android:textSize="24dp"
                 android:textColor="@color/jcWhiteColor"
-                android:layout_marginTop="5dp"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:paddingBottom="50dp"
+                android:paddingBottom="15dp"
                 android:paddingTop="15dp"/>
 
             <LinearLayout
@@ -55,7 +54,7 @@
                     android:textStyle="bold"
                     android:layout_marginTop="5dp"/>
 
-                <AutoCompleteTextView
+                <EditText
                     android:id="@+id/email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -77,8 +76,8 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_password"
                     android:imeActionId="@+id/login"
-                    android:imeActionLabel="@string/action_sign_in"
-                    android:imeOptions="actionUnspecified"
+                    android:imeActionLabel="@string/action_go"
+                    android:imeOptions="actionGo"
                     android:inputType="textPassword"
                     android:maxLines="1"
                     android:singleLine="true"/>

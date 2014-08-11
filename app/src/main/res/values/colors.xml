@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- TODO remove 'color' from color names -->
     <color name="jcDarkBlueColor">#3993C5</color>
     <color name="jcLightBlueColor">#4CB9E2</color>
     <color name="jcBlueColor">#00A1DF</color>
+    <color name="jcTransparentBlueColor">#7700A1DF</color>
     <color name="jcGreenColor">#7Ed321</color>
     <color name="jcRedColor">#FF1A1A</color>
     <color name="jcWhiteColor">#ffffff</color>
-    <color name="jcBlackColor">#ffffff</color>
+    <color name="jcBlackColor">#000000</color>
 </resources>

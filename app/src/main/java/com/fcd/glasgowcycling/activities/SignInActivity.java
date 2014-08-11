@@ -7,20 +7,24 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AutoCompleteTextView;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.fcd.glasgowcycling.CyclingApplication;
+import com.fcd.glasgowcycling.LoadingView;
 import com.fcd.glasgowcycling.R;
-import com.fcd.glasgowcycling.api.AuthModel;
+import com.fcd.glasgowcycling.api.http.ApiClientModule;
+import com.fcd.glasgowcycling.api.responses.AuthModel;
 import com.fcd.glasgowcycling.api.auth.CyclingAuthenticator;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
-import javax.inject.Inject;
+
+import net.hockeyapp.android.UpdateManager;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -33,18 +37,17 @@ public class SignInActivity extends AccountAuthenticatorActivity {
     // Bundle Args
     public static final String ARG_IS_ADDING_NEW_ACCOUNT = "ADDING_NEW_ACCOUNT";
     public static final String PARAM_USER_PASS = "USER_PASSWORD";
-    public final String ACCOUNT_TYPE = "com.fcd.GlasgowCycling";
 
     // Views
-    @InjectView(R.id.email) AutoCompleteTextView emailField;
+    @InjectView(R.id.email) EditText emailField;
     @InjectView(R.id.password) EditText passwordField;
 
     @InjectView(R.id.sign_in_button) Button signInButton;
-    @InjectView(R.id.sign_up_button) Button signupButton;
-    @InjectView(R.id.signin_image) ImageView signinImageView;
+    @InjectView(R.id.sign_up_button) Button signUpButton;
+    @InjectView(R.id.loading_view) LoadingView loadingView;
 
     // API
-    @Inject GoCyclingApiInterface sCyclingService;
+    GoCyclingApiInterface sCyclingService;
     AccountManager mAccountManager;
     private boolean fromAccountManager;
 
@@ -53,18 +56,55 @@ public class SignInActivity extends AccountAuthenticatorActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
         ButterKnife.inject(this);
-        ((CyclingApplication) getApplication()).inject(this);
-
+        sCyclingService = new ApiClientModule(this, (CyclingApplication)getApplication()).provideAuthClient();
         fromAccountManager = getIntent().getBooleanExtra(ARG_IS_ADDING_NEW_ACCOUNT, false);
         Log.d(TAG, "From account manager: " + (fromAccountManager ? "YES" : "NO"));
 
-        emailField.setText("chris.sloey@gmail.com");
-        passwordField.setText("bananazz");
-
         mAccountManager = AccountManager.get(this);
 
-        signInButton.setOnClickListener(new SignInListener(sCyclingService));
-        //signUpButton.setOnClickListener(new SignUpListener()); TODO signup
+        passwordField.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View view, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_UP &&
+                        keyCode == KeyEvent.KEYCODE_ENTER) {
+                    signInButton.setEnabled(false);
+                    loadingView.startAnimating();
+                    new LoginTask().execute();
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+
+        signInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "Sign In clicked");
+                signInButton.setEnabled(false);
+                loadingView.startAnimating();
+                new LoginTask().execute();
+            }
+        });
+
+        signUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "Sign Up clicked");
+                Intent signUpIntent = new Intent(getBaseContext(), SignUpActivity.class);
+                if (!emailField.getText().toString().isEmpty()) {
+                    Bundle extras = new Bundle();
+                    extras.putString("email", emailField.getText().toString());
+                    signUpIntent.putExtras(extras);
+                }
+                startActivity(signUpIntent);
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        UpdateManager.register(this, "31f27fc9f4a5e74f41ed1bfe0ab10860");
     }
 
     @Override
@@ -80,7 +120,8 @@ public class SignInActivity extends AccountAuthenticatorActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_forgotten_password) {
+            startActivity(new Intent(getApplicationContext(), AccountForgottenActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -92,7 +133,7 @@ public class SignInActivity extends AccountAuthenticatorActivity {
         final Account account = new Account(accountName, intent.getStringExtra(AccountManager.KEY_ACCOUNT_TYPE));
         String refreshToken = intent.getStringExtra(CyclingAuthenticator.KEY_REFRESH_TOKEN);
         boolean addingAccount = getIntent().getBooleanExtra(ARG_IS_ADDING_NEW_ACCOUNT, false);
-        boolean accountExists = mAccountManager.getAccountsByType(ACCOUNT_TYPE).length > 0;
+        boolean accountExists = mAccountManager.getAccountsByType(CyclingAuthenticator.ACCOUNT_TYPE).length > 0;
         if (addingAccount || !accountExists) {
             String authToken = intent.getStringExtra(AccountManager.KEY_AUTHTOKEN);
             // Creating the account on the device and setting the auth token we got
@@ -109,63 +150,93 @@ public class SignInActivity extends AccountAuthenticatorActivity {
 
         if (!fromAccountManager) {
             // Load user overview
-            startActivity(new Intent(this, UserOverviewActivity.class));
+            Intent userIntent = new Intent(getBaseContext(), UserOverviewActivity.class);
+            userIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(userIntent);
         }
 
         finish();
     }
 
-    private class SignInListener implements View.OnClickListener {
+    public void showToast(final String message, final int length) {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                Toast.makeText(SignInActivity.this, message, length).show();
+            }
+        });
+    }
 
-        private GoCyclingApiInterface cyclingService;
+    public void loginFailed() {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                signInButton.setEnabled(true);
+                endLoading();
+            }
+        });
+    }
 
-        public SignInListener(GoCyclingApiInterface cyclingService) {
-            this.cyclingService = cyclingService;
+    public void endLoading() {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                loadingView.stopAnimating();
+            }
+        });
+    }
+
+    private class LoginTask extends AsyncTask<Void, Void, Intent> {
+        @Override
+        protected Intent doInBackground(Void... params) {
+            // Dismiss keyboard
+            InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+
+            if(imm.isAcceptingText()) { // verify if the soft keyboard is open
+                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+            }
+
+            // Sign in
+            String email = emailField.getText().toString();
+            String password = passwordField.getText().toString();
+            AuthModel authModel = null;
+            try {
+                authModel = sCyclingService.signin(email, password);
+            } catch (RetrofitError error) {
+                Log.d(TAG, "Retrofit error");
+                if (error.isNetworkError()) {
+                    Log.d(TAG, "Network error");
+                    showToast("Check your connection and try again", Toast.LENGTH_SHORT);
+                } else if (error.getResponse().getStatus() == 401) {
+                    // Unauthorized
+                    Log.d(TAG, "Invalid details");
+                    showToast("The details you entered were incorrect", Toast.LENGTH_LONG);
+                } else {
+                    showToast("Login failed, try again", Toast.LENGTH_SHORT);
+                }
+                loginFailed();
+                return null;
+            }
+            if (authModel != null) {
+                String authToken = authModel.getUserToken();
+                String refreshToken = authModel.getRefreshToken();
+                final Intent res = new Intent();
+                res.putExtra(AccountManager.KEY_ACCOUNT_NAME, email);
+                res.putExtra(AccountManager.KEY_ACCOUNT_TYPE, CyclingAuthenticator.ACCOUNT_TYPE);
+                res.putExtra(AccountManager.KEY_AUTHTOKEN, authToken);
+                res.putExtra(CyclingAuthenticator.KEY_REFRESH_TOKEN, refreshToken);
+                res.putExtra(PARAM_USER_PASS, password);
+                return res;
+            } else {
+                Log.d(TAG, "Login failed");
+                showToast("Failed to login", Toast.LENGTH_SHORT);
+                loginFailed();
+                return null;
+            }
         }
 
         @Override
-        public void onClick(View v) {
-            Log.d(TAG, "Sign In clicked");
-            final String email = emailField.getText().toString();
-            final String password = passwordField.getText().toString();
-            new AsyncTask<Void, Void, Intent>() {
-                @Override
-                protected Intent doInBackground(Void... params) {
-                    AuthModel authModel = null;
-                    try {
-                        authModel = cyclingService.signin(email, password);
-                    } catch (RetrofitError error) {
-                        Log.d(TAG, "Retrofit error");
-                        if (error.isNetworkError()) {
-                            Log.d(TAG, "Network error");
-                        } else if (error.getResponse().getStatus() == 401) {
-                            // Unauthorized
-                            Log.d(TAG, "Invalid details");
-                        }
-                        return null;
-                    }
-                    if (authModel != null) {
-                        String authToken = authModel.getUserToken();
-                        String refreshToken = authModel.getRefreshToken();
-                        final Intent res = new Intent();
-                        res.putExtra(AccountManager.KEY_ACCOUNT_NAME, email);
-                        res.putExtra(AccountManager.KEY_ACCOUNT_TYPE, ACCOUNT_TYPE);
-                        res.putExtra(AccountManager.KEY_AUTHTOKEN, authToken);
-                        res.putExtra(CyclingAuthenticator.KEY_REFRESH_TOKEN, refreshToken);
-                        res.putExtra(PARAM_USER_PASS, password);
-                        return res;
-                    } else {
-                        Log.d(TAG, "Login failed");
-                        return null;
-                    }
-                }
-                @Override
-                protected void onPostExecute(Intent intent) {
-                    if (intent != null) {
-                        finishLogin(intent);
-                    }
-                }
-            }.execute();
+        protected void onPostExecute(Intent intent) {
+            if (intent != null) {
+                finishLogin(intent);
+            }
         }
     }
 }

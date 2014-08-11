@@ -1,8 +1,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.fcd.glasgowcycling.activities.SignInActivity" >
-    <item android:id="@+id/action_settings"
-        android:title="@string/action_resetpassword"
+    <item android:id="@+id/action_forgotten_password"
+        android:title="@string/action_forgotten_password"
         android:orderInCategory="100"
         android:showAsAction="never" />
 </menu>

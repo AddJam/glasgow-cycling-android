@@ -1,50 +1,55 @@
 package com.fcd.glasgowcycling.models;
 
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
 import com.google.gson.annotations.Expose;
 
-@DatabaseTable(tableName = "User")
-public class User{
+@Table(name = "Users")
+public class User extends Model {
 
-    @Expose @DatabaseField(id = true)
-    private String userID;
+    @Expose @Column(name = "UserId")
+    private String userId;
 
-    @Expose @DatabaseField
+    @Expose @Column(name = "FirstName")
     private String firstName;
 
-    @Expose @DatabaseField
+    @Expose @Column(name = "LastName")
     private String lastName;
 
-    @Expose
+    @Expose @Column(name = "Month")
     private Month month;
 
-    @Expose @DatabaseField
+    @Expose @Column(name = "Email")
     private String email;
 
-    @Expose @DatabaseField
+    @Expose @Column(name = "Gender")
     private String gender;
 
-    // Need this for ormlite
-    public User() {
+    @Expose @Column(name = "ProfilePic")
+    private String profilePic;
 
+    // Need this for orm
+    public User() {
+        super();
     }
 
-    public User(String firstName, String lastName, Month month, String email, String gender){
-
+    public User(String firstName, String lastName, Month month, String email, String gender, String profilePic){
+        super();
         this.firstName = firstName;
         this.lastName = lastName;
         this.month = month;
         this.email = email;
         this.gender = gender;
+        this.profilePic = profilePic;
     }
 
-    public String getUserID() {
-        return userID;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUserID(String userID) {
-        this.userID = userID;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getFirstName() {
@@ -61,6 +66,10 @@ public class User{
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getName() {
+        return getFirstName() + " " + getLastName();
     }
 
     public Month getMonth() {
@@ -85,5 +94,13 @@ public class User{
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    public String getProfilePic() {
+        return profilePic;
+    }
+
+    public void setProfilePic(String profilePic) {
+        this.profilePic = profilePic;
     }
 }

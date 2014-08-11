@@ -1,18 +1,50 @@
 package com.fcd.glasgowcycling.api.http;
 
 import android.content.Context;
+import android.util.Log;
 
+import com.fcd.glasgowcycling.CyclingApplication;
+import com.fcd.glasgowcycling.R;
+import com.fcd.glasgowcycling.activities.AccountForgottenActivity;
+import com.fcd.glasgowcycling.activities.AccountPasswordActivity;
+import com.fcd.glasgowcycling.activities.AccountSettingsActivity;
+import com.fcd.glasgowcycling.activities.RouteCaptureActivity;
+import com.fcd.glasgowcycling.activities.RouteListActivity;
+import com.fcd.glasgowcycling.activities.SearchActivity;
+import com.fcd.glasgowcycling.activities.RouteOverviewActivity;
 import com.fcd.glasgowcycling.activities.SignInActivity;
-import com.fcd.glasgowcycling.api.AuthModel;
+import com.fcd.glasgowcycling.activities.SignUpActivity;
+import com.fcd.glasgowcycling.api.responses.AuthModel;
 import com.fcd.glasgowcycling.activities.UserOverviewActivity;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.squareup.okhttp.OkHttpClient;
+
+import org.apache.http.conn.ssl.AllowAllHostnameVerifier;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.KeyStore;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManagerFactory;
 
 import dagger.Module;
 import dagger.Provides;
+import retrofit.ErrorHandler;
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Client;
+import retrofit.client.Header;
+import retrofit.client.OkClient;
+import retrofit.client.Request;
+import retrofit.client.Response;
+import retrofit.client.UrlConnectionClient;
 import retrofit.converter.GsonConverter;
 
 /**
@@ -20,39 +52,168 @@ import retrofit.converter.GsonConverter;
  */
 @Module(complete=false, library = true, injects = {
         SignInActivity.class,
-        UserOverviewActivity.class
+        UserOverviewActivity.class,
+        ApiClientModule.class,
+        RouteListActivity.class,
+        RouteCaptureActivity.class,
+        SignUpActivity.class,
+        SearchActivity.class,
+        RouteOverviewActivity.class,
+        AccountSettingsActivity.class,
+        AccountPasswordActivity.class,
+        AccountForgottenActivity.class
 })
 public class ApiClientModule {
 
-    private Context mContext;
+    private final String TAG = "ApiClientModule";
 
-    public ApiClientModule(Context context) {
+    private final String ENDPOINT = "https://activetravel.cloudapp.net";// "http://172.20.10.4:3000"; // "http://10.0.2.2:3000" == Localhost (for simulator)
+    private Context mContext;
+    private CyclingApplication mApplication;
+    private AuthModel mAuthModel;
+    private GoCyclingApiInterface sAuthService;
+
+    public ApiClientModule(Context context, CyclingApplication app) {
+        mApplication = app;
         mContext = context;
+        mAuthModel = new AuthModel(mContext);
+        sAuthService = provideAuthClient();
     }
 
     @Provides
     public GoCyclingApiInterface provideClient() {
+        OkHttpClient httpClient = new OkHttpClient();
+        httpClient.setSslSocketFactory(getPinnedCertSslSocketFactory(mContext));
+        httpClient.setHostnameVerifier(new AllowAllHostnameVerifier());
+        CyclingClient client = new CyclingClient(httpClient);
+
         Gson gson = new GsonBuilder()
+                .excludeFieldsWithoutExposeAnnotation()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                 .create();
 
-//        AuthModel authModel = new AuthModel(mContext);
-//        OAuthClient oAuthClient = new OAuthClient(authModel);
-
-        final RestAdapter restAdapter = new RestAdapter.Builder()
-//                .setEndpoint("http://10.0.2.2:3000") // Localhost (for simulator)
-                .setEndpoint("http://172.20.10.5:3000") // Tethered IP (device)
+        RestAdapter restAdapter = new RestAdapter.Builder()
+                .setEndpoint(ENDPOINT)
                 .setConverter(new GsonConverter(gson))
-                .setRequestInterceptor(new RequestInterceptor() {
-                    @Override
-                    public void intercept(RequestFacade request) {
-                        request.addQueryParam("client_id", "913623efb87a2efa99860b74f0ee7d63c25a750efcd9d93bb62a177add26eccb");
-                        request.addQueryParam("client_secret", "84980d8bb9440cba2b3709ce30958e6c11da1e22a3475c4327a498c16b62fe0b");
-                    }
-                })
-//                .setClient(oAuthClient)
+                .setRequestInterceptor(new GoCyclingAPIRequestInterceptor())
+                .setErrorHandler(new GoCyclingAPIErrorHandler())
+                .setClient(client)
                 .build();
 
         return restAdapter.create(GoCyclingApiInterface.class);
+    }
+
+    /*
+     * Client which doesn't handle errors, for requests which shouldn't result in logout on 401
+     */
+    public GoCyclingApiInterface provideAuthClient() {
+        OkHttpClient httpClient = new OkHttpClient();
+        httpClient.setSslSocketFactory(getPinnedCertSslSocketFactory(mContext));
+        httpClient.setHostnameVerifier(new AllowAllHostnameVerifier());
+        OkClient client = new OkClient(httpClient);
+
+        Gson gson = new GsonBuilder()
+                .excludeFieldsWithoutExposeAnnotation()
+                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                .create();
+
+        RestAdapter restAdapter = new RestAdapter.Builder()
+                .setEndpoint(ENDPOINT)
+                .setConverter(new GsonConverter(gson))
+                .setClient(client)
+                .build();
+
+        return restAdapter.create(GoCyclingApiInterface.class);
+    }
+
+    private class GoCyclingAPIRequestInterceptor implements RequestInterceptor {
+
+        @Override
+        public void intercept(RequestInterceptor.RequestFacade request) {
+//            request.addQueryParam("client_id", "123");
+//            request.addQueryParam("client_secret", "321");
+            request.addQueryParam("client_id", "3db23ee6dfb278fafb78f6cd3c5f2140ebbce0f2cde3a3fb612f669bb879b0c4");
+            request.addQueryParam("client_secret", "8cb0159073b4df229a32f88e32ead76aa77608a606b3c69a77e36b4341ca2b6a");
+
+            mAuthModel.updateTokens();
+            String userToken = mAuthModel.getUserToken();
+            if (userToken != null) {
+                request.addHeader("Authorization", "Bearer " + userToken);
+            }
+        }
+    }
+
+    private class GoCyclingAPIErrorHandler implements ErrorHandler {
+
+        @Override
+        public Throwable handleError(RetrofitError cause) {
+            if (cause.isNetworkError()) {
+                Log.d(TAG, "Network error making request: " + cause.getUrl());
+            } else if (cause.getResponse() == null) {
+                Log.d(TAG, "Error making request");
+            } else if (cause.getResponse().getStatus() == 401) {
+                // Refresh token and try again
+                Log.d(TAG, "Unauthorized error making request, logging out");
+                mApplication.logout();
+            }
+            return cause;
+        }
+    }
+
+    private class CyclingClient extends OkClient {
+        public CyclingClient(OkHttpClient client) {
+            super (client);
+        }
+
+        @Override
+        public Response execute(Request request) throws IOException {
+            Response response = super.execute(request);
+            if (response.getStatus() == 401) {
+                // Unauthorized, attempt to refresh access token
+                String refreshToken = mAuthModel.getRefreshToken();
+                if (refreshToken == null) {
+                    return response;
+                }
+                mAuthModel = sAuthService.refreshToken(refreshToken);
+                mAuthModel.setContext(mContext);
+                mAuthModel.saveTokens();
+                Log.d(TAG, "Refresh token is now " + mAuthModel.getRefreshToken());
+                Log.d(TAG, "Access token is now " + mAuthModel.getUserToken());
+
+                // Switch out auth token in request
+                List<Header> headers = new ArrayList<Header>();
+                for (Header header : request.getHeaders()) {
+                    if (header.getName().equals("Authorization")) {
+                        Log.d(TAG, "Replace auth bearer");
+                        headers.add(new Header("Authorization", "Bearer " + mAuthModel.getUserToken()));
+                    } else {
+                        headers.add(header);
+                    }
+                }
+
+                // Retry request
+                Request updatedRequest = new Request(request.getMethod(), request.getUrl(), headers, request.getBody());
+                return super.execute(updatedRequest);
+            } else {
+                return response;
+            }
+        }
+    }
+
+    private SSLSocketFactory getPinnedCertSslSocketFactory(Context context) {
+        try {
+            KeyStore trusted = KeyStore.getInstance("BKS");
+            InputStream in = context.getResources().openRawResource(R.raw.mytruststore);
+            trusted.load(in, "9oUHVSyZ8LYbY9M*4F2G".toCharArray());
+            SSLContext sslContext = SSLContext.getInstance("TLS");
+            TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(
+                    TrustManagerFactory.getDefaultAlgorithm());
+            trustManagerFactory.init(trusted);
+            sslContext.init(null, trustManagerFactory.getTrustManagers(), null);
+            return sslContext.getSocketFactory();
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
+        return null;
     }
 }
