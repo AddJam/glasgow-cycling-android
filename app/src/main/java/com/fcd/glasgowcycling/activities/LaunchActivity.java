@@ -9,6 +9,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import com.fcd.glasgowcycling.R;
 
+import net.hockeyapp.android.CrashManager;
+import net.hockeyapp.android.UpdateManager;
+
 public class LaunchActivity extends Activity {
 
     private AccountManager mAccountManager;
@@ -20,11 +23,17 @@ public class LaunchActivity extends Activity {
 
         mAccountManager = AccountManager.get(this);
         Account[] userAccounts = mAccountManager.getAccountsByType(ACCOUNT_TYPE);
-        if(userAccounts.length > 0) {
+        if (userAccounts.length > 0) {
             startActivity(new Intent(this, UserOverviewActivity.class));
         } else {
             startActivity(new Intent(this, SignInActivity.class));
         }
         finish();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        CrashManager.register(this, "31f27fc9f4a5e74f41ed1bfe0ab10860");
     }
 }

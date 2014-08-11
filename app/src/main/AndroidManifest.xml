@@ -8,7 +8,8 @@
         android:allowBackup="true"
         android:icon="@drawable/logo"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme"
+        >
         <meta-data
             android:name="AA_DB_NAME"
             android:value="GlasgowCycling.db" />
@@ -117,6 +118,7 @@
             android:name=".activities.AccountForgottenActivity"
             android:label="@string/title_activity_account_forgotten" >
         </activity>
+        <activity android:name="net.hockeyapp.android.UpdateActivity" />
     </application>
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
@@ -132,5 +134,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
 </manifest>
