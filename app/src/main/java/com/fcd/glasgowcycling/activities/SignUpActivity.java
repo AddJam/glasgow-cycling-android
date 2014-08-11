@@ -80,7 +80,7 @@ public class SignUpActivity extends Activity {
 
         // Check for email from sign in form
         Bundle extras = getIntent().getExtras();
-        if (extras.containsKey("email")) {
+        if (extras != null && extras.containsKey("email")) {
             emailField.setText(extras.getString("email"));
         }
 
