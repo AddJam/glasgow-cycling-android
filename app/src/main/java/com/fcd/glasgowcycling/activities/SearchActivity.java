@@ -1,6 +1,5 @@
 package com.fcd.glasgowcycling.activities;
 
-import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.location.Address;
@@ -8,27 +7,12 @@ import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.TextView;
 
-import com.fcd.glasgowcycling.CyclingApplication;
 import com.fcd.glasgowcycling.R;
-import com.fcd.glasgowcycling.adapters.RouteAdapter;
-import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
-import com.fcd.glasgowcycling.models.RouteList;
 
 import java.io.IOException;
 import java.util.List;
-
-import javax.inject.Inject;
-
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 public class SearchActivity extends RouteListActivity {
     private final String TAG = "Search";

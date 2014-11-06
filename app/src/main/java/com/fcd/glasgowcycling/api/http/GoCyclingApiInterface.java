@@ -1,13 +1,13 @@
 package com.fcd.glasgowcycling.api.http;
 
-import com.fcd.glasgowcycling.api.responses.AuthModel;
 import com.fcd.glasgowcycling.api.requests.SignupRequest;
+import com.fcd.glasgowcycling.api.responses.AuthModel;
 import com.fcd.glasgowcycling.api.responses.RouteCaptureResponse;
 import com.fcd.glasgowcycling.models.CaptureRoute;
+import com.fcd.glasgowcycling.models.PoiList;
 import com.fcd.glasgowcycling.models.Route;
 import com.fcd.glasgowcycling.models.RouteList;
 import com.fcd.glasgowcycling.models.User;
-
 import com.fcd.glasgowcycling.models.Weather;
 
 import retrofit.Callback;
@@ -61,4 +61,7 @@ public interface GoCyclingApiInterface {
 
     @POST("/forgot_password.json")
     void forgottenPassword(@Query("email") String email, Callback<User> user);
+
+    @GET("/poi/all.json")
+    void pointsOfInterest(Callback<PoiList> points);
 }

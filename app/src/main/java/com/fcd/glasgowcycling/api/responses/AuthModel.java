@@ -2,21 +2,11 @@ package com.fcd.glasgowcycling.api.responses;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.accounts.AccountManagerCallback;
-import android.accounts.AccountManagerFuture;
-import android.accounts.AuthenticatorException;
-import android.accounts.OperationCanceledException;
 import android.content.Context;
-import android.os.Bundle;
 import android.util.Log;
 
 import com.fcd.glasgowcycling.api.auth.CyclingAuthenticator;
-import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 import com.google.gson.annotations.Expose;
-
-import java.io.IOException;
-
-import javax.inject.Inject;
 
 /**
  * Created by chrissloey on 01/07/2014.

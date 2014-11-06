@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.fcd.glasgowcycling"
     android:installLocation="internalOnly"
-    android:versionCode="3"
-    android:versionName="1.0.2">
+    android:versionCode="4"
+    android:versionName="1.1.0">
 
     <application
         android:name=".CyclingApplication"
@@ -17,10 +17,10 @@
             android:value="GlasgowCycling.db" />
         <meta-data
             android:name="AA_DB_VERSION"
-            android:value="1" />
+            android:value="2" />
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyDLoQyGQtDTQQkoqg8IkiZxvmwa4OxNcbY" />
+            android:value="AIzaSyAFp8nxLgf4YZOcn3U4_Ny9iyYCRAZmwjQ" />
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -121,6 +121,10 @@
             android:label="@string/title_activity_account_forgotten" >
         </activity>
         <activity android:name="net.hockeyapp.android.UpdateActivity" />
+        <activity android:name="com.fcd.glasgowcycling.activities.CycleMapActivity"
+            android:label="@string/title_activity_cycle_map">
+
+        </activity>
     </application>
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->

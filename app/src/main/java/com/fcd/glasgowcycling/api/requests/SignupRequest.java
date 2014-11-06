@@ -2,8 +2,6 @@ package com.fcd.glasgowcycling.api.requests;
 
 import com.google.gson.annotations.Expose;
 
-import retrofit.http.Query;
-
 /**
  * Created by michaelhayes on 25/07/2014.
  */

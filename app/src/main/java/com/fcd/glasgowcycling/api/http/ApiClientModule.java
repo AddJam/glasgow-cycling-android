@@ -8,14 +8,15 @@ import com.fcd.glasgowcycling.R;
 import com.fcd.glasgowcycling.activities.AccountForgottenActivity;
 import com.fcd.glasgowcycling.activities.AccountPasswordActivity;
 import com.fcd.glasgowcycling.activities.AccountSettingsActivity;
+import com.fcd.glasgowcycling.activities.CycleMapActivity;
 import com.fcd.glasgowcycling.activities.RouteCaptureActivity;
 import com.fcd.glasgowcycling.activities.RouteListActivity;
-import com.fcd.glasgowcycling.activities.SearchActivity;
 import com.fcd.glasgowcycling.activities.RouteOverviewActivity;
+import com.fcd.glasgowcycling.activities.SearchActivity;
 import com.fcd.glasgowcycling.activities.SignInActivity;
 import com.fcd.glasgowcycling.activities.SignUpActivity;
-import com.fcd.glasgowcycling.api.responses.AuthModel;
 import com.fcd.glasgowcycling.activities.UserOverviewActivity;
+import com.fcd.glasgowcycling.api.responses.AuthModel;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -39,12 +40,10 @@ import retrofit.ErrorHandler;
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
-import retrofit.client.Client;
 import retrofit.client.Header;
 import retrofit.client.OkClient;
 import retrofit.client.Request;
 import retrofit.client.Response;
-import retrofit.client.UrlConnectionClient;
 import retrofit.converter.GsonConverter;
 
 /**
@@ -61,7 +60,8 @@ import retrofit.converter.GsonConverter;
         RouteOverviewActivity.class,
         AccountSettingsActivity.class,
         AccountPasswordActivity.class,
-        AccountForgottenActivity.class
+        AccountForgottenActivity.class,
+        CycleMapActivity.class
 })
 public class ApiClientModule {
 

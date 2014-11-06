@@ -3,11 +3,12 @@ package com.fcd.glasgowcycling.models;
 /**
  * Created by michaelhayes on 10/07/2014.
  */
+
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
-import com.google.gson.annotations.SerializedName;
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 @Table(name = "CapturePoints")
 public class CapturePoint extends Model {

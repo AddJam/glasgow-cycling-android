@@ -1,6 +1,5 @@
 package com.fcd.glasgowcycling.activities;
 
-import android.app.Activity;
 import android.app.ListActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,8 +9,8 @@ import android.widget.ListView;
 import com.fcd.glasgowcycling.CyclingApplication;
 import com.fcd.glasgowcycling.LoadingView;
 import com.fcd.glasgowcycling.R;
-import com.fcd.glasgowcycling.adapters.RouteClickListener;
 import com.fcd.glasgowcycling.adapters.RouteAdapter;
+import com.fcd.glasgowcycling.adapters.RouteClickListener;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgowcycling.models.Route;
 import com.fcd.glasgowcycling.models.RouteList;
@@ -20,8 +19,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;

@@ -24,10 +24,10 @@ import android.widget.Toast;
 import com.fcd.glasgowcycling.CyclingApplication;
 import com.fcd.glasgowcycling.LoadingView;
 import com.fcd.glasgowcycling.R;
-import com.fcd.glasgowcycling.api.responses.AuthModel;
-import com.fcd.glasgowcycling.api.requests.SignupRequest;
 import com.fcd.glasgowcycling.api.auth.CyclingAuthenticator;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
+import com.fcd.glasgowcycling.api.requests.SignupRequest;
+import com.fcd.glasgowcycling.api.responses.AuthModel;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;

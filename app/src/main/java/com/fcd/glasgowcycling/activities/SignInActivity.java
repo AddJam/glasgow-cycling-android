@@ -19,10 +19,10 @@ import android.widget.Toast;
 import com.fcd.glasgowcycling.CyclingApplication;
 import com.fcd.glasgowcycling.LoadingView;
 import com.fcd.glasgowcycling.R;
-import com.fcd.glasgowcycling.api.http.ApiClientModule;
-import com.fcd.glasgowcycling.api.responses.AuthModel;
 import com.fcd.glasgowcycling.api.auth.CyclingAuthenticator;
+import com.fcd.glasgowcycling.api.http.ApiClientModule;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
+import com.fcd.glasgowcycling.api.responses.AuthModel;
 
 import net.hockeyapp.android.UpdateManager;
 
