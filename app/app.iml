@@ -81,6 +81,7 @@
     <orderEntry type="jdk" jdkName="Android API 20 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="HockeySDK-3.0.2" level="project" />
+    <orderEntry type="library" exported="" name="android-maps-extensions-2.1.0" level="project" />
     <orderEntry type="library" exported="" name="guava-15.0" level="project" />
     <orderEntry type="library" exported="" name="ActiveAndroid" level="project" />
     <orderEntry type="library" exported="" name="javawriter-2.3.0" level="project" />
