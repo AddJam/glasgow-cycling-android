@@ -19,8 +19,11 @@ import com.fcd.glasgowcycling.R;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgowcycling.models.Poi;
 import com.fcd.glasgowcycling.models.PoiList;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -106,8 +109,8 @@ public class CycleMapActivity extends FragmentActivity {
             public void onMapLoaded() {
                 // Clear map
                 mMap.clear();
-
                 mTypes = new ArrayList<String>();
+                LatLngBounds.Builder builder = new LatLngBounds.Builder();
                 for (Poi poi : mList.getLocations()) {
                     LatLng location = new LatLng(poi.getLat(), poi.getLng());
                     String type = poi.getType();
@@ -136,7 +139,13 @@ public class CycleMapActivity extends FragmentActivity {
                     options.clusterGroup(typeId);
 
                     mMap.addMarker(options);
+                    builder.include(options.getPosition());
                 }
+
+                // Zoom to show all POI
+                LatLngBounds bounds = builder.build();
+                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 50);
+                mMap.animateCamera(cameraUpdate);
             }
         });
     }
