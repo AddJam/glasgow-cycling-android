@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
 
+import com.activeandroid.ActiveAndroid;
 import com.activeandroid.query.Select;
 import com.androidmapsextensions.ClusterOptions;
 import com.androidmapsextensions.ClusterOptionsProvider;
@@ -52,19 +53,43 @@ public class CycleMapActivity extends FragmentActivity {
         setUpMapIfNeeded();
 
         mList = new Select().from(PoiList.class).limit(1).executeSingle();
-
-        if (mList == null) {
+        long oneDayAgo = System.currentTimeMillis() - (24 * 60 * 60 * 1000);
+        boolean listOutdated = mList == null || mList.getUpdatedAt() < oneDayAgo;
+        if (listOutdated) {
             mCyclingService.pointsOfInterest(new Callback<PoiList>() {
                 @Override
                 public void success(PoiList poiList, Response response) {
+                    // Delete old list
+                    if (mList != null) {
+                        mList.delete();
+                    }
+
+                    // Fetch new
                     mList = poiList;
+                    mList.setUpdatedAt(System.currentTimeMillis());
+                    ActiveAndroid.beginTransaction();
+                    try {
+                        mList.save();
+                        for (Poi poi : mList.getLocations()) {
+                            poi.setPoiList(mList);
+                            poi.save();
+                        }
+                        ActiveAndroid.setTransactionSuccessful();
+                    } finally {
+                        ActiveAndroid.endTransaction();
+                    }
                     showLocations();
                 }
 
                 @Override
-                public void failure(RetrofitError error) {
+                public void failure (RetrofitError error){
                     Toast.makeText(getBaseContext(), "Network error retrieving locations",
                             Toast.LENGTH_LONG).show();
+
+                    // Fall back to old list if possible
+                    if (mList != null) {
+                        showLocations();
+                    }
                 }
             });
         } else {

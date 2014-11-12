@@ -24,6 +24,13 @@ public class Poi extends Model {
     @Expose @Column(name="type")
     String type;
 
+    @Column(name="PoiList", onDelete= Column.ForeignKeyAction.CASCADE)
+    PoiList poiList;
+
+    public Poi() {
+        super();
+    }
+
     public float getLat() {
         return lat;
     }
@@ -54,5 +61,13 @@ public class Poi extends Model {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public PoiList getPoiList() {
+        return poiList;
+    }
+
+    public void setPoiList(PoiList poiList) {
+        this.poiList = poiList;
     }
 }
