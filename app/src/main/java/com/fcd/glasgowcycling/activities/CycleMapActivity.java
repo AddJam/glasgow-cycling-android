@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.activeandroid.ActiveAndroid;
@@ -109,6 +111,29 @@ public class CycleMapActivity extends FragmentActivity {
             // Try to obtain the map from the SupportMapFragment.
             mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
                     .getExtendedMap();
+            mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+                private final View window = getLayoutInflater().inflate(R.layout.map_info_window, null);
+
+                @Override
+                public View getInfoContents(Marker marker) {
+                    return null;
+                }
+
+                @Override
+                public View getInfoWindow(Marker marker) {
+                    TextView view = (TextView)window.findViewById(R.id.title);
+                    String title = marker.getTitle();
+                    if (title != null && title.length() > 0) {
+                        view.setText(title);
+                    } else {
+                        int typeId = marker.getClusterGroup();
+                        String type = mTypes.get(typeId);
+                        type = type.toUpperCase().charAt(0) + type.substring(1) + "s";
+                        view.setText(type);
+                    }
+                    return view;
+                }
+            });
 
             ClusterOptionsProvider clusterOptions = new ClusterOptionsProvider() {
                 @Override
