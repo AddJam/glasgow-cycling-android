@@ -47,8 +47,7 @@ public class AccountSettingsActivity extends Activity {
     GoCyclingApiInterface cyclingService;
     private static final String TAG = "AccountSettings";
 
-    @InjectView(R.id.settings_last_name) EditText firstNameField;
-    @InjectView(R.id.settings_first_name) EditText lastNameField;
+    @InjectView(R.id.settings_username) EditText usernameField;
     @InjectView(R.id.settings_email) EditText emailField;
     @InjectView(R.id.settings_picture_button) ImageView pictureButton;
     @InjectView(R.id.settings_gender_button) Button genderButton;
@@ -69,8 +68,7 @@ public class AccountSettingsActivity extends Activity {
 
         mUser = new Select().from(User.class).limit(1).executeSingle();
 
-        firstNameField.setText(mUser.getFirstName());
-        lastNameField.setText(mUser.getLastName());
+        usernameField.setText(mUser.getUsername());
         emailField.setText(mUser.getEmail());
 
         if (mUser.getProfilePic() != null){
@@ -203,8 +201,7 @@ public class AccountSettingsActivity extends Activity {
     }
 
     private void submitAccountDetails(){
-        mUser.setFirstName(firstNameField.getText().toString());
-        mUser.setLastName(lastNameField.getText().toString());
+        mUser.setUsername(usernameField.getText().toString());
         mUser.setEmail(emailField.getText().toString());
         mUser.setGender(genderButton.getText().toString());
         if (pictureUpdate){
@@ -220,7 +217,7 @@ public class AccountSettingsActivity extends Activity {
                 .create();
         String userJson = gson.toJson(mUser);
 
-        cyclingService.updateDetails(mUser.getFirstName(), mUser.getLastName(), mUser.getProfilePic(), mUser.getEmail(), mUser.getGender(), new Callback<User>() {
+        cyclingService.updateDetails(mUser.getUsername(), mUser.getProfilePic(), mUser.getEmail(), mUser.getGender(), new Callback<User>() {
                     @Override
                     public void success(User user, Response response) {
                         Log.d(TAG, "User details updated");

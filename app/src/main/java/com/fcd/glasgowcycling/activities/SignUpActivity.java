@@ -48,8 +48,7 @@ public class SignUpActivity extends Activity {
 
     private static final String TAG = "SignUpActivity";
 
-    @InjectView(R.id.first_name) EditText firstNameField;
-    @InjectView(R.id.last_name) EditText lastNameField;
+    @InjectView(R.id.username) EditText usernameField;
     @InjectView(R.id.email) EditText emailField;
     @InjectView(R.id.password) EditText passwordField;
     @InjectView(R.id.gender_button) Button genderButton;
@@ -259,8 +258,7 @@ public class SignUpActivity extends Activity {
     }
 
     private void submitSignup(){
-        String firstName = firstNameField.getText().toString();
-        String lastName = lastNameField.getText().toString();
+        String username = usernameField.getText().toString();
         final String email = emailField.getText().toString();
         final String password = passwordField.getText().toString();
         String profilePic = "";
@@ -273,7 +271,7 @@ public class SignUpActivity extends Activity {
         Log.d(TAG, "Base 64 img >> "+ profilePic);
         AuthModel authModel;
 
-        cyclingService.signup(new SignupRequest(email, firstName, lastName, password, gender, yearOfBirth, profilePic),
+        cyclingService.signup(new SignupRequest(email, username, password, gender, yearOfBirth, profilePic),
                 new Callback<AuthModel>() {
             @Override
             public void success(AuthModel authModel, Response response) {

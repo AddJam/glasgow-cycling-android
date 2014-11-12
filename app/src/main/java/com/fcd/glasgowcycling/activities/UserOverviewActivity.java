@@ -249,7 +249,7 @@ public class UserOverviewActivity extends Activity {
     private void populateFields(){
         Month month = mUser.getMonth();
 
-        username.setText(mUser.getName());
+        username.setText(mUser.getUsername());
         distanceStat.setText(month.getReadableTime());
         timeStat.setText(month.getReadableDistance());
         Bitmap decodedImage;

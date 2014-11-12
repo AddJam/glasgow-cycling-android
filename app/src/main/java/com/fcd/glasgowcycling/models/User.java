@@ -11,11 +11,8 @@ public class User extends Model {
     @Expose @Column(name = "UserId")
     private String userId;
 
-    @Expose @Column(name = "FirstName")
-    private String firstName;
-
-    @Expose @Column(name = "LastName")
-    private String lastName;
+    @Expose @Column(name = "Username")
+    private String username;
 
     @Expose @Column(name = "Month")
     private Month month;
@@ -36,8 +33,7 @@ public class User extends Model {
 
     public User(String firstName, String lastName, Month month, String email, String gender, String profilePic){
         super();
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.username = username;
         this.month = month;
         this.email = email;
         this.gender = gender;
@@ -52,24 +48,12 @@ public class User extends Model {
         this.userId = userId;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getName() {
-        return getFirstName() + " " + getLastName();
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public Month getMonth() {
