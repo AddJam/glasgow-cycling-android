@@ -20,10 +20,10 @@
             android:value="1" />
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyDLoQyGQtDTQQkoqg8IkiZxvmwa4OxNcbY" />
+            android:value="cycling-android" />
         <meta-data
             android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
+            android:value="@integer/google_play_services_version"/>
 
         <activity
             android:name=".activities.LaunchActivity"
