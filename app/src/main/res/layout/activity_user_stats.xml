@@ -77,6 +77,92 @@
                     />
             </LinearLayout>
         </FrameLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="15dp"
+            android:paddingTop="30dp"
+            android:paddingBottom="30dp"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:id="@+id/overview_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/overview_label"
+                android:textSize="28sp"
+                android:textColor="@color/jcBlueColor"
+                android:paddingLeft="15dp"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="25dp"
+                android:paddingBottom="15dp"
+                android:paddingTop="15dp"
+
+                >
+                <TextView
+                    android:id="@+id/distance_label"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/distance_label"
+                    android:textSize="14sp"
+                    android:textColor="@color/jcBlueColor"
+                    />
+                <TextView
+                    android:id="@+id/distance_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    android:text="0.00"
+                    android:textColor="@color/jcBlueColor"
+                    android:paddingLeft="15dp"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="25dp"
+                >
+                <TextView
+                    android:id="@+id/routes_label"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/stat_route_label"
+                    android:textSize="14sp"
+                    android:textColor="@color/jcBlueColor"
+                    />
+                <TextView
+                    android:id="@+id/time_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    android:text="0.00"
+                    android:textColor="@color/jcBlueColor"
+                    android:paddingLeft="15dp"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/line_chart_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/line_chart_label"
+                android:textSize="28sp"
+                android:textColor="@color/jcBlueColor"
+                android:paddingLeft="30dp"
+                />
+            <lecho.lib.hellocharts.view.LineChartView
+                android:id="@+id/line_chart"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
     </LinearLayout>
+
 
 </RelativeLayout>

@@ -1,8 +1,0 @@
-<resources>
-    <string name="title_activity_user_overview">Glasgow Cycling</string>
-
-    <!-- Strings related to user overview -->
-    <string name="distance_stat">0 miles this month</string>
-    <string name="time_stat">0 hours this month</string>
-    <string name="stats_message">Swipe through stats</string>
-</resources>

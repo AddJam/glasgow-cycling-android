@@ -6,12 +6,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import com.fcd.glasgowcycling.R;
 
+import butterknife.ButterKnife;
+
 public class UserStatsActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_stats);
+        ButterKnife.inject(this);
+
+        
     }
 
 
