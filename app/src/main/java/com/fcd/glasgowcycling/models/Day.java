@@ -1,31 +1,35 @@
 package com.fcd.glasgowcycling.models;
 
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by michaelhayes on 19/11/14.
  */
+@Table(name = "Day")
 public class Day {
 
-    @Expose
+    @Expose @Column(name = "Distance")
     private Integer distance;
+
     @SerializedName("avg_speed")
-    @Expose
+    @Expose @Column(name = "AvgSpeed")
     private Integer avgSpeed;
     @SerializedName("min_speed")
-    @Expose
+    @Expose @Column(name = "MinSpeed")
     private Integer minSpeed;
     @SerializedName("max_speed")
-    @Expose
+    @Expose @Column(name = "MaxSpeed")
     private Integer maxSpeed;
     @SerializedName("routes_started")
-    @Expose
+    @Expose @Column(name = "RoutesStarted")
     private Integer routesStarted;
     @SerializedName("routes_completed")
-    @Expose
+    @Expose @Column(name = "RoutesCompleted")
     private Integer routesCompleted;
-    @Expose
+    @Expose @Column(name = "Time")
     private Integer time;
 
     /**

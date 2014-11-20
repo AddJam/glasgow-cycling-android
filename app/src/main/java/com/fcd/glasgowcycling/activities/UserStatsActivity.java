@@ -69,8 +69,7 @@ public class UserStatsActivity extends Activity {
             profileImage.setImageBitmap(decodedImage);
         }
 
-        distanceValue.setText("yoyoyoyo");
-        routeValue.setText("yoyoyoyo");
+        getStats();
     }
 
 
@@ -93,6 +92,30 @@ public class UserStatsActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void getStats() {
+    public void getStats(){
+        // Load from API
+        int numDays = 7;
+        cyclingService.getStats(numDays, new Callback<Overall>() {
+
+            @Override
+            public void success(Overall overall, Response response) {
+                Log.d(TAG, "retreived stats");
+
+                // Delete existing users
+                new Delete().from(Overall.class).execute();
+
+                // Store
+                mOverallStats = overall;
+
+                distanceValue.setText(mOverallStats.getDistance()+ " km");
+                routeValue.setText(mOverallStats.getRoutesCompleted() + " completed");
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.d(TAG, "Failed to get stats");
+            }
+        });
     }
 }

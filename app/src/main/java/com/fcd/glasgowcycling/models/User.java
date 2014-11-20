@@ -31,7 +31,7 @@ public class User extends Model {
         super();
     }
 
-    public User(String firstName, String lastName, Month month, String email, String gender, String profilePic){
+    public User(String username, Month month, String email, String gender, String profilePic){
         super();
         this.username = username;
         this.month = month;

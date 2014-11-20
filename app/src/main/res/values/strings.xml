@@ -13,7 +13,7 @@
     <string name="title_activity_account_settings">Update Account Settings</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_cycle_map">Cycle Map</string>
-    <string name="title_activity_user_stats">UserStatsActivity</string>
+    <string name="title_activity_user_stats">Stats for this week</string>
 
     <!--stats strings-->
     <string name="stats_message">Scroll to view your weekly stats</string>
