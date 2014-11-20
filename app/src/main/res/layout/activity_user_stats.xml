@@ -134,7 +134,7 @@
                     android:textColor="@color/jcBlueColor"
                     />
                 <TextView
-                    android:id="@+id/time_value"
+                    android:id="@+id/route_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="24sp"

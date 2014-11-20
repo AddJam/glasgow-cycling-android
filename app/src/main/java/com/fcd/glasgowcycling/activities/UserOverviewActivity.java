@@ -287,8 +287,7 @@ public class UserOverviewActivity extends Activity {
         @Override
         public void onClick(View v) {
             Log.d(TAG, "Stats clicked");
-            //TODO implement stats
-
+            startActivity(new Intent(getApplicationContext(), UserStatsActivity.class));
         }
     }
 

@@ -2,6 +2,8 @@ package com.fcd.glasgowcycling.models;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.activeandroid.Model;
 import com.google.gson.annotations.Expose;
 
 import com.google.gson.annotations.Expose;
@@ -9,15 +11,12 @@ import com.google.gson.annotations.Expose;
 /**
  * Created by michaelhayes on 19/11/14.
  */
-public class Overall {
+public class Overall extends Model {
 
-
-@Expose
-private Overall overall;
-@Expose
-private List<Day> days = new ArrayList<Day>();
-
-
+    @Expose
+    private Overall overall;
+    @Expose
+    private List<Day> days = new ArrayList<Day>();
 
     /**
      *

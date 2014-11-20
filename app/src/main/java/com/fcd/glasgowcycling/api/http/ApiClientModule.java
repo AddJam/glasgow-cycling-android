@@ -16,6 +16,7 @@ import com.fcd.glasgowcycling.activities.SearchActivity;
 import com.fcd.glasgowcycling.activities.SignInActivity;
 import com.fcd.glasgowcycling.activities.SignUpActivity;
 import com.fcd.glasgowcycling.activities.UserOverviewActivity;
+import com.fcd.glasgowcycling.activities.UserStatsActivity;
 import com.fcd.glasgowcycling.api.responses.AuthModel;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
@@ -61,7 +62,8 @@ import retrofit.converter.GsonConverter;
         AccountSettingsActivity.class,
         AccountPasswordActivity.class,
         AccountForgottenActivity.class,
-        CycleMapActivity.class
+        CycleMapActivity.class,
+        UserStatsActivity.class
 })
 public class ApiClientModule {
 

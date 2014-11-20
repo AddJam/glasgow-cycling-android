@@ -17,7 +17,7 @@
 
     <!--stats strings-->
     <string name="stats_message">Scroll to view your weekly stats</string>
-    <string name="stat_route_label">Routes</string>
+    <string name="stat_route_label">Routes:</string>
     <string name="overview_label">Overview</string>
     <string name="line_chart_label">Distance per Day</string>
 </resources>
