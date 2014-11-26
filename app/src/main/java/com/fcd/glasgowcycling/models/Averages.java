@@ -36,24 +36,24 @@ public class Averages implements Serializable {
     }
 
     public String getReadableTime() {
-        int hours = (int) Math.floor(time / 3600);
-        int minutes = (int) Math.floor((time / 60) - (3600 * hours));
-        int seconds = (int) Math.floor(time - (3600 * hours) * (60 * minutes));
+        int totalMinutes = (int) Math.floor(time / 60);
+        int minutes = totalMinutes % 60;
+        int hours = (int)Math.floor(totalMinutes / 60);
+
+        String hoursDescriptor = "hours";
+        if (hours == 1) {
+            hoursDescriptor = "hour";
+        }
+
+        String minutesDescriptor = "minutes";
+        if (minutes == 1) {
+            minutesDescriptor = "minute";
+        }
 
         if (hours > 0) {
-            String descriptor = "hours";
-            if (minutes == 1) {
-                descriptor = "hour";
-            }
-            return String.format("%02d:%02d:%02d %s", descriptor, hours, minutes, seconds);
-        } else if (minutes > 0) {
-            String descriptor = "minutes";
-            if (minutes == 1) {
-                descriptor = "minute";
-            }
-            return String.format("%02d:%02d %s", minutes, seconds, descriptor);
+            return String.format("%02d %s %02d %s", hours, hoursDescriptor, minutes, minutesDescriptor);
         } else {
-            return String.format("%02d seconds", seconds);
+            return String.format("%02d %s", minutes, minutesDescriptor);
         }
     }
 
