@@ -40,6 +40,14 @@ public class Route implements Serializable {
     @Expose
     private List<Point> points = new ArrayList<Point>();
 
+    public Route() {
+        super();
+    }
+
+    public boolean hasChildren() {
+        return this.id == null;
+    }
+
     public List<Point> getPoints() {
         return points;
     }
