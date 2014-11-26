@@ -13,11 +13,12 @@
     <string name="title_activity_account_settings">Update Account Settings</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_cycle_map">Cycle Map</string>
-    <string name="title_activity_user_stats">Stats for this week</string>
+    <string name="title_activity_user_stats">Usage Statistics</string>
 
     <!--stats strings-->
     <string name="stats_message">Scroll to view your weekly stats</string>
     <string name="stat_route_label">Routes:</string>
     <string name="overview_label">Overview</string>
     <string name="line_chart_label">Distance per Day</string>
+    <string name="column_chart_label">Routes per Day</string>
 </resources>
