@@ -4,7 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/glasgow-cycling-android.iml" filepath="$PROJECT_DIR$/glasgow-cycling-android.iml" />
-      <module fileurl="file://$PROJECT_DIR$/hellocharts-library/hellocharts-library.iml" filepath="$PROJECT_DIR$/hellocharts-library/hellocharts-library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/glasgow-cycling-android.iml" filepath="$PROJECT_DIR$/glasgow-cycling-android.iml" />
     </modules>
   </component>
 </project>
