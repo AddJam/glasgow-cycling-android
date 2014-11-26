@@ -73,16 +73,24 @@ public class RouteOverviewActivity extends Activity {
                 Log.d(TAG, "Successfully got route details");
                 List<Point> points = routeDetails.getPoints();
                 if (points.size() > 1) {
+                    map.clear();
+
+                    // Move camera to start of route
                     LatLng routeStart = points.get(0).getLatLng();
                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(routeStart, 15));
+
+                    // Draw route line
+                    PolylineOptions polylineOptions = new PolylineOptions()
+                            .width(10)
+                            .color(getResources().getColor(R.color.jcBlueColor));
                     for (int i = 1; i < points.size(); i++) {
                         Point previousPoint = points.get(i - 1);
                         Point currentPoint = points.get(i);
-                        map.addPolyline(new PolylineOptions()
-                                .add(previousPoint.getLatLng(), currentPoint.getLatLng())
-                                .width(10)
-                                .color(getResources().getColor(R.color.jcBlueColor)));
+                        polylineOptions.add(previousPoint.getLatLng(), currentPoint.getLatLng());
                     }
+                    map.addPolyline(polylineOptions);
+
+                    // Draw privacy circles
                     LatLng routeEnd = points.get(points.size() - 1).getLatLng();
                     map.addCircle(new CircleOptions()
                             .center(routeStart)
