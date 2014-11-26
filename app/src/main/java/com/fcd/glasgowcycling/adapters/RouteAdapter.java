@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fcd.glasgowcycling.R;
@@ -50,8 +51,18 @@ public class RouteAdapter extends ArrayAdapter<Route> {
 
         Route route = getItem(position);
 
-        holder.toName.setText(route.getEndName());
-        holder.fromName.setText(route.getStartName());
+        if (route.getEndName() != null) {
+            holder.toRow.setVisibility(View.VISIBLE);
+            holder.toName.setText(route.getEndName());
+        } else {
+            holder.toRow.setVisibility(View.GONE);
+        }
+        if (route.getStartName() != null) {
+            holder.fromRow.setVisibility(View.VISIBLE);
+            holder.fromName.setText(route.getStartName());
+        } else {
+            holder.fromRow.setVisibility(View.GONE);
+        }
         holder.numReviews.setText("(" + route.getNumReviews() + ")");
         holder.averageDistance.setText(route.getAverages().getReadableDistance());
         holder.averageTime.setText(route.getAverages().getReadableTime());
@@ -63,6 +74,8 @@ public class RouteAdapter extends ArrayAdapter<Route> {
 
     // somewhere else in your class definition
     static class ViewHolder {
+        @InjectView(R.id.toText) RelativeLayout toRow;
+        @InjectView(R.id.fromText) RelativeLayout fromRow;
         @InjectView(R.id.toName) TextView toName;
         @InjectView(R.id.fromName) TextView fromName;
         @InjectView(R.id.rating) RatingBar rating;
