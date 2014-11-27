@@ -124,7 +124,8 @@
         </activity>
         <activity
             android:name=".activities.UserStatsActivity"
-            android:label="@string/title_activity_user_stats" >
+            android:label="@string/title_activity_user_stats"
+            android:parentActivityName=".activities.UserOverviewActivity">
         </activity>
     </application>
 
