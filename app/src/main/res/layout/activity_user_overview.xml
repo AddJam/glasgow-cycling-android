@@ -1,9 +1,120 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.fcd.glasgowcycling.activities.UserOverviewActivity"
     android:background="@color/jcBlueColor">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/jcLightBlueColor"
+            android:paddingTop="15dp"
+            android:id="@+id/weather_area">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                android:layout_marginLeft="8dp"
+                android:layout_weight="0.05">
+                <ImageView
+                    android:id="@+id/weather_icon"
+                    android:src="@drawable/loading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                android:layout_marginLeft="8dp"
+                android:layout_weight="0.15">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/temp_label"
+                        android:text="@string/temp_label"
+                        android:textColor="@color/jcWhiteColor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:id="@+id/temp_info"
+                        android:textSize="20sp"
+                        android:textColor="@color/jcWhiteColor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                android:layout_marginLeft="8dp"
+                android:layout_weight="0.15">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/precip_label"
+                        android:text="@string/precip_label"
+                        android:textColor="@color/jcWhiteColor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:id="@+id/precip_info"
+                        android:textColor="@color/jcWhiteColor"
+                        android:textSize="20sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                android:layout_marginLeft="8dp"
+                android:layout_weight="0.15"
+                android:gravity="bottom">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/wind_speed_label"
+                        android:text="@string/wind_speed_label"
+                        android:textColor="@color/jcWhiteColor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:id="@+id/wind_speed_info"
+                        android:textColor="@color/jcWhiteColor"
+                        android:textSize="20sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+        <TextView
+            android:id="@+id/weather_source"
+            android:textColor="@color/jcWhiteColor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/jcLightBlueColor"
+            android:paddingLeft="10dp"
+            android:paddingBottom="10dp"
+            />
+    </LinearLayout>
 
     <ScrollView
         android:id="@+id/overivew_scroll"
@@ -107,112 +218,13 @@
                     android:textColor="@color/jcWhiteColor"
                     />
             </FrameLayout>
-            <include android:id="@+id/user_routes" layout="@layout/icon_cell"></include>
-            <include android:id="@+id/nearby_routes" layout="@layout/icon_cell"></include>
-            <include android:id="@+id/cycle_map" layout="@layout/icon_cell"></include>
-            <LinearLayout
+            <include android:id="@+id/user_routes" layout="@layout/icon_cell"/>
+            <include android:id="@+id/nearby_routes" layout="@layout/icon_cell"/>
+            <include android:id="@+id/cycle_map" layout="@layout/icon_cell"/>
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/jcLightBlueColor"
-                android:orientation="horizontal"
-                android:paddingTop="15dp"
-                android:id="@+id/weather_area">
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="10dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_weight="0.05">
-                    <ImageView
-                        android:id="@+id/weather_icon"
-                        android:src="@drawable/loading"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="10dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_weight="0.15">
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-                        <TextView
-                            android:id="@+id/temp_label"
-                            android:text="@string/temp_label"
-                            android:textColor="@color/jcWhiteColor"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                        <TextView
-                            android:id="@+id/temp_info"
-                            android:textSize="20sp"
-                            android:textColor="@color/jcWhiteColor"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                    </LinearLayout>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="10dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_weight="0.15">
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-                        <TextView
-                            android:id="@+id/precip_label"
-                            android:text="@string/precip_label"
-                            android:textColor="@color/jcWhiteColor"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                        <TextView
-                            android:id="@+id/precip_info"
-                            android:textColor="@color/jcWhiteColor"
-                            android:textSize="20sp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                    </LinearLayout>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="10dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_weight="0.15">
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-                        <TextView
-                            android:id="@+id/wind_speed_label"
-                            android:text="@string/wind_speed_label"
-                            android:textColor="@color/jcWhiteColor"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                        <TextView
-                            android:id="@+id/wind_speed_info"
-                            android:textColor="@color/jcWhiteColor"
-                            android:textSize="20sp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                    </LinearLayout>
-                </LinearLayout>
-            </LinearLayout>
-                <TextView
-                    android:id="@+id/weather_source"
-                    android:textColor="@color/jcWhiteColor"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/jcLightBlueColor"
-                    android:paddingLeft="10dp"
-                    />
+                android:layout_height="92dp"
+                android:background="@android:color/transparent"/>
         </LinearLayout>
     </ScrollView>
-</RelativeLayout>
+</FrameLayout>
