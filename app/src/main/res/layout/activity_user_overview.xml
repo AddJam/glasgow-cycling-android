@@ -67,6 +67,17 @@
                         android:textColor="@color/jcWhiteColor"
                         android:layout_gravity="center"
                         android:gravity="center"
+                        android:paddingBottom="8dp"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/view_stats"
+                        android:textColor="@color/jcWhiteColor"
+                        android:textStyle="bold"
+                        android:layout_gravity="center"
+                        android:gravity="center"
                         android:paddingBottom="25dp"
                         />
                 </LinearLayout>
