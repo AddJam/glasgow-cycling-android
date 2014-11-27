@@ -1,6 +1,7 @@
 package com.fcd.glasgowcycling.adapters;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -89,6 +90,13 @@ public class RouteAdapter extends ArrayAdapter<Route> {
         holder.rating.setRating(route.getAverages().getRating().floatValue());
         holder.numInstances.setText(route.getNumInstances() + " routes");
 
+        Typeface semiBoldFont = Typeface.createFromAsset(getContext().getAssets(), "fonts/FutureCitySemiBold.otf");
+        Typeface regularFont = Typeface.createFromAsset(getContext().getAssets(), "fonts/FutureCityRegular.otf");
+        holder.fromName.setTypeface(semiBoldFont);
+        holder.toName.setTypeface(semiBoldFont);
+        holder.toLabel.setTypeface(regularFont);
+        holder.fromLabel.setTypeface(regularFont);
+
         return view;
     }
 
@@ -97,7 +105,9 @@ public class RouteAdapter extends ArrayAdapter<Route> {
         @InjectView(R.id.toText) RelativeLayout toRow;
         @InjectView(R.id.fromText) RelativeLayout fromRow;
         @InjectView(R.id.toName) TextView toName;
+        @InjectView(R.id.toLabel) TextView toLabel;
         @InjectView(R.id.fromName) TextView fromName;
+        @InjectView(R.id.fromLabel) TextView fromLabel;
         @InjectView(R.id.rating) RatingBar rating;
         @InjectView(R.id.numReviews) TextView numReviews;
         @InjectView(R.id.averageDistance) TextView averageDistance;
