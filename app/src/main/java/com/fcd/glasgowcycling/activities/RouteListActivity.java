@@ -15,9 +15,12 @@ import com.fcd.glasgowcycling.LoadingView;
 import com.fcd.glasgowcycling.R;
 import com.fcd.glasgowcycling.adapters.RouteAdapter;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
+import com.fcd.glasgowcycling.api.routes.RouteSearch;
 import com.fcd.glasgowcycling.models.Route;
 import com.fcd.glasgowcycling.models.RouteList;
+import com.fcd.glasgowcycling.utils.EndlessScrollListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -30,10 +33,15 @@ public class RouteListActivity extends ListActivity implements AdapterView.OnIte
 
     private final String TAG = "RouteList";
 
+    static final int PER_PAGE = 1;
+    int mCurrentPage = 1;
+    Bundle mQuery;
+
     private List<Route> mRoutes;
-    private Callback<RouteList> mSearchCallback;
     private ListView routesList;
     private LoadingView loadingView;
+
+    RouteSearch mSearcher;
     @Inject GoCyclingApiInterface cyclingService;
 
     // Messages
@@ -45,19 +53,36 @@ public class RouteListActivity extends ListActivity implements AdapterView.OnIte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.route_list);
         ((CyclingApplication) getApplication()).inject(this);
+        mRoutes = new ArrayList<Route>();
 
         // Empty list view
         routesList = getListView();
+        routesList.setOnScrollListener(new EndlessScrollListener() {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                Log.d(TAG, "Loading page " + page + " total items is " + totalItemsCount);
+                mCurrentPage = page;
+                performSearch();
+            }
+        });
         loadingView = (LoadingView) getListView().getEmptyView();
         loadingView.setBlue(true);
 
         // Search callback
-        mSearchCallback = new Callback<RouteList>() {
+        mSearcher = new RouteSearch(cyclingService) {
+
             @Override
-            public void success(RouteList routeList, Response response) {
-                List<Route> retrievedRoutes = routeList.getRoutes();
-                mRoutes = retrievedRoutes;
-                Log.d(TAG, "Got routes - total: " + mRoutes.size());
+            public void onStartLoad() {
+                if (mRoutes.size() == 0) {
+                    loadingView.setRandomMessage();
+                    loadingView.startAnimating();
+                }
+            }
+
+            @Override
+            public void onLoad(List<Route> routes) {
+                mRoutes.addAll(routes);
+                Log.d(TAG, "Got " + routes.size() + " more routes - total: " + mRoutes.size());
                 routesList.setAdapter(new RouteAdapter(getBaseContext(), R.layout.route_cell, mRoutes));
                 if (mRoutes.size() == 0) {
                     searchFinished(mEmptyMessage);
@@ -67,7 +92,7 @@ public class RouteListActivity extends ListActivity implements AdapterView.OnIte
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void onFailure() {
                 Log.d(TAG, "Failed to get routes");
                 searchFinished(mErrorMessage);
             }
@@ -78,39 +103,22 @@ public class RouteListActivity extends ListActivity implements AdapterView.OnIte
 
         // Get data and perform search if possible
         Bundle bundle = getIntent().getExtras();
-        if (bundle.containsKey("start_maidenhead") && bundle.containsKey("end_maidenhead")) {
-            // Showing routes for a selected journey
-            setTitle(bundle.getString("name"));
-            int perPage = 1000;
-            int pageNum = 1;
-            loadingView.setRandomMessage();
-            loadingView.startAnimating();
-            cyclingService.searchRoutes(bundle.getString("start_maidenhead"), bundle.getString("end_maidenhead"), mSearchCallback);
-        } else if (bundle.containsKey("user_only") || bundle.containsKey("source_lat") || bundle.containsKey("source_long")) {
-            // Either user or nearby routes
-            boolean userOnly = bundle.getBoolean("user_only");
-            float sourceLat = bundle.getFloat("source_lat", 0.0f);
-            float sourceLong = bundle.getFloat("source_long", 0.0f);
-            search(userOnly, sourceLat, sourceLong);
 
-            if (userOnly) {
-                setTitle("My Routes");
-            } else {
-                setTitle("Nearby Routes");
-            }
-        } else {
-            setTitle("Search");
+        if (bundle.containsKey("title")) {
+            setTitle(bundle.getString("title"));
         }
+        setQuery(bundle);
+        performSearch();
     }
 
-    public void search(boolean userOnly, float sourceLat, float sourceLong) {
-        loadingView.setRandomMessage();
-        loadingView.startAnimating();
-        if (userOnly) {
-            cyclingService.routes(userOnly, mSearchCallback);
-        } else {
-            cyclingService.nearbyRoutes(sourceLat, sourceLong, mSearchCallback);
-        }
+    public void setQuery(Bundle query) {
+        mQuery = query;
+    }
+
+    public void performSearch() {
+        mQuery.putInt("per_page", PER_PAGE);
+        mQuery.putInt("page_num", mCurrentPage);
+        mSearcher.search(mQuery);
     }
 
     private void searchFinished(final String message) {
@@ -150,7 +158,7 @@ public class RouteListActivity extends ListActivity implements AdapterView.OnIte
             Bundle extras = new Bundle();
             extras.putSerializable("start_maidenhead", route.getStartMaidenhead());
             extras.putSerializable("end_maidenhead", route.getEndMaidenhead());
-            extras.putSerializable("name", route.getStartName() + " to " + route.getEndName());
+            extras.putSerializable("title", route.getStartName() + " to " + route.getEndName());
             routeListIntent.putExtras(extras);
             startActivity(routeListIntent);
         } else {

@@ -105,6 +105,7 @@ public class UserOverviewActivity extends Activity {
                 Intent userRoutesIntent = new Intent(getBaseContext(), RouteListActivity.class);
                 Bundle extras = new Bundle();
                 extras.putBoolean("user_only", true);
+                extras.putString("title", "My Routes");
                 userRoutesIntent.putExtras(extras);
                 startActivity(userRoutesIntent);
             }
@@ -117,6 +118,7 @@ public class UserOverviewActivity extends Activity {
                 Bundle extras = new Bundle();
                 extras.putFloat("source_lat", (float) mUserLocation.latitude);
                 extras.putFloat("source_long", (float) mUserLocation.longitude);
+                extras.putString("title", "Nearby Routes");
                 userRoutesIntent.putExtras(extras);
                 startActivity(userRoutesIntent);
             }

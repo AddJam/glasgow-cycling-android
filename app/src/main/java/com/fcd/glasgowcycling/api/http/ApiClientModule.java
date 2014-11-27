@@ -18,6 +18,7 @@ import com.fcd.glasgowcycling.activities.SignUpActivity;
 import com.fcd.glasgowcycling.activities.UserOverviewActivity;
 import com.fcd.glasgowcycling.activities.UserStatsActivity;
 import com.fcd.glasgowcycling.api.responses.AuthModel;
+import com.fcd.glasgowcycling.api.routes.RouteSearch;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -55,6 +56,7 @@ import retrofit.converter.GsonConverter;
         UserOverviewActivity.class,
         ApiClientModule.class,
         RouteListActivity.class,
+        RouteSearch.class,
         RouteCaptureActivity.class,
         SignUpActivity.class,
         SearchActivity.class,
