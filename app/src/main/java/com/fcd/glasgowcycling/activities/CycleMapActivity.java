@@ -33,6 +33,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -42,6 +45,8 @@ public class CycleMapActivity extends FragmentActivity {
     @Inject
     GoCyclingApiInterface mCyclingService;
 
+    @InjectView(R.id.progress) SmoothProgressBar progressBar;
+
     private GoogleMap mMap;
     private PoiList mList;
     private List<String> mTypes;
@@ -49,9 +54,9 @@ public class CycleMapActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((CyclingApplication) getApplication()).inject(this);
-
         setContentView(R.layout.activity_cycle_map);
+        ButterKnife.inject(this);
+        ((CyclingApplication) getApplication()).inject(this);
         setUpMapIfNeeded();
 
         mList = new Select().from(PoiList.class).limit(1).executeSingle();
@@ -80,7 +85,9 @@ public class CycleMapActivity extends FragmentActivity {
                     } finally {
                         ActiveAndroid.endTransaction();
                     }
+
                     showLocations();
+                    progressBar.setVisibility(View.GONE);
                 }
 
                 @Override
@@ -92,6 +99,7 @@ public class CycleMapActivity extends FragmentActivity {
                     if (mList != null) {
                         showLocations();
                     }
+                    progressBar.setVisibility(View.GONE);
                 }
             });
         } else {
@@ -193,6 +201,7 @@ public class CycleMapActivity extends FragmentActivity {
 
                     mMap.addMarker(options);
                 }
+                progressBar.setVisibility(View.GONE);
             }
         });
     }
