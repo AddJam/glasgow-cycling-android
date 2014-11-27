@@ -60,7 +60,7 @@ public interface GoCyclingApiInterface {
                        @Query("dest_lat") float destLat, @Query("dest_long") float destLong,
                        Callback<RouteList> callback);
 
-    @POST("/routes.json")
+    @POST("/routes.json?source=android")
     void route(@Body CaptureRoute route, Callback<RouteCaptureResponse> callback);
 
     @POST("/signup.json")
