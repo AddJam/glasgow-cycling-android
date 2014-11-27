@@ -43,6 +43,15 @@ public interface GoCyclingApiInterface {
     void nearbyRoutes(@Query("source_lat") float sourceLat, @Query("source_long") float sourceLong,
                       Callback<RouteList> callback);
 
+    @GET("/routes.json?per_page=1000&page_num=1")
+    void routesTo(@Query("dest_lat") float destLat, @Query("dest_long") float destLong,
+                      Callback<RouteList> callback);
+
+    @GET("/routes.json?per_page=1000&page_num=1")
+    void routesBetween(@Query("source_lat") float sourceLat, @Query("source_long") float sourceLong,
+                  @Query("dest_lat") float destLat, @Query("dest_long") float destLong,
+                  Callback<RouteList> callback);
+
     @POST("/routes.json")
     void route(@Body CaptureRoute route, Callback<RouteCaptureResponse> callback);
 

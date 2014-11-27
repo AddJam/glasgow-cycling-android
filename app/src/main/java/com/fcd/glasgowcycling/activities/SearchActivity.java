@@ -8,8 +8,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.fcd.glasgowcycling.R;
+import com.fcd.glasgowcycling.utils.LocationUtil;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
 import java.util.List;
@@ -24,6 +27,7 @@ public class SearchActivity extends RouteListActivity {
 
         mGeoCoder = new Geocoder(this);
         handleIntent(getIntent());
+        setTitle("Search");
     }
 
     @Override
@@ -38,17 +42,38 @@ public class SearchActivity extends RouteListActivity {
             mLoadingMessage = "Searching for routes to " + query;
             mEmptyMessage = "No routes to " + query;
 
+            LatLng userLocation = LocationUtil.getLastKnownLocation(getBaseContext());
+            if (userLocation == null) {
+                Toast.makeText(getBaseContext(),
+                        "Could not locate you - finding any route to destination",
+                        Toast.LENGTH_LONG)
+                        .show();
+            }
+
             try {
                 List<Address> geoInfo = mGeoCoder.getFromLocationName(query, 1);
                 Address location = geoInfo.get(0);
                 if (location.hasLatitude() && location.hasLongitude()) {
-                    Log.d(TAG, "Searching for routes near " + location.getLatitude() + ", " + location.getLongitude());
-                    search(false, (float)location.getLatitude(), (float)location.getLongitude());
+                    Log.d(TAG, "Searching for routes to " + location.getLatitude() + ", " + location.getLongitude());
+                    Bundle searchQuery = new Bundle();
+                    if (userLocation != null) {
+                        searchQuery.putFloat("source_lat", (float) userLocation.latitude);
+                        searchQuery.putFloat("source_long", (float) userLocation.longitude);
+                    }
+                    searchQuery.putFloat("dest_lat", (float)location.getLatitude());
+                    searchQuery.putFloat("dest_long", (float)location.getLongitude());
+                    mSearcher.search(searchQuery);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public void performSearch(Bundle query) {
+        // Prevent on-load searches by route list
+        return;
     }
 
     @Override
