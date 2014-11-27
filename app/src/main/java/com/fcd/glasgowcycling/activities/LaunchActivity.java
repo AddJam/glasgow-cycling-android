@@ -6,8 +6,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import net.hockeyapp.android.CrashManager;
-
 public class LaunchActivity extends Activity {
 
     private AccountManager mAccountManager;
@@ -30,6 +28,5 @@ public class LaunchActivity extends Activity {
     @Override
     public void onResume() {
         super.onResume();
-        CrashManager.register(this, "31f27fc9f4a5e74f41ed1bfe0ab10860");
     }
 }

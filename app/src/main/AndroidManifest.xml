@@ -119,7 +119,6 @@
             android:name=".activities.AccountForgottenActivity"
             android:label="@string/title_activity_account_forgotten" >
         </activity>
-        <activity android:name="net.hockeyapp.android.UpdateActivity" />
         <activity
             android:name=".activities.CycleMapActivity"
             android:label="@string/title_activity_cycle_map" >

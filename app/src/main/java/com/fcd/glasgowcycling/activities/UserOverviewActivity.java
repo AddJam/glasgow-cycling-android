@@ -41,8 +41,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
-import net.hockeyapp.android.UpdateManager;
-
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
@@ -137,7 +135,6 @@ public class UserOverviewActivity extends Activity {
 
     protected void onResume() {
         super.onResume();
-        UpdateManager.register(this, "31f27fc9f4a5e74f41ed1bfe0ab10860");
         getDetails();
         getWeather();
         setupMap();

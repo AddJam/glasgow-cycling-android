@@ -35,7 +35,6 @@ dependencies {
     compile 'com.jakewharton:butterknife:5.1.1'
     compile 'com.squareup.dagger:dagger:1.2.1'
     compile 'de.hdodenhof:circleimageview:1.1.1'
-    compile 'net.hockeyapp.android:HockeySDK:3.0.2'
     compile 'com.androidmapsextensions:android-maps-extensions:2.1+'
     compile files('libs/mpandroidchartlibrary-1-7-4.jar')
     compile 'com.github.castorflex.smoothprogressbar:library:1.0.0'
