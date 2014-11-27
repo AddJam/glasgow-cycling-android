@@ -5,7 +5,7 @@ import com.fcd.glasgowcycling.api.responses.AuthModel;
 import com.fcd.glasgowcycling.api.responses.RouteCaptureResponse;
 import com.fcd.glasgowcycling.models.CaptureRoute;
 import com.fcd.glasgowcycling.models.PoiList;
-import com.fcd.glasgowcycling.models.Overall;
+import com.fcd.glasgowcycling.models.Stats;
 import com.fcd.glasgowcycling.models.Route;
 import com.fcd.glasgowcycling.models.RouteList;
 import com.fcd.glasgowcycling.models.User;
@@ -88,5 +88,5 @@ public interface GoCyclingApiInterface {
     void pointsOfInterest(Callback<PoiList> points);
 
     @GET("/stats/days.json")
-    void getStats(@Query("num_days") int numDays, Callback<Overall> overall);
+    void getStats(@Query("num_days") int numDays, Callback<Stats> overall);
 }

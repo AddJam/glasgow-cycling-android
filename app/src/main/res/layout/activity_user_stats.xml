@@ -91,13 +91,12 @@
             android:textColor="@color/jcBlueColor"
             android:layout_gravity="center"
             android:gravity="center"
-            android:paddingBottom="15dp"
             />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="15dp"
-            android:paddingTop="30dp"
+            android:paddingTop="20dp"
             android:paddingBottom="30dp"
             android:orientation="vertical"
             >

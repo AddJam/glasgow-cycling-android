@@ -25,6 +25,7 @@
                 android:paddingTop="15dp"/>
 
             <TextView
+                android:id="@+id/welcome_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/welcome_label"
@@ -33,8 +34,8 @@
                 android:textColor="@color/jcWhiteColor"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:paddingBottom="15dp"
-                android:paddingTop="15dp"/>
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"/>
 
             <LinearLayout
                 android:id="@+id/form_view"
@@ -48,10 +49,11 @@
                 android:background="@color/jcWhiteColor">
 
                 <TextView
+                    android:id="@+id/welcome_message"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/welcome_message"
-                    android:textSize="20sp"
+                    android:textSize="22sp"
                     android:paddingLeft="7dp"
                     android:paddingRight="7dp"
                     android:paddingBottom="15dp"

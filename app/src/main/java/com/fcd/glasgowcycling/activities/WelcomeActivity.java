@@ -60,9 +60,11 @@ public class WelcomeActivity extends Activity {
         });
 
 
-        Typeface customFont = Typeface.createFromAsset(getAssets(), "fonts/FutureCitySemiBold.otf");
-        welcomeTitle.setTypeface(customFont);
-        welcomeMessage.setTypeface(customFont);
+        Typeface regularFont = Typeface.createFromAsset(getAssets(), "fonts/FutureCityRegular.otf");
+        Typeface semiBoldFont = Typeface.createFromAsset(getAssets(), "fonts/FutureCityRegular.otf");
+
+        welcomeTitle.setTypeface(semiBoldFont);
+        welcomeMessage.setTypeface(regularFont);
 
     }
 
