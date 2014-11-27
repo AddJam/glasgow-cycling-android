@@ -1,5 +1,5 @@
 <resources>
-    <string name="title_activity_sign_up">Help Make Glasgow a Cycling City</string>
+    <string name="title_activity_sign_up">Let's make Glasgow better</string>
 
     <!-- Strings related to login -->
     <string name="sign_up_prompt_first_name">Forename</string>
