@@ -165,7 +165,7 @@
                 android:paddingBottom="15dp"
                 />
             <com.github.mikephil.charting.charts.BarChart
-                android:id="@+id/column_chart"
+                android:id="@+id/bar_chart"
                 android:layout_width="350dp"
                 android:layout_height="350dp"
                 android:layout_gravity="center"
