@@ -14,6 +14,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_cycle_map">Cycle Map</string>
     <string name="title_activity_user_stats">Usage Statistics</string>
+    <string name="title_activity_welcome">Welcome to Glasgow Walking</string>
 
     <!-- stats strings -->
     <string name="stats_message">Scroll to view your weekly stats</string>
@@ -21,10 +22,10 @@
     <string name="overview_label">Overview</string>
     <string name="line_chart_label">Distance per Day</string>
     <string name="column_chart_label">Routes per Day</string>
-    <string name="title_activity_welcome">WelcomeActivity</string>
 
     <!-- welcomestrings -->
     <string name="welcome_message">This is an exciting tool that empowers you to effect change and improve the cycling infrastructure of your city.</string>
     <string name="why_sign_up">Why do I need an account?</string>
     <string name="dialog_close">Close</string>
+
 </resources>
