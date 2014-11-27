@@ -2,6 +2,7 @@ package com.fcd.glasgowcycling.activities;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
@@ -19,6 +20,7 @@ import com.androidmapsextensions.MarkerOptions;
 import com.androidmapsextensions.SupportMapFragment;
 import com.fcd.glasgowcycling.CyclingApplication;
 import com.fcd.glasgowcycling.R;
+import com.fcd.glasgowcycling.TypefaceSpan;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgowcycling.models.Poi;
 import com.fcd.glasgowcycling.models.PoiList;
@@ -130,6 +132,8 @@ public class CycleMapActivity extends FragmentActivity {
                 @Override
                 public View getInfoWindow(Marker marker) {
                     TextView view = (TextView)window.findViewById(R.id.title);
+                    Typeface customFont = Typeface.createFromAsset(getBaseContext().getAssets(), "fonts/FutureCitySemiBold.otf");
+                    view.setTypeface(customFont);
                     String title = marker.getTitle();
                     if (title != null && title.length() > 0) {
                         view.setText(title);
