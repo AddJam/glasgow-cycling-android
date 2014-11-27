@@ -3,6 +3,7 @@ package com.fcd.glasgowcycling.activities;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Typeface;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -114,6 +115,11 @@ public class RouteCaptureActivity extends Activity {
         t.start();
 
         finishButton.setOnClickListener(new FinishListener());
+        Typeface regularFont = Typeface.createFromAsset(getAssets(), "fonts/FutureCitySemiBold.otf");
+        distanceInfo.setTypeface(regularFont);
+        timeInfo.setTypeface(regularFont);
+        avgSpeedInfo.setTypeface(regularFont);
+        speedInfo.setTypeface(regularFont);
     }
 
     private GooglePlayServicesClient.ConnectionCallbacks mConnectionCallbacks = new GooglePlayServicesClient.ConnectionCallbacks() {
