@@ -150,6 +150,10 @@ public class CycleMapActivity extends FragmentActivity {
                     .enabled(true)
                     .clusterOptionsProvider(clusterOptions);
             mMap.setClustering(clusterSettings);
+
+            // Show Glasgow area
+            mMap.setMyLocationEnabled(true);
+            mMap.moveCamera( CameraUpdateFactory.newLatLngZoom(new LatLng(55.8628, -4.235), 10.8f));
         }
     }
 
@@ -160,7 +164,6 @@ public class CycleMapActivity extends FragmentActivity {
                 // Clear map
                 mMap.clear();
                 mTypes = new ArrayList<String>();
-                LatLngBounds.Builder builder = new LatLngBounds.Builder();
                 for (Poi poi : mList.getLocations()) {
                     LatLng location = new LatLng(poi.getLat(), poi.getLng());
                     String type = poi.getType();
@@ -189,13 +192,7 @@ public class CycleMapActivity extends FragmentActivity {
                     options.clusterGroup(typeId);
 
                     mMap.addMarker(options);
-                    builder.include(options.getPosition());
                 }
-
-                // Zoom to show all POI
-                LatLngBounds bounds = builder.build();
-                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 50);
-                mMap.animateCamera(cameraUpdate);
             }
         });
     }
