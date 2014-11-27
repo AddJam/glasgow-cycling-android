@@ -12,17 +12,17 @@ import com.google.gson.annotations.SerializedName;
 public class Day {
 
     @Expose @Column(name = "Distance")
-    private Integer distance;
+    private double distance;
 
     @SerializedName("avg_speed")
     @Expose @Column(name = "AvgSpeed")
-    private Integer avgSpeed;
+    private double avgSpeed;
     @SerializedName("min_speed")
     @Expose @Column(name = "MinSpeed")
-    private Integer minSpeed;
+    private double minSpeed;
     @SerializedName("max_speed")
     @Expose @Column(name = "MaxSpeed")
-    private Integer maxSpeed;
+    private double maxSpeed;
     @SerializedName("routes_started")
     @Expose @Column(name = "RoutesStarted")
     private Integer routesStarted;
@@ -37,7 +37,7 @@ public class Day {
      * @return
      * The distance
      */
-    public Integer getDistance() {
+    public double getDistance() {
         return distance;
     }
 
@@ -46,7 +46,7 @@ public class Day {
      * @param distance
      * The distance
      */
-    public void setDistance(Integer distance) {
+    public void setDistance(double distance) {
         this.distance = distance;
     }
 
@@ -55,7 +55,7 @@ public class Day {
      * @return
      * The avgSpeed
      */
-    public Integer getAvgSpeed() {
+    public double getAvgSpeed() {
         return avgSpeed;
     }
 
@@ -64,7 +64,7 @@ public class Day {
      * @param avgSpeed
      * The avg_speed
      */
-    public void setAvgSpeed(Integer avgSpeed) {
+    public void setAvgSpeed(double avgSpeed) {
         this.avgSpeed = avgSpeed;
     }
 
@@ -73,7 +73,7 @@ public class Day {
      * @return
      * The minSpeed
      */
-    public Integer getMinSpeed() {
+    public double getMinSpeed() {
         return minSpeed;
     }
 
@@ -82,7 +82,7 @@ public class Day {
      * @param minSpeed
      * The min_speed
      */
-    public void setMinSpeed(Integer minSpeed) {
+    public void setMinSpeed(double minSpeed) {
         this.minSpeed = minSpeed;
     }
 
@@ -91,7 +91,7 @@ public class Day {
      * @return
      * The maxSpeed
      */
-    public Integer getMaxSpeed() {
+    public double getMaxSpeed() {
         return maxSpeed;
     }
 
@@ -100,7 +100,7 @@ public class Day {
      * @param maxSpeed
      * The max_speed
      */
-    public void setMaxSpeed(Integer maxSpeed) {
+    public void setMaxSpeed(double maxSpeed) {
         this.maxSpeed = maxSpeed;
     }
 

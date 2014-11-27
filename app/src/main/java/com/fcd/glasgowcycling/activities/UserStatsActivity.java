@@ -112,7 +112,7 @@ public class UserStatsActivity extends Activity {
                 // Store
                 mOverallStats = overall;
 
-                if(mOverallStats.getRoutesCompleted() == 0 && mOverallStats.getDistance() == 0){
+                if(mOverallStats.getRoutesCompleted() < 0){
                     loadingView.stopAnimating();
                     loadingView.setMessage("No activity in the past week");
                 }
@@ -206,7 +206,8 @@ public class UserStatsActivity extends Activity {
                 xVals.add("Day " + (i + 1));
 
             }
-           yVals.add(new Entry(mOverallStats.getDays().get(i).getDistance(), i));
+            long yValue = Math.round(mOverallStats.getDays().get(i).getDistance());
+            yVals.add(new Entry(yValue, i));
         }
 
         // create a dataset and give it a type
