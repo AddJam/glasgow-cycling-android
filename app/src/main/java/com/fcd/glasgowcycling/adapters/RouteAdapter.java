@@ -25,18 +25,38 @@ import butterknife.InjectView;
 public class RouteAdapter extends ArrayAdapter<Route> {
 
     private final String TAG = "RouteAdapter";
+    private boolean mLoading;
 
     public RouteAdapter(Context context, int resourceId, List<Route> routes) {
         super(context, resourceId, routes);
     }
 
+    public void setLoading(boolean loading) {
+        mLoading = loading;
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public int getCount() {
+        if (mLoading) {
+            return super.getCount() + 1;
+        } else {
+            return super.getCount();
+        }
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        if (position == super.getCount() && mLoading) {
+            LayoutInflater viewInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            return viewInflater.inflate(R.layout.loading_cell, null);
+        }
+
         Log.d(TAG, "Getting view for position " + position);
         View view = convertView;
         ViewHolder holder; // to reference the child views for later actions
 
-        if (view == null) {
+        if (view == null || view.getTag() == null) {
             LayoutInflater viewInflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = viewInflater.inflate(R.layout.route_cell, null);
             // cache view fields into the holder

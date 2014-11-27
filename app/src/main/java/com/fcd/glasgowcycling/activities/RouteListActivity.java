@@ -1,9 +1,11 @@
 package com.fcd.glasgowcycling.activities;
 
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -33,13 +35,15 @@ public class RouteListActivity extends ListActivity implements AdapterView.OnIte
 
     private final String TAG = "RouteList";
 
-    static final int PER_PAGE = 1;
+    static final int PER_PAGE = 10;
     int mCurrentPage = 1;
+    boolean mReachedBottom;
     Bundle mQuery;
 
     private List<Route> mRoutes;
     private ListView routesList;
     private LoadingView loadingView;
+    private View mFooterView;
 
     RouteSearch mSearcher;
     @Inject GoCyclingApiInterface cyclingService;
@@ -54,6 +58,7 @@ public class RouteListActivity extends ListActivity implements AdapterView.OnIte
         setContentView(R.layout.route_list);
         ((CyclingApplication) getApplication()).inject(this);
         mRoutes = new ArrayList<Route>();
+        mReachedBottom = false;
 
         // Empty list view
         routesList = getListView();
@@ -61,29 +66,50 @@ public class RouteListActivity extends ListActivity implements AdapterView.OnIte
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
                 Log.d(TAG, "Loading page " + page + " total items is " + totalItemsCount);
-                mCurrentPage = page;
-                performSearch();
+                if (!mReachedBottom) {
+                    mCurrentPage = page;
+                    performSearch();
+                }
             }
         });
+        setListAdapter(new RouteAdapter(getBaseContext(), R.layout.route_cell, mRoutes));
+
+        // Loading view for footer (infinite scrolling)
+        LayoutInflater viewInflater = (LayoutInflater) getBaseContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mFooterView = viewInflater.inflate(R.layout.loading_cell, null);
+
+        // Loading view for empty list
         loadingView = (LoadingView) getListView().getEmptyView();
         loadingView.setBlue(true);
 
         // Search callback
         mSearcher = new RouteSearch(cyclingService) {
-
             @Override
             public void onStartLoad() {
                 if (mRoutes.size() == 0) {
                     loadingView.setRandomMessage();
                     loadingView.startAnimating();
+                } else {
+                    // Show loading indicator
+                    setLoading(true);
                 }
             }
 
             @Override
             public void onLoad(List<Route> routes) {
-                mRoutes.addAll(routes);
                 Log.d(TAG, "Got " + routes.size() + " more routes - total: " + mRoutes.size());
-                routesList.setAdapter(new RouteAdapter(getBaseContext(), R.layout.route_cell, mRoutes));
+
+                if (routes.size() == 0) {
+                    mReachedBottom = true;
+                } else {
+                    // Add routes to list
+                    RouteAdapter adapter = ((RouteAdapter) getListAdapter());
+                    for (Route route : routes) {
+                        adapter.add(route); // This also adds to mRoutes
+                    }
+                }
+
+                // Finished loading
                 if (mRoutes.size() == 0) {
                     searchFinished(mEmptyMessage);
                 } else {
@@ -115,15 +141,22 @@ public class RouteListActivity extends ListActivity implements AdapterView.OnIte
         mQuery = query;
     }
 
+    public void setLoading(boolean loading) {
+        ((RouteAdapter)getListAdapter()).setLoading(loading);
+    }
+
     public void performSearch() {
-        mQuery.putInt("per_page", PER_PAGE);
-        mQuery.putInt("page_num", mCurrentPage);
-        mSearcher.search(mQuery);
+        if (mQuery != null) {
+            mQuery.putInt("per_page", PER_PAGE);
+            mQuery.putInt("page_num", mCurrentPage);
+            mSearcher.search(mQuery);
+        }
     }
 
     private void searchFinished(final String message) {
         runOnUiThread(new Runnable() {
             public void run() {
+                setLoading(false);
                 loadingView.stopAnimating();
                 if (message == null || message.isEmpty()) {
                     loadingView.hideMessage();
@@ -171,4 +204,9 @@ public class RouteListActivity extends ListActivity implements AdapterView.OnIte
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        getListView().setOnScrollListener(null);
+        super.onBackPressed();
+    }
 }

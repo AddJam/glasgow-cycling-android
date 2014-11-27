@@ -33,6 +33,9 @@ public interface GoCyclingApiInterface {
     void details(Callback<User> callback);
 
     @GET("/routes.json")
+    void allRoutes(@Query("per_page") int perPage, @Query("page_num") int pageNum, Callback<RouteList> callback);
+
+    @GET("/routes.json")
     void routes(@Query("per_page") int perPage, @Query("page_num") int pageNum,
                 @Query("user_only") boolean userOnly, Callback<RouteList> callback);
 
