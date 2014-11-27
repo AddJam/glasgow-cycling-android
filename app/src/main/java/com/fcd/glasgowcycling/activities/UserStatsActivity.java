@@ -3,17 +3,12 @@ package com.fcd.glasgowcycling.activities;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
@@ -24,6 +19,7 @@ import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgowcycling.models.Day;
 import com.fcd.glasgowcycling.models.Month;
 import com.fcd.glasgowcycling.models.Overall;
+import com.fcd.glasgowcycling.models.Stats;
 import com.fcd.glasgowcycling.models.User;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
@@ -33,9 +29,6 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.interfaces.OnChartValueSelectedListener;
-import com.github.mikephil.charting.utils.LimitLine;
-import com.github.mikephil.charting.utils.ValueFormatter;
 import com.github.mikephil.charting.utils.XLabels;
 import com.github.mikephil.charting.utils.YLabels;
 
@@ -67,7 +60,7 @@ public class UserStatsActivity extends Activity {
     @InjectView(R.id.stats_area) View statsArea;
 
     private User mUser;
-    private Overall mOverallStats;
+    private Stats mStats;
     private ArrayList<Day> mDays;
 
     @Override
@@ -100,26 +93,27 @@ public class UserStatsActivity extends Activity {
     public void getStats(){
         // Load from API
         int numDays = 7;
-        cyclingService.getStats(numDays, new Callback<Overall>() {
+        cyclingService.getStats(numDays, new Callback<Stats>() {
 
             @Override
-            public void success(Overall overall, Response response) {
+            public void success(Stats stats, Response response) {
                 Log.d(TAG, "retreived stats");
 
                 // Delete existing users
-                new Delete().from(Overall.class).execute();
+                new Delete().from(Stats.class).execute();
 
                 // Store
-                mOverallStats = overall;
+                mStats = stats;
+                Overall overallStats = mStats.getOverall();
 
-                if(mOverallStats.getRoutesCompleted() < 0){
+                if(overallStats.getRoutesCompleted() < 1){
                     loadingView.stopAnimating();
                     loadingView.setMessage("No activity in the past week");
                 }
                 else {
 
-                    distanceValue.setText(mOverallStats.getDistance() + " km");
-                    routeValue.setText(mOverallStats.getRoutesCompleted() + " completed");
+                    distanceValue.setText(String.format("%.01f km", overallStats.getDistance()));
+                    routeValue.setText(overallStats.getRoutesCompleted() + " completed");
 
                     setBarChart();
                     setLineChart();
@@ -143,15 +137,15 @@ public class UserStatsActivity extends Activity {
         ArrayList<String> xVals = new ArrayList<String>();
         ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
 
-        for (int i = 0; i < mOverallStats.getDays().size(); i++) {
-            if (i == mOverallStats.getDays().size()-1){
+        for (int i = 0; i < mStats.getDays().size(); i++) {
+            if (i == mStats.getDays().size()-1){
                 xVals.add("Today");
             }
             else {
                 xVals.add("Day " + (i + 1));
 
             }
-            yVals1.add(new BarEntry(mOverallStats.getDays().get(i).getRoutesCompleted(), i));
+            yVals1.add(new BarEntry(mStats.getDays().get(i).getRoutesCompleted(), i));
         }
 
         BarDataSet set1 = new BarDataSet(yVals1, null);
@@ -198,15 +192,15 @@ public class UserStatsActivity extends Activity {
 
         ArrayList<String> xVals = new ArrayList<String>();
         ArrayList<Entry> yVals = new ArrayList<Entry>();
-        for (int i = 0; i < mOverallStats.getDays().size(); i++) {
-            if (i == mOverallStats.getDays().size()-1){
+        for (int i = 0; i < mStats.getDays().size(); i++) {
+            if (i == mStats.getDays().size()-1){
                 xVals.add("Today");
             }
             else {
                 xVals.add("Day " + (i + 1));
 
             }
-            long yValue = Math.round(mOverallStats.getDays().get(i).getDistance());
+            long yValue = Math.round(mStats.getDays().get(i).getDistance());
             yVals.add(new Entry(yValue, i));
         }
 
