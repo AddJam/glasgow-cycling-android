@@ -9,6 +9,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 import com.fcd.glasgowcycling.CyclingApplication;
+import com.fcd.glasgowcycling.LoadingView;
 import com.fcd.glasgowcycling.R;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgowcycling.models.Day;
@@ -61,6 +63,8 @@ public class UserStatsActivity extends Activity {
     @InjectView(R.id.route_value) TextView routeValue;
     @InjectView(R.id.bar_chart) BarChart barChart;
     @InjectView(R.id.line_chart) LineChart lineChart;
+    @InjectView(R.id.loading_view) LoadingView loadingView;
+    @InjectView(R.id.stats_area) View statsArea;
 
     private User mUser;
     private Overall mOverallStats;
@@ -72,6 +76,9 @@ public class UserStatsActivity extends Activity {
         setContentView(R.layout.activity_user_stats);
         ((CyclingApplication) getApplication()).inject(this);
         ButterKnife.inject(this);
+
+        loadingView.setBlue(true);
+        loadingView.startAnimating();
 
         mUser = new Select().from(User.class).limit(1).executeSingle();
         Month month = mUser.getMonth();
@@ -124,17 +131,28 @@ public class UserStatsActivity extends Activity {
                 // Store
                 mOverallStats = overall;
 
-                distanceValue.setText(mOverallStats.getDistance()+ " km");
-                routeValue.setText(mOverallStats.getRoutesCompleted() + " completed");
+                if(mOverallStats.getRoutesCompleted() == 0 && mOverallStats.getDistance() == 0){
+                    loadingView.stopAnimating();
+                    loadingView.setMessage("No activity in the past week");
+                }
+                else {
 
-                setBarChart();
-                setLineChart();
+                    distanceValue.setText(mOverallStats.getDistance() + " km");
+                    routeValue.setText(mOverallStats.getRoutesCompleted() + " completed");
 
+                    setBarChart();
+                    setLineChart();
+                    loadingView.stopAnimating();
+                    loadingView.setVisibility(View.GONE);
+                    statsArea.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
             public void failure(RetrofitError error) {
                 Log.d(TAG, "Failed to get stats");
+                loadingView.stopAnimating();
+                loadingView.setMessage(" Error getting weekly stats");
             }
         });
     }
