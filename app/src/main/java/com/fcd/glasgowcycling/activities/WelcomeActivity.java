@@ -94,6 +94,12 @@ public class WelcomeActivity extends Activity {
             }
         });
 
+        Typeface regularFont = Typeface.createFromAsset(getAssets(), "fonts/FutureCityRegular.otf");
+        Typeface semiBoldFont = Typeface.createFromAsset(getAssets(), "fonts/FutureCityRegular.otf");
+        headerText.setTypeface(semiBoldFont);
+        contentText.setTypeface(regularFont);
+
+
         dialog.show();
     }
 }
