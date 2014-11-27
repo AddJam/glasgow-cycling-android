@@ -35,7 +35,6 @@ public class SearchActivity extends RouteListActivity {
 
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-            mLoadingMessage = "Searching for routes to " + query;
             mEmptyMessage = "No routes to " + query;
 
             try {

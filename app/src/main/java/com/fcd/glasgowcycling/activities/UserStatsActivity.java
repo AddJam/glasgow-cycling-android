@@ -79,6 +79,7 @@ public class UserStatsActivity extends Activity {
 
         loadingView.setBlue(true);
         loadingView.startAnimating();
+        loadingView.setRandomMessage();
 
         mUser = new Select().from(User.class).limit(1).executeSingle();
         Month month = mUser.getMonth();

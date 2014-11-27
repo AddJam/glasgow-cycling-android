@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.Random;
+
 public class LoadingView extends RelativeLayout {
 
     private boolean isBlue;
@@ -92,6 +94,28 @@ public class LoadingView extends RelativeLayout {
     public void hideMessage() {
         mMessage.setText("");
         mMessage.setVisibility(GONE);
+    }
+
+    public void setRandomMessage() {
+
+        String[] message = new String[12];
+        message[0] = "Don't use headphones while cycling";
+        message[1] = "Make yourself visible at night. Lights and reflectors are a must";
+        message[2] = "Cycling is the third most popular recreational activity in the UK";
+        message[3] = "You can burn 650 calories with an hour's riding";
+        message[4] = "Cycling is one of the easiest ways to exercise";
+        message[5] = "20 miles a week can reduce the risk of coronary heart disease by 50%";
+        message[6] = "Studies show cycling can reduce stress";
+        message[7] = "Why not use cycling to raise money for a good cause";
+        message[8] = "Your data is secure and anonymous";
+        message[9] = "We can make Glasgow a Cycling City";
+        message[10] = "Check out glasgowcycling.com";
+        message[11] = "Follow @OpenGlasgow for updates";
+
+        Random rand = new Random();
+        int i = rand.nextInt(11);
+        mMessage.setText(message[i]);
+        mMessage.setVisibility(VISIBLE);
     }
 
     @Override

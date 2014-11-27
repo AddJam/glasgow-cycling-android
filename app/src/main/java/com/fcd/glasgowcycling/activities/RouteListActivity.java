@@ -37,7 +37,6 @@ public class RouteListActivity extends ListActivity implements AdapterView.OnIte
     @Inject GoCyclingApiInterface cyclingService;
 
     // Messages
-    public String mLoadingMessage = "Loading routes";
     public String mEmptyMessage = "No routes found";
     public String mErrorMessage = "Error retrieving routes";
 
@@ -84,7 +83,7 @@ public class RouteListActivity extends ListActivity implements AdapterView.OnIte
             setTitle(bundle.getString("name"));
             int perPage = 1000;
             int pageNum = 1;
-            loadingView.setMessage(mLoadingMessage);
+            loadingView.setRandomMessage();
             loadingView.startAnimating();
             cyclingService.searchRoutes(bundle.getString("start_maidenhead"), bundle.getString("end_maidenhead"), mSearchCallback);
         } else if (bundle.containsKey("user_only") || bundle.containsKey("source_lat") || bundle.containsKey("source_long")) {
@@ -105,7 +104,7 @@ public class RouteListActivity extends ListActivity implements AdapterView.OnIte
     }
 
     public void search(boolean userOnly, float sourceLat, float sourceLong) {
-        loadingView.setMessage(mLoadingMessage);
+        loadingView.setRandomMessage();
         loadingView.startAnimating();
         if (userOnly) {
             cyclingService.routes(userOnly, mSearchCallback);
