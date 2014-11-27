@@ -27,6 +27,8 @@ public class WelcomeActivity extends Activity {
     @InjectView(R.id.sign_in_button) Button signInButton;
     @InjectView(R.id.sign_up_button) Button signUpButton;
     @InjectView(R.id.explain_text) TextView explainView;
+    @InjectView(R.id.welcome_title) TextView welcomeTitle;
+    @InjectView(R.id.welcome_message) TextView welcomeMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +58,11 @@ public class WelcomeActivity extends Activity {
                 explainSignupDialog();
             }
         });
+
+
+        Typeface customFont = Typeface.createFromAsset(getAssets(), "fonts/FutureCitySemiBold.otf");
+        welcomeTitle.setTypeface(customFont);
+        welcomeMessage.setTypeface(customFont);
 
     }
 
