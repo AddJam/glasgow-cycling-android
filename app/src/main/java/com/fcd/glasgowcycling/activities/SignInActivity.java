@@ -4,6 +4,7 @@ import android.accounts.Account;
 import android.accounts.AccountAuthenticatorActivity;
 import android.accounts.AccountManager;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -43,7 +44,6 @@ public class SignInActivity extends AccountAuthenticatorActivity {
     @InjectView(R.id.password) EditText passwordField;
 
     @InjectView(R.id.sign_in_button) Button signInButton;
-    @InjectView(R.id.sign_up_button) Button signUpButton;
     @InjectView(R.id.loading_view) LoadingView loadingView;
 
     // API
@@ -83,20 +83,6 @@ public class SignInActivity extends AccountAuthenticatorActivity {
                 signInButton.setEnabled(false);
                 loadingView.startAnimating();
                 new LoginTask().execute();
-            }
-        });
-
-        signUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "Sign Up clicked");
-                Intent signUpIntent = new Intent(getBaseContext(), SignUpActivity.class);
-                if (!emailField.getText().toString().isEmpty()) {
-                    Bundle extras = new Bundle();
-                    extras.putString("email", emailField.getText().toString());
-                    signUpIntent.putExtras(extras);
-                }
-                startActivity(signUpIntent);
             }
         });
     }
