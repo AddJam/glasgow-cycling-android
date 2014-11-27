@@ -22,7 +22,7 @@ public class LaunchActivity extends Activity {
         if (userAccounts.length > 0) {
             startActivity(new Intent(this, UserOverviewActivity.class));
         } else {
-            startActivity(new Intent(this, SignInActivity.class));
+            startActivity(new Intent(this, WelcomeActivity.class));
         }
         finish();
     }

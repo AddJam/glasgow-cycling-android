@@ -3,7 +3,8 @@
     package="com.fcd.glasgowcycling"
     android:installLocation="internalOnly"
     android:versionCode="4"
-    android:versionName="1.1.0">
+    android:versionName="1.1.0" >
+
     <application
         android:name=".CyclingApplication"
         android:allowBackup="true"
@@ -119,13 +120,18 @@
             android:label="@string/title_activity_account_forgotten" >
         </activity>
         <activity android:name="net.hockeyapp.android.UpdateActivity" />
-        <activity android:name="com.fcd.glasgowcycling.activities.CycleMapActivity"
-            android:label="@string/title_activity_cycle_map">
+        <activity
+            android:name=".activities.CycleMapActivity"
+            android:label="@string/title_activity_cycle_map" >
         </activity>
         <activity
             android:name=".activities.UserStatsActivity"
             android:label="@string/title_activity_user_stats"
-            android:parentActivityName=".activities.UserOverviewActivity">
+            android:parentActivityName=".activities.UserOverviewActivity" >
+        </activity>
+        <activity
+            android:name=".activities.WelcomeActivity"
+            android:label="@string/title_activity_welcome" >
         </activity>
     </application>
 
