@@ -21,6 +21,8 @@ public class SearchActivity extends RouteListActivity {
     private final String TAG = "Search";
     private Geocoder mGeoCoder;
 
+    boolean mHasQuery;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +64,9 @@ public class SearchActivity extends RouteListActivity {
                     }
                     searchQuery.putFloat("dest_lat", (float)location.getLatitude());
                     searchQuery.putFloat("dest_long", (float)location.getLongitude());
-                    mSearcher.search(searchQuery);
+                    setQuery(searchQuery);
+                    mHasQuery = true;
+                    performSearch();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -71,8 +75,11 @@ public class SearchActivity extends RouteListActivity {
     }
 
     @Override
-    public void performSearch(Bundle query) {
+    public void performSearch() {
         // Prevent on-load searches by route list
+        if (mHasQuery) {
+            super.performSearch();
+        }
         return;
     }
 

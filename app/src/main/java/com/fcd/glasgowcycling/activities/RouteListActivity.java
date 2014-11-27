@@ -20,6 +20,7 @@ import com.fcd.glasgowcycling.models.Route;
 import com.fcd.glasgowcycling.models.RouteList;
 import com.fcd.glasgowcycling.utils.EndlessScrollListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -31,6 +32,10 @@ import retrofit.client.Response;
 public class RouteListActivity extends ListActivity implements AdapterView.OnItemClickListener {
 
     private final String TAG = "RouteList";
+
+    static final int PER_PAGE = 1;
+    int mCurrentPage = 1;
+    Bundle mQuery;
 
     private List<Route> mRoutes;
     private ListView routesList;
@@ -49,6 +54,7 @@ public class RouteListActivity extends ListActivity implements AdapterView.OnIte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.route_list);
         ((CyclingApplication) getApplication()).inject(this);
+        mRoutes = new ArrayList<Route>();
 
         // Empty list view
         routesList = getListView();
@@ -56,6 +62,8 @@ public class RouteListActivity extends ListActivity implements AdapterView.OnIte
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
                 Log.d(TAG, "Loading page " + page + " total items is " + totalItemsCount);
+                mCurrentPage = page;
+                performSearch();
             }
         });
         loadingView = (LoadingView) getListView().getEmptyView();
@@ -66,14 +74,16 @@ public class RouteListActivity extends ListActivity implements AdapterView.OnIte
 
             @Override
             public void onStartLoad() {
-                loadingView.setMessage(mLoadingMessage);
-                loadingView.startAnimating();
+                if (mRoutes.size() == 0) {
+                    loadingView.setMessage(mLoadingMessage);
+                    loadingView.startAnimating();
+                }
             }
 
             @Override
             public void onLoad(List<Route> routes) {
-                mRoutes = routes;
-                Log.d(TAG, "Got routes - total: " + mRoutes.size());
+                mRoutes.addAll(routes);
+                Log.d(TAG, "Got " + routes.size() + " more routes - total: " + mRoutes.size());
                 routesList.setAdapter(new RouteAdapter(getBaseContext(), R.layout.route_cell, mRoutes));
                 if (mRoutes.size() == 0) {
                     searchFinished(mEmptyMessage);
@@ -97,11 +107,18 @@ public class RouteListActivity extends ListActivity implements AdapterView.OnIte
         if (bundle.containsKey("title")) {
             setTitle(bundle.getString("title"));
         }
-        performSearch(bundle);
+        setQuery(bundle);
+        performSearch();
     }
 
-    public void performSearch(Bundle query) {
-        mSearcher.search(query);
+    public void setQuery(Bundle query) {
+        mQuery = query;
+    }
+
+    public void performSearch() {
+        mQuery.putInt("per_page", PER_PAGE);
+        mQuery.putInt("page_num", mCurrentPage);
+        mSearcher.search(mQuery);
     }
 
     private void searchFinished(final String message) {
