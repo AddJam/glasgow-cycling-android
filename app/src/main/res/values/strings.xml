@@ -16,6 +16,7 @@
     <string name="title_activity_welcome">Welcome to Glasgow Cycling</string>
 
     <!-- stats strings -->
+    <string name="view_stats">View More</string>
     <string name="stats_message">Scroll to view your weekly stats</string>
     <string name="stat_route_label">Routes:</string>
     <string name="overview_label">Overview</string>

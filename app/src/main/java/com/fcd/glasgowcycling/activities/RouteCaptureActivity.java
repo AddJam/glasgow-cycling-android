@@ -98,7 +98,7 @@ public class RouteCaptureActivity extends Activity {
                             @Override
                             public void run() {
                                 long millis = System.currentTimeMillis() - captureRoute.getStartTime();
-                                timeInfo.setText(String.format("%02d:%02d.%02d",
+                                timeInfo.setText(String.format("%02d:%02d:%02d",
                                         TimeUnit.MILLISECONDS.toHours(millis),
                                         TimeUnit.MILLISECONDS.toMinutes(millis) -
                                         TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)),

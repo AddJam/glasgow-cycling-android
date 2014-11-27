@@ -5,8 +5,7 @@ import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-
-import net.hockeyapp.android.CrashManager;
+import com.crashlytics.android.Crashlytics;
 
 public class LaunchActivity extends Activity {
 
@@ -16,6 +15,7 @@ public class LaunchActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Crashlytics.start(this);
 
         mAccountManager = AccountManager.get(this);
         Account[] userAccounts = mAccountManager.getAccountsByType(ACCOUNT_TYPE);
@@ -25,11 +25,5 @@ public class LaunchActivity extends Activity {
             startActivity(new Intent(this, WelcomeActivity.class));
         }
         finish();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        CrashManager.register(this, "31f27fc9f4a5e74f41ed1bfe0ab10860");
     }
 }

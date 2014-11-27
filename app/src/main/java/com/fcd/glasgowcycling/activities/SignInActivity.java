@@ -26,8 +26,6 @@ import com.fcd.glasgowcycling.api.http.ApiClientModule;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgowcycling.api.responses.AuthModel;
 
-import net.hockeyapp.android.UpdateManager;
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import retrofit.RetrofitError;
@@ -89,12 +87,6 @@ public class SignInActivity extends AccountAuthenticatorActivity {
 
         Typeface semiBoldFont = Typeface.createFromAsset(getAssets(), "fonts/FutureCitySemiBold.otf");
         welcomeTitle.setTypeface(semiBoldFont);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        UpdateManager.register(this, "31f27fc9f4a5e74f41ed1bfe0ab10860");
     }
 
     @Override
