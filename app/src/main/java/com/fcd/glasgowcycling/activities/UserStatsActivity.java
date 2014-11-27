@@ -3,6 +3,7 @@ package com.fcd.glasgowcycling.activities;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
@@ -32,6 +33,8 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.utils.XLabels;
 import com.github.mikephil.charting.utils.YLabels;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 import javax.inject.Inject;
@@ -52,10 +55,14 @@ public class UserStatsActivity extends Activity {
     @InjectView(R.id.distance_stat) TextView distanceProfileStat;
     @InjectView(R.id.time_stat) TextView timeStat;
     @InjectView(R.id.profile_image) ImageView profileImage;
+    @InjectView(R.id.overview_label)TextView overviewLabel;
     @InjectView(R.id.distance_value) TextView distanceValue;
     @InjectView(R.id.route_value) TextView routeValue;
     @InjectView(R.id.bar_chart) BarChart barChart;
+    @InjectView(R.id.line_chart_label)TextView lineChartLabel;
     @InjectView(R.id.line_chart) LineChart lineChart;
+    @InjectView(R.id.bar_chart_label)TextView barChartLabel;
+
     @InjectView(R.id.loading_view) LoadingView loadingView;
     @InjectView(R.id.stats_area) View statsArea;
 
@@ -88,6 +95,17 @@ public class UserStatsActivity extends Activity {
         }
 
         getStats();
+
+        Typeface regularFont = Typeface.createFromAsset(getAssets(), "fonts/FutureCityRegular.otf");
+        Typeface semiBoldFont = Typeface.createFromAsset(getAssets(), "fonts/FutureCitySemiBold.otf");
+        username.setTypeface(regularFont);
+        distanceProfileStat.setTypeface(regularFont);
+        timeStat.setTypeface(regularFont);
+        distanceValue.setTypeface(semiBoldFont);
+        routeValue.setTypeface(semiBoldFont);
+        overviewLabel.setTypeface(semiBoldFont);
+        barChartLabel.setTypeface(semiBoldFont);
+        lineChartLabel.setTypeface(semiBoldFont);
     }
 
     public void getStats(){
