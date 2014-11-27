@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.location.Criteria;
 import android.location.Location;
@@ -133,6 +134,14 @@ public class UserOverviewActivity extends Activity {
         });
 
         setupMap();
+
+        Typeface regularFont = Typeface.createFromAsset(getAssets(), "fonts/FutureCityRegular.otf");
+        Typeface semiBoldFont = Typeface.createFromAsset(getAssets(), "fonts/FutureCitySemiBold.otf");
+
+        username.setTypeface(regularFont);
+        captureButton.setTypeface(semiBoldFont);
+        distanceStat.setTypeface(regularFont);
+        timeStat.setTypeface(regularFont);
     }
 
     protected void onResume() {
@@ -179,6 +188,10 @@ public class UserOverviewActivity extends Activity {
 
         TextView textView = (TextView) view.findViewById(R.id.text);
         textView.setText(text);
+
+        Typeface customFont = Typeface.createFromAsset(getAssets(), "fonts/FutureCitySemiBold.otf");
+        textView.setTypeface(customFont);
+
     }
 
     @Override
