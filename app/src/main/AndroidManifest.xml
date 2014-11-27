@@ -132,6 +132,7 @@
             android:name=".activities.WelcomeActivity"
             android:label="@string/title_activity_welcome" >
         </activity>
+        <meta-data android:name="com.crashlytics.ApiKey" android:value="bfe078d6ca5ea6f9689b7a5b694662ca3ebda224"/>
     </application>
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
