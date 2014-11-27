@@ -17,6 +17,7 @@ import com.fcd.glasgowcycling.CyclingApplication;
 import com.fcd.glasgowcycling.R;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgowcycling.api.responses.RouteCaptureResponse;
+import com.fcd.glasgowcycling.models.CapturePoint;
 import com.fcd.glasgowcycling.models.CaptureRoute;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
@@ -27,6 +28,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.io.IOException;
@@ -62,6 +64,8 @@ public class RouteCaptureActivity extends Activity {
 
     private CaptureRoute captureRoute = new CaptureRoute();
 
+    private int polylinesDrawn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +84,7 @@ public class RouteCaptureActivity extends Activity {
         map.getUiSettings().setAllGesturesEnabled(false);
         map.setMyLocationEnabled(true);
         map.getUiSettings().setCompassEnabled(false);
+        polylinesDrawn = 0;
 
         Thread t = new Thread() {
 
@@ -173,12 +178,28 @@ public class RouteCaptureActivity extends Activity {
             avgSpeedInfo.setText(String.format("%.02f mph", captureRoute.getAvgSpeedMiles()));
             distanceInfo.setText(String.format("%.02f m", captureRoute.getDistance()));
 
-            //use existing userlocation
             if (captureRoute.getPoints().size() > 1) {
-                map.addPolyline(new PolylineOptions()
-                        .add(lastUserLocation, currentLocation)
-                        .width(10)
-                        .color(getResources().getColor(R.color.jcBlueColor)));
+                // Keep number of polylines drawn to a low number for performance
+                if (polylinesDrawn > 50) {
+                    polylinesDrawn = 1;
+                    map.clear();
+                    PolylineOptions polylineOptions = new PolylineOptions()
+                            .width(10)
+                            .color(getResources().getColor(R.color.jcBlueColor));
+                    List<CapturePoint> points = captureRoute.getPoints();
+                    for (int i = 1; i < points.size(); i++) {
+                        LatLng previousPoint = new LatLng(points.get(i-1).getLat(), points.get(i-1).getLng());
+                        LatLng thisPoint = new LatLng(points.get(i).getLat(), points.get(i).getLng());
+                        polylineOptions.add(previousPoint, thisPoint);
+                    }
+                    map.addPolyline(polylineOptions);
+                } else {
+                    map.addPolyline(new PolylineOptions()
+                            .add(lastUserLocation, currentLocation)
+                            .width(10)
+                            .color(getResources().getColor(R.color.jcBlueColor)));
+                    polylinesDrawn++;
+                }
             }
 
             lastUserLocation = currentLocation;

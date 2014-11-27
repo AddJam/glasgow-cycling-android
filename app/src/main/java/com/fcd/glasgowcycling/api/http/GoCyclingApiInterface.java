@@ -33,6 +33,9 @@ public interface GoCyclingApiInterface {
     void details(Callback<User> callback);
 
     @GET("/routes.json")
+    void allRoutes(@Query("per_page") int perPage, @Query("page_num") int pageNum, Callback<RouteList> callback);
+
+    @GET("/routes.json")
     void routes(@Query("per_page") int perPage, @Query("page_num") int pageNum,
                 @Query("user_only") boolean userOnly, Callback<RouteList> callback);
 
@@ -57,7 +60,7 @@ public interface GoCyclingApiInterface {
                        @Query("dest_lat") float destLat, @Query("dest_long") float destLong,
                        Callback<RouteList> callback);
 
-    @POST("/routes.json")
+    @POST("/routes.json?source=android")
     void route(@Body CaptureRoute route, Callback<RouteCaptureResponse> callback);
 
     @POST("/signup.json")

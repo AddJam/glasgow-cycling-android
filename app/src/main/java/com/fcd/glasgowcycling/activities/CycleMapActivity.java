@@ -33,6 +33,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -42,6 +45,8 @@ public class CycleMapActivity extends FragmentActivity {
     @Inject
     GoCyclingApiInterface mCyclingService;
 
+    @InjectView(R.id.progress) SmoothProgressBar progressBar;
+
     private GoogleMap mMap;
     private PoiList mList;
     private List<String> mTypes;
@@ -49,9 +54,9 @@ public class CycleMapActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((CyclingApplication) getApplication()).inject(this);
-
         setContentView(R.layout.activity_cycle_map);
+        ButterKnife.inject(this);
+        ((CyclingApplication) getApplication()).inject(this);
         setUpMapIfNeeded();
 
         mList = new Select().from(PoiList.class).limit(1).executeSingle();
@@ -80,7 +85,9 @@ public class CycleMapActivity extends FragmentActivity {
                     } finally {
                         ActiveAndroid.endTransaction();
                     }
+
                     showLocations();
+                    progressBar.setVisibility(View.GONE);
                 }
 
                 @Override
@@ -92,6 +99,7 @@ public class CycleMapActivity extends FragmentActivity {
                     if (mList != null) {
                         showLocations();
                     }
+                    progressBar.setVisibility(View.GONE);
                 }
             });
         } else {
@@ -150,6 +158,10 @@ public class CycleMapActivity extends FragmentActivity {
                     .enabled(true)
                     .clusterOptionsProvider(clusterOptions);
             mMap.setClustering(clusterSettings);
+
+            // Show Glasgow area
+            mMap.setMyLocationEnabled(true);
+            mMap.moveCamera( CameraUpdateFactory.newLatLngZoom(new LatLng(55.8628, -4.235), 10.8f));
         }
     }
 
@@ -160,7 +172,6 @@ public class CycleMapActivity extends FragmentActivity {
                 // Clear map
                 mMap.clear();
                 mTypes = new ArrayList<String>();
-                LatLngBounds.Builder builder = new LatLngBounds.Builder();
                 for (Poi poi : mList.getLocations()) {
                     LatLng location = new LatLng(poi.getLat(), poi.getLng());
                     String type = poi.getType();
@@ -189,13 +200,8 @@ public class CycleMapActivity extends FragmentActivity {
                     options.clusterGroup(typeId);
 
                     mMap.addMarker(options);
-                    builder.include(options.getPosition());
                 }
-
-                // Zoom to show all POI
-                LatLngBounds bounds = builder.build();
-                CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, 50);
-                mMap.animateCamera(cameraUpdate);
+                progressBar.setVisibility(View.GONE);
             }
         });
     }

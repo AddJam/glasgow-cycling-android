@@ -38,4 +38,5 @@ dependencies {
     compile 'net.hockeyapp.android:HockeySDK:3.0.2'
     compile 'com.androidmapsextensions:android-maps-extensions:2.1+'
     compile files('libs/mpandroidchartlibrary-1-7-4.jar')
+    compile 'com.github.castorflex.smoothprogressbar:library:1.0.0'
 }
