@@ -25,6 +25,7 @@
                 android:paddingTop="15dp"/>
 
             <TextView
+                android:id="@+id/welcome_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/welcome_label"
@@ -48,11 +49,12 @@
                android:background="@color/jcWhiteColor">
 
                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/prompt_email"
-                    android:textStyle="bold"
-                    android:layout_marginTop="5dp"/>
+                   android:id="@+id/email_label"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:text="@string/email_label"
+                   android:textSize="20dp"
+                   android:layout_marginTop="5dp"/>
 
                 <EditText
                     android:id="@+id/email"
@@ -64,10 +66,11 @@
                     android:singleLine="true"/>
 
                 <TextView
+                    android:id="@+id/password_label"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/prompt_password"
-                    android:textStyle="bold"
+                    android:text="@string/password_label"
+                    android:textSize="20dp"
                     android:layout_marginTop="16dp"/>                />
 
                 <EditText

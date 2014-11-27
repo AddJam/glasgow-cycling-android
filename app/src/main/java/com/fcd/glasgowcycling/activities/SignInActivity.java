@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fcd.glasgowcycling.CyclingApplication;
@@ -42,7 +43,7 @@ public class SignInActivity extends AccountAuthenticatorActivity {
     // Views
     @InjectView(R.id.email) EditText emailField;
     @InjectView(R.id.password) EditText passwordField;
-
+    @InjectView(R.id.welcome_title) TextView welcomeTitle;
     @InjectView(R.id.sign_in_button) Button signInButton;
     @InjectView(R.id.loading_view) LoadingView loadingView;
 
@@ -85,6 +86,9 @@ public class SignInActivity extends AccountAuthenticatorActivity {
                 new LoginTask().execute();
             }
         });
+
+        Typeface semiBoldFont = Typeface.createFromAsset(getAssets(), "fonts/FutureCitySemiBold.otf");
+        welcomeTitle.setTypeface(semiBoldFont);
     }
 
     @Override

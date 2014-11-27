@@ -1,7 +1,9 @@
 <resources>
-    <string name="title_activity_sign_in">Welcome back to Glasgow Cycling</string>
+    <string name="title_activity_sign_in">Welcome Back</string>
 
     <!-- Strings related to login -->
+    <string name="email_label">Email Address:</string>
+    <string name="password_label">Password:</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
     <string name="welcome_label">Making Glasgow a Cycling city</string>
