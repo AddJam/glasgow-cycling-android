@@ -12,6 +12,7 @@ import com.fcd.glasgowcycling.R;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgowcycling.models.Point;
 import com.fcd.glasgowcycling.models.Route;
+import com.fcd.glasgowcycling.utils.ActionBarFontUtil;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -46,6 +47,8 @@ public class RouteOverviewActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_overview);
         ButterKnife.inject(this);
+        ActionBarFontUtil.setFont(this);
+
         ((CyclingApplication) getApplication()).inject(this);
 
         // Present data

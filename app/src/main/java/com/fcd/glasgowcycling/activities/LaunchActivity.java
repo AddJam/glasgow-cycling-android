@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import com.crashlytics.android.Crashlytics;
+import com.fcd.glasgowcycling.utils.ActionBarFontUtil;
 
 public class LaunchActivity extends Activity {
 
@@ -16,6 +17,7 @@ public class LaunchActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Crashlytics.start(this);
+        ActionBarFontUtil.setFont(this);
 
         mAccountManager = AccountManager.get(this);
         Account[] userAccounts = mAccountManager.getAccountsByType(ACCOUNT_TYPE);

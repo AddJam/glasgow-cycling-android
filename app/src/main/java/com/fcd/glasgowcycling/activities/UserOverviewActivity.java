@@ -35,6 +35,7 @@ import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgowcycling.models.Month;
 import com.fcd.glasgowcycling.models.User;
 import com.fcd.glasgowcycling.models.Weather;
+import com.fcd.glasgowcycling.utils.ActionBarFontUtil;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -88,6 +89,7 @@ public class UserOverviewActivity extends Activity {
 
         ((CyclingApplication) getApplication()).inject(this);
         ButterKnife.inject(this);
+        ActionBarFontUtil.setFont(this);
 
         // Stats
         statsButton.setOnClickListener(new StatsListener());

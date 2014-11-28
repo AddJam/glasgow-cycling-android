@@ -11,6 +11,7 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.fcd.glasgowcycling.R;
+import com.fcd.glasgowcycling.utils.ActionBarFontUtil;
 import com.fcd.glasgowcycling.utils.LocationUtil;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -26,6 +27,7 @@ public class SearchActivity extends RouteListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ActionBarFontUtil.setFont(this);
 
         mGeoCoder = new Geocoder(this);
         handleIntent(getIntent());

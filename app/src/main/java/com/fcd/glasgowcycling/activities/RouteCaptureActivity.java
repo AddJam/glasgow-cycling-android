@@ -20,6 +20,7 @@ import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgowcycling.api.responses.RouteCaptureResponse;
 import com.fcd.glasgowcycling.models.CapturePoint;
 import com.fcd.glasgowcycling.models.CaptureRoute;
+import com.fcd.glasgowcycling.utils.ActionBarFontUtil;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationClient;
@@ -71,6 +72,7 @@ public class RouteCaptureActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_capture);
+        ActionBarFontUtil.setFont(this);
         ((CyclingApplication) getApplication()).inject(this);
         ButterKnife.inject(this);
 

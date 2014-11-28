@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.fcd.glasgowcycling.R;
 import com.fcd.glasgowcycling.api.requests.SignupRequest;
+import com.fcd.glasgowcycling.utils.ActionBarFontUtil;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -35,6 +36,7 @@ public class WelcomeActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
         ButterKnife.inject(this);
+        ActionBarFontUtil.setFont(this);
 
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override

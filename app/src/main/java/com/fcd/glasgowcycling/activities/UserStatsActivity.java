@@ -22,6 +22,7 @@ import com.fcd.glasgowcycling.models.Month;
 import com.fcd.glasgowcycling.models.Overall;
 import com.fcd.glasgowcycling.models.Stats;
 import com.fcd.glasgowcycling.models.User;
+import com.fcd.glasgowcycling.utils.ActionBarFontUtil;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.BarData;
@@ -76,6 +77,7 @@ public class UserStatsActivity extends Activity {
         setContentView(R.layout.activity_user_stats);
         ((CyclingApplication) getApplication()).inject(this);
         ButterKnife.inject(this);
+        ActionBarFontUtil.setFont(this);
 
         loadingView.setBlue(true);
         loadingView.startAnimating();

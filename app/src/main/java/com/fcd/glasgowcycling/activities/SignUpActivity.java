@@ -28,6 +28,7 @@ import com.fcd.glasgowcycling.api.auth.CyclingAuthenticator;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgowcycling.api.requests.SignupRequest;
 import com.fcd.glasgowcycling.api.responses.AuthModel;
+import com.fcd.glasgowcycling.utils.ActionBarFontUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -72,6 +73,7 @@ public class SignUpActivity extends Activity {
         setContentView(R.layout.activity_sign_up);
         ButterKnife.inject(this);
         ((CyclingApplication) getApplication()).inject(this);
+        ActionBarFontUtil.setFont(this);
 
         mAccountManager = AccountManager.get(this);
 

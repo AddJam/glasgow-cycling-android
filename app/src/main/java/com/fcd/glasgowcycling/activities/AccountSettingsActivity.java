@@ -25,6 +25,7 @@ import com.fcd.glasgowcycling.CyclingApplication;
 import com.fcd.glasgowcycling.R;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgowcycling.models.User;
+import com.fcd.glasgowcycling.utils.ActionBarFontUtil;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -65,6 +66,7 @@ public class AccountSettingsActivity extends Activity {
         setContentView(R.layout.activity_account_settings);
         ((CyclingApplication) getApplication()).inject(this);
         ButterKnife.inject(this);
+        ActionBarFontUtil.setFont(this);
 
         mUser = new Select().from(User.class).limit(1).executeSingle();
 

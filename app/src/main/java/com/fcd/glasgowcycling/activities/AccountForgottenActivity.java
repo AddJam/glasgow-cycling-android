@@ -12,6 +12,7 @@ import com.fcd.glasgowcycling.CyclingApplication;
 import com.fcd.glasgowcycling.R;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgowcycling.models.User;
+import com.fcd.glasgowcycling.utils.ActionBarFontUtil;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -39,6 +40,7 @@ public class AccountForgottenActivity extends Activity {
         setContentView(R.layout.activity_account_forgotten);
         ((CyclingApplication) getApplication()).inject(this);
         ButterKnife.inject(this);
+        ActionBarFontUtil.setFont(this);
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override

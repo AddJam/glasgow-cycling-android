@@ -24,6 +24,7 @@ import com.fcd.glasgowcycling.TypefaceSpan;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgowcycling.models.Poi;
 import com.fcd.glasgowcycling.models.PoiList;
+import com.fcd.glasgowcycling.utils.ActionBarFontUtil;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -58,6 +59,8 @@ public class CycleMapActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cycle_map);
         ButterKnife.inject(this);
+        ActionBarFontUtil.setFont(this);
+
         ((CyclingApplication) getApplication()).inject(this);
         setUpMapIfNeeded();
 

@@ -25,6 +25,7 @@ import com.fcd.glasgowcycling.api.auth.CyclingAuthenticator;
 import com.fcd.glasgowcycling.api.http.ApiClientModule;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgowcycling.api.responses.AuthModel;
+import com.fcd.glasgowcycling.utils.ActionBarFontUtil;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -55,6 +56,8 @@ public class SignInActivity extends AccountAuthenticatorActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
         ButterKnife.inject(this);
+        ActionBarFontUtil.setFont(this);
+
         sCyclingService = new ApiClientModule(this, (CyclingApplication)getApplication()).provideAuthClient();
         fromAccountManager = getIntent().getBooleanExtra(ARG_IS_ADDING_NEW_ACCOUNT, false);
         Log.d(TAG, "From account manager: " + (fromAccountManager ? "YES" : "NO"));

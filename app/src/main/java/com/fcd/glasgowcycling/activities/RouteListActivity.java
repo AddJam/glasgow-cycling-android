@@ -20,6 +20,7 @@ import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgowcycling.api.routes.RouteSearch;
 import com.fcd.glasgowcycling.models.Route;
 import com.fcd.glasgowcycling.models.RouteList;
+import com.fcd.glasgowcycling.utils.ActionBarFontUtil;
 import com.fcd.glasgowcycling.utils.EndlessScrollListener;
 
 import java.util.ArrayList;
@@ -56,6 +57,8 @@ public class RouteListActivity extends ListActivity implements AdapterView.OnIte
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.route_list);
+        ActionBarFontUtil.setFont(this);
+
         ((CyclingApplication) getApplication()).inject(this);
         mRoutes = new ArrayList<Route>();
         mReachedBottom = false;

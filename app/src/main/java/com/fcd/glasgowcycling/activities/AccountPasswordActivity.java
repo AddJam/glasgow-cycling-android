@@ -13,6 +13,7 @@ import com.fcd.glasgowcycling.R;
 import com.fcd.glasgowcycling.api.http.ApiClientModule;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgowcycling.api.responses.AuthModel;
+import com.fcd.glasgowcycling.utils.ActionBarFontUtil;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -34,6 +35,8 @@ public class AccountPasswordActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_password);
         ButterKnife.inject(this);
+        ActionBarFontUtil.setFont(this);
+
         cyclingService = new ApiClientModule(this, (CyclingApplication)getApplication()).provideAuthClient();
 
         submitButton.setOnClickListener(new View.OnClickListener() {
