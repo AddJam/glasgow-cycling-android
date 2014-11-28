@@ -356,6 +356,7 @@ public class UserOverviewActivity extends Activity {
     }
 
     private void setWeather(){
+
         temperature.setText(mWeather.getReadableTemp());
         precipitation.setText(mWeather.getReadablePrecipitationProbability());
         windspeed.setText(mWeather.getReadableWindSpeed());
@@ -367,6 +368,12 @@ public class UserOverviewActivity extends Activity {
         Drawable icon = getResources().getDrawable(imageResource);
 
         weatherIcon.setImageDrawable(icon);
+
+        Typeface customFont = Typeface.createFromAsset(getAssets(), "fonts/FutureCitySemiBold.otf");
+        temperature.setTypeface(customFont);
+        precipitation.setTypeface(customFont);
+        windspeed.setTypeface(customFont);
+        weatherSource.setTypeface(customFont);
     }
 
     private void noPlayServicesDialog(){
