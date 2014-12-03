@@ -13,6 +13,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.logging.Handler;
 
 public class LoadingView extends RelativeLayout {
 
@@ -84,6 +87,16 @@ public class LoadingView extends RelativeLayout {
     public void stopAnimating() {
         mWheelAnimation.cancel();
         mWheelAnimation.reset();
+    }
+
+    public void animateFor(long durationMillis) {
+        startAnimating();
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                stopAnimating();
+            }
+        }, durationMillis);
     }
 
     public void setMessage(String message) {

@@ -1,0 +1,57 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/email_login_form"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/jcBlueColor"
+    tools:context="com.fcd.glasgowcycling.fragments.welcome_four"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin">
+
+    <TextView
+        android:id="@+id/welcome_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/welcome_message"
+        android:textSize="22sp"
+        android:paddingLeft="7dp"
+        android:paddingRight="7dp"
+        android:paddingBottom="15dp"
+        android:paddingTop="15dp"
+        android:gravity="center"
+        android:textColor="@color/jcWhiteColor"/>
+
+    <Button
+        android:id="@+id/sign_in_button"
+        style="?android:textAppearanceSmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/action_sign_in"
+        android:textStyle="bold"
+        android:textColor="@color/jcWhiteColor"
+        android:background="@drawable/outline_button"/>
+
+    <Button
+        android:id="@+id/sign_up_button"
+        style="?android:textAppearanceSmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/action_sign_up"
+        android:textStyle="bold"
+        android:background="@color/jcGreenColor"
+        android:textColor="@color/jcWhiteColor" />
+
+    <TextView
+        android:id="@+id/explain_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/why_sign_up"
+        android:textSize="14sp"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/jcWhiteColor"
+        android:padding="15dp"/>
+</LinearLayout>
