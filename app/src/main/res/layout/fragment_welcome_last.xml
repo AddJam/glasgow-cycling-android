@@ -32,7 +32,8 @@
         android:text="@string/action_sign_in"
         android:textStyle="bold"
         android:textColor="@color/jcWhiteColor"
-        android:background="@drawable/outline_button"/>
+        android:background="@drawable/outline_button"
+        android:textSize="16sp"/>
 
     <Button
         android:id="@+id/sign_up_button"
@@ -43,7 +44,8 @@
         android:text="@string/action_sign_up"
         android:textStyle="bold"
         android:background="@color/jcGreenColor"
-        android:textColor="@color/jcWhiteColor" />
+        android:textColor="@color/jcWhiteColor"
+        android:textSize="16sp"/>
 
     <TextView
         android:id="@+id/explain_text"

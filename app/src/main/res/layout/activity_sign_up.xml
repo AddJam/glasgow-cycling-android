@@ -131,7 +131,7 @@
             android:textStyle="bold"
             android:background="@color/jcGreenColor"
             android:textColor="@color/jcWhiteColor"
-            />
+            android:textSize="16sp" />
         <com.fcd.glasgowcycling.LoadingView
             android:paddingTop="10dp"
             android:layout_width="wrap_content"
