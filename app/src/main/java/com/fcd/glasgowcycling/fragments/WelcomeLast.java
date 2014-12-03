@@ -104,7 +104,6 @@ public class WelcomeLast extends Fragment {
         headerText.setTypeface(semiBoldFont);
         contentText.setTypeface(regularFont);
 
-
         dialog.show();
     }
 

@@ -24,12 +24,12 @@
     <string name="column_chart_label">Routes per Day</string>
 
     <!-- welcomestrings -->
-    <string name="welcome_message">Create as part of the Glasgow Future City Project</string>
+    <string name="welcome_message">Created as part of the Glasgow Future City Project</string>
     <string name="why_sign_up">Why do I need an account?</string>
     <string name="dialog_close">Close</string>
     <string name="welcome_one">Let\'s Make Glasgow a Cycling City</string>
     <string name="welcome_two">Track your personal data and discover new routes in your city\n\nTogether we have curated hundreds of routes</string>
-    <string name="welcome_three">With your help we can impact the decision making and cycliung infrastructure of our city</string>
+    <string name="welcome_three">With your help we can impact the decision making and cycling infrastructure of our city</string>
     <string name="next">Continue</string>
 
 </resources>
