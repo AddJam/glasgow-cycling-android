@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.text.Spannable;
 import android.text.SpannableString;
 
+import com.fcd.glasgowcycling.R;
 import com.fcd.glasgowcycling.TypefaceSpan;
 
 /**
@@ -11,7 +12,7 @@ import com.fcd.glasgowcycling.TypefaceSpan;
  */
 public class ActionBarFontUtil {
     public static void setFont(Activity activity) {
-        SpannableString s = new SpannableString("Glasgow Walking");
+        SpannableString s = new SpannableString(activity.getString(R.string.app_name));
         s.setSpan(new TypefaceSpan(activity, "FutureCitySemiBold.otf"), 0, s.length(),
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
