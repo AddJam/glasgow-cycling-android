@@ -29,10 +29,20 @@ import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgowcycling.api.requests.SignupRequest;
 import com.fcd.glasgowcycling.api.responses.AuthModel;
 import com.fcd.glasgowcycling.utils.ActionBarFontUtil;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -294,6 +304,7 @@ public class SignUpActivity extends Activity {
             @Override
             public void failure(RetrofitError error) {
                 Log.d(TAG, "Retrofit error");
+
                 if (error.isNetworkError()) {
                     Log.d(TAG, "Network error");
                     showToast("Check your connection and try again", Toast.LENGTH_SHORT);
@@ -301,7 +312,42 @@ public class SignUpActivity extends Activity {
                     // Unauthorized
                     Log.d(TAG, "Invalid details");
                 } else {
-                    showToast("Sign up failed - are you already signed up?", Toast.LENGTH_LONG);
+                    // Get raw JSON
+                    BufferedReader reader = null;
+                    StringBuilder sb = new StringBuilder();
+                    try {
+                        reader = new BufferedReader(new InputStreamReader(error.getResponse().getBody().in()));
+
+                        String line;
+
+                        try {
+                            while ((line = reader.readLine()) != null) {
+                                sb.append(line);
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    String result = sb.toString();
+
+                    // Convert to Gson object
+                    JsonParser jsonParser = new JsonParser();
+                    JsonObject json = (JsonObject)jsonParser.parse(result);
+
+                    // Check errors
+                    JsonObject errors = json.getAsJsonObject("errors");
+                    Set<Map.Entry<String, JsonElement>> errorSet = errors.entrySet();
+                    if (errorSet.size() > 0) {
+                        Map.Entry entry = errorSet.iterator().next();
+                        String entryError = ((JsonArray)entry.getValue()).get(0).getAsString();
+                        String errorMessage = ((String)entry.getKey()) + " " + ((String)entryError);
+
+                        showToast("Error: " + errorMessage, Toast.LENGTH_LONG);
+                    } else {
+                        showToast("Sign up failed - are you already signed up?", Toast.LENGTH_LONG);
+                    }
                 }
                 signupFailed();
             }
