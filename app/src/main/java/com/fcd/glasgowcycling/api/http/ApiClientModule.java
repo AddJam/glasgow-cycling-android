@@ -3,6 +3,7 @@ package com.fcd.glasgowcycling.api.http;
 import android.content.Context;
 import android.util.Log;
 
+import com.fcd.glasgowcycling.BuildConfig;
 import com.fcd.glasgowcycling.CyclingApplication;
 import com.fcd.glasgowcycling.R;
 import com.fcd.glasgowcycling.activities.AccountForgottenActivity;
@@ -24,17 +25,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.okhttp.OkHttpClient;
 
-import org.apache.http.conn.ssl.AllowAllHostnameVerifier;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.KeyStore;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManagerFactory;
 
 import dagger.Module;
 import dagger.Provides;
@@ -70,14 +65,18 @@ import retrofit.converter.GsonConverter;
 public class ApiClientModule {
 
     private final String TAG = "ApiClientModule";
-
-    private final String ENDPOINT = "https://activetravel.cloudapp.net";// "http://172.20.10.4:3000"; // "http://10.0.2.2:3000" == Localhost (for simulator)
+    private final String ENDPOINT;
     private Context mContext;
     private CyclingApplication mApplication;
     private AuthModel mAuthModel;
     private GoCyclingApiInterface sAuthService;
 
     public ApiClientModule(Context context, CyclingApplication app) {
+        if (BuildConfig.LOCAL_MODE) {
+            ENDPOINT = "http://172.20.10.4:3000"; // "http://10.0.2.2:3000" (for simulator)
+        } else {
+            ENDPOINT = "https://glasgowcycling.com/";
+        }
         mApplication = app;
         mContext = context;
         mAuthModel = new AuthModel(mContext);
@@ -87,8 +86,6 @@ public class ApiClientModule {
     @Provides
     public GoCyclingApiInterface provideClient() {
         OkHttpClient httpClient = new OkHttpClient();
-        httpClient.setSslSocketFactory(getPinnedCertSslSocketFactory(mContext));
-        httpClient.setHostnameVerifier(new AllowAllHostnameVerifier());
         CyclingClient client = new CyclingClient(httpClient);
 
         Gson gson = new GsonBuilder()
@@ -112,8 +109,6 @@ public class ApiClientModule {
      */
     public GoCyclingApiInterface provideAuthClient() {
         OkHttpClient httpClient = new OkHttpClient();
-        httpClient.setSslSocketFactory(getPinnedCertSslSocketFactory(mContext));
-        httpClient.setHostnameVerifier(new AllowAllHostnameVerifier());
         OkClient client = new OkClient(httpClient);
 
         Gson gson = new GsonBuilder()
@@ -134,10 +129,13 @@ public class ApiClientModule {
 
         @Override
         public void intercept(RequestInterceptor.RequestFacade request) {
-//            request.addQueryParam("client_id", "123");
-//            request.addQueryParam("client_secret", "321");
-            request.addQueryParam("client_id", "3db23ee6dfb278fafb78f6cd3c5f2140ebbce0f2cde3a3fb612f669bb879b0c4");
-            request.addQueryParam("client_secret", "8cb0159073b4df229a32f88e32ead76aa77608a606b3c69a77e36b4341ca2b6a");
+            if (BuildConfig.LOCAL_MODE) {
+                request.addQueryParam("client_id", "123");
+                request.addQueryParam("client_secret", "321");
+            } else {
+                request.addQueryParam("client_id", "3db23ee6dfb278fafb78f6cd3c5f2140ebbce0f2cde3a3fb612f669bb879b0c4");
+                request.addQueryParam("client_secret", "8cb0159073b4df229a32f88e32ead76aa77608a606b3c69a77e36b4341ca2b6a");
+            }
 
             mAuthModel.updateTokens();
             String userToken = mAuthModel.getUserToken();
@@ -202,22 +200,5 @@ public class ApiClientModule {
                 return response;
             }
         }
-    }
-
-    private SSLSocketFactory getPinnedCertSslSocketFactory(Context context) {
-        try {
-            KeyStore trusted = KeyStore.getInstance("BKS");
-            InputStream in = context.getResources().openRawResource(R.raw.mytruststore);
-            trusted.load(in, "9oUHVSyZ8LYbY9M*4F2G".toCharArray());
-            SSLContext sslContext = SSLContext.getInstance("TLS");
-            TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(
-                    TrustManagerFactory.getDefaultAlgorithm());
-            trustManagerFactory.init(trusted);
-            sslContext.init(null, trustManagerFactory.getTrustManagers(), null);
-            return sslContext.getSocketFactory();
-        } catch (Exception e) {
-            Log.e(TAG, e.getMessage(), e);
-        }
-        return null;
     }
 }

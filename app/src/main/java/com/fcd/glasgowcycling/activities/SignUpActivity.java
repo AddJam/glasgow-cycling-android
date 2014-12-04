@@ -332,7 +332,7 @@ public class SignUpActivity extends Activity {
                     }
                     String result = sb.toString();
 
-                    // Convert to Gson object
+                    // Convert to json object
                     JsonParser jsonParser = new JsonParser();
                     JsonObject json = (JsonObject)jsonParser.parse(result);
 
