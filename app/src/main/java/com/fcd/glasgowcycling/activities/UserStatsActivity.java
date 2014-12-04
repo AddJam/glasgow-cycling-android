@@ -37,6 +37,8 @@ import com.github.mikephil.charting.utils.YLabels;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import javax.inject.Inject;
 
@@ -152,19 +154,13 @@ public class UserStatsActivity extends Activity {
         });
     }
 
-    public void setBarChart(){
-
+    public void setBarChart() {
         ArrayList<String> xVals = new ArrayList<String>();
         ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
 
         for (int i = 0; i < mStats.getDays().size(); i++) {
-            if (i == mStats.getDays().size()-1){
-                xVals.add("Today");
-            }
-            else {
-                xVals.add("Day " + (i + 1));
-
-            }
+            String day = getDaysAgoName(i);
+            xVals.add(0, day);
             yVals1.add(new BarEntry(mStats.getDays().get(i).getRoutesCompleted(), i));
         }
 
@@ -176,17 +172,13 @@ public class UserStatsActivity extends Activity {
 
         BarData data = new BarData(xVals, dataSets);
 
-        // enable the drawing of values
         barChart.setDrawYValues(false);
         barChart.setDrawValueAboveBar(false);
         barChart.setPinchZoom(false);
         barChart.setScaleEnabled(false);
         barChart.setDoubleTapToZoomEnabled(false);
-
         barChart.setDescription("");
         barChart.setDrawLegend(false);
-
-        // disable 3D
         barChart.set3DEnabled(false);
         barChart.setUnit("");
         barChart.setDrawGridBackground(false);
@@ -209,25 +201,17 @@ public class UserStatsActivity extends Activity {
     }
 
     private void setLineChart() {
-
+        // Set axis values
         ArrayList<String> xVals = new ArrayList<String>();
         ArrayList<Entry> yVals = new ArrayList<Entry>();
         for (int i = 0; i < mStats.getDays().size(); i++) {
-            if (i == mStats.getDays().size()-1){
-                xVals.add("Today");
-            }
-            else {
-                xVals.add("Day " + (i + 1));
-
-            }
+            String day = getDaysAgoName(i);
+            xVals.add(0, day);
             long yValue = Math.round(mStats.getDays().get(i).getDistance());
             yVals.add(new Entry(yValue, i));
         }
-
         // create a dataset and give it a type
         LineDataSet set1 = new LineDataSet(yVals, "DataSet 1");
-        // set1.setFillAlpha(110);
-        // set1.setFillColor(Color.RED);
 
         int jcBlueColor = getResources().getColor(R.color.jcBlueColor);
         int jcLightBlueColor = getResources().getColor(R.color.jcLightBlueColor);
@@ -248,25 +232,35 @@ public class UserStatsActivity extends Activity {
         lineChart.setDescription("");
         lineChart.setDrawLegend(false);
 
-        // set1.setShader(new LinearGradient(0, 0, 0, mChart.getHeight(),
-        // Color.BLACK, Color.WHITE, Shader.TileMode.MIRROR));
-
         ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
-        dataSets.add(set1); // add the datasets
+        dataSets.add(set1);
 
         //Set labels
         XLabels xl = lineChart.getXLabels();
+        xl.setAvoidFirstLastClipping(true);
         xl.setPosition(XLabels.XLabelPosition.BOTTOM);
-        xl.setCenterXLabelText(true);
 
         YLabels yl = lineChart.getYLabels();
-        yl.setLabelCount(6);
         yl.setPosition(YLabels.YLabelPosition.LEFT);
 
         // create a data object with the datasets
         LineData data = new LineData(xVals, dataSets);
+
         // set data
         lineChart.setData(data);
         lineChart.refreshDrawableState();
+    }
+
+    private String getDaysAgoName(int daysAgo) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        String[] days = new String[] { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
+        days[calendar.get(Calendar.DAY_OF_WEEK) - 1] = "Today";
+        int todayIndex = calendar.get(Calendar.DAY_OF_WEEK) - 1;
+        int dayOfWeek = (todayIndex - daysAgo) % 7;
+        if (dayOfWeek < 0) {
+            dayOfWeek += 7;
+        }
+        return days[dayOfWeek];
     }
 }

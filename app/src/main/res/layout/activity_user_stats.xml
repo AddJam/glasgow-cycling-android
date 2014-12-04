@@ -75,134 +75,131 @@
             android:layout_centerInParent="true"
             android:paddingTop="15dp"
             android:layout_gravity="center"/>
-    <LinearLayout
-        android:id="@+id/stats_area"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone"
-        >
-        <TextView
-            android:id="@+id/stats_message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/stats_message"
-            android:textSize="12sp"
-            android:textColor="@color/jcBlueColor"
-            android:layout_gravity="center"
-            android:gravity="center"
-            />
         <LinearLayout
+            android:id="@+id/stats_area"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="15dp"
-            android:paddingTop="20dp"
-            android:paddingBottom="30dp"
             android:orientation="vertical"
+            android:visibility="gone"
             >
             <TextView
-                android:id="@+id/overview_label"
+                android:id="@+id/stats_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/overview_label"
-                android:textSize="28sp"
+                android:text="@string/stats_message"
+                android:textSize="12sp"
                 android:textColor="@color/jcBlueColor"
+                android:layout_gravity="center"
+                android:gravity="center"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:paddingLeft="15dp"
-                />
+                android:paddingTop="20dp"
+                android:paddingBottom="30dp"
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:id="@+id/overview_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/overview_label"
+                    android:textSize="28sp"
+                    android:textColor="@color/jcBlueColor"
+                    android:paddingLeft="15dp"
+                    />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="25dp"
+                    android:paddingBottom="15dp"
+                    android:paddingTop="15dp">
+                    <TextView
+                        android:id="@+id/distance_label"
+                        android:layout_width="60dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/distance_label"
+                        android:textSize="14sp"
+                        android:textColor="@color/jcBlueColor"
+                        />
+                    <TextView
+                        android:id="@+id/distance_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="24sp"
+                        android:text="0.00"
+                        android:textColor="@color/jcBlueColor"
+                        android:paddingLeft="15dp"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="25dp"
+                    >
+                    <TextView
+                        android:id="@+id/routes_label"
+                        android:layout_width="60dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/stat_route_label"
+                        android:textSize="14sp"
+                        android:textColor="@color/jcBlueColor"
+                        />
+                    <TextView
+                        android:id="@+id/route_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="24sp"
+                        android:text="0.00"
+                        android:textColor="@color/jcBlueColor"
+                        android:paddingLeft="15dp"
+                        />
+                </LinearLayout>
+            </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="25dp"
-                android:paddingBottom="15dp"
-                android:paddingTop="15dp"
-
-                >
+                android:orientation="vertical"
+                android:paddingBottom="25dp">
                 <TextView
-                    android:id="@+id/distance_label"
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/distance_label"
-                    android:textSize="14sp"
-                    android:textColor="@color/jcBlueColor"
-                    />
-                <TextView
-                    android:id="@+id/distance_value"
+                    android:id="@+id/bar_chart_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="24sp"
-                    android:text="0.00"
+                    android:text="@string/column_chart_label"
+                    android:textSize="28sp"
                     android:textColor="@color/jcBlueColor"
-                    android:paddingLeft="15dp"
+                    android:paddingLeft="30dp"
+                    android:paddingBottom="15dp"
+                    />
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/bar_chart"
+                    android:layout_width="350dp"
+                    android:layout_height="350dp"
+                    android:layout_gravity="center"
                     />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="25dp"
-                >
+                android:orientation="vertical"
+                android:layout_marginBottom="20dp">
                 <TextView
-                    android:id="@+id/routes_label"
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/stat_route_label"
-                    android:textSize="14sp"
-                    android:textColor="@color/jcBlueColor"
-                    />
-                <TextView
-                    android:id="@+id/route_value"
+                    android:id="@+id/line_chart_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="24sp"
-                    android:text="0.00"
+                    android:text="@string/line_chart_label"
+                    android:textSize="28sp"
                     android:textColor="@color/jcBlueColor"
-                    android:paddingLeft="15dp"
+                    android:paddingLeft="30dp"
+                    android:paddingBottom="15dp"
                     />
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/line_chart"
+                    android:layout_width="match_parent"
+                    android:layout_height="350dp"
+                    android:layout_gravity="center"/>
             </LinearLayout>
         </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="25dp">
-            <TextView
-                android:id="@+id/bar_chart_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/column_chart_label"
-                android:textSize="28sp"
-                android:textColor="@color/jcBlueColor"
-                android:paddingLeft="30dp"
-                android:paddingBottom="15dp"
-                />
-            <com.github.mikephil.charting.charts.BarChart
-                android:id="@+id/bar_chart"
-                android:layout_width="350dp"
-                android:layout_height="350dp"
-                android:layout_gravity="center"
-                />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/line_chart_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/line_chart_label"
-                android:textSize="28sp"
-                android:textColor="@color/jcBlueColor"
-                android:paddingLeft="30dp"
-                android:paddingBottom="15dp"
-                />
-            <com.github.mikephil.charting.charts.LineChart
-                android:id="@+id/line_chart"
-                android:layout_width="350dp"
-                android:layout_height="350dp"
-                android:layout_gravity="center"
-                />
-        </LinearLayout>
     </LinearLayout>
-    </LinearLayout>
-
 </ScrollView>
