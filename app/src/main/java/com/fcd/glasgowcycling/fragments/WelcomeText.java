@@ -1,6 +1,7 @@
 package com.fcd.glasgowcycling.fragments;
 
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -45,7 +46,8 @@ public class WelcomeText extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_welcome_text, container, false);
         ButterKnife.inject(this, view);
-
+        Typeface customFont = android.graphics.Typeface.createFromAsset(getActivity().getAssets(), "fonts/FutureCitySemiBold.otf");
+        textView.setTypeface(customFont);
         if (mText != null) {
             textView.setText(mText);
         }
