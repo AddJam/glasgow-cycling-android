@@ -4,7 +4,6 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 
 import com.fcd.glasgowcycling.LoadingView;
 import com.fcd.glasgowcycling.R;
@@ -48,7 +47,7 @@ public class WelcomeActivity extends FragmentActivity implements OnFragmentInter
     public void showNextFragment() {
         Fragment fragment = fragments.get(currentFragmentIndex++);
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
+        transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right);
         transaction.replace(R.id.fragment_container, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
@@ -59,6 +58,16 @@ public class WelcomeActivity extends FragmentActivity implements OnFragmentInter
         if (flag == NEXT) {
             loadingView.animateFor(1500);
             showNextFragment();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(getFragmentManager().getBackStackEntryCount() > 1) {
+            currentFragmentIndex--;
+            getFragmentManager().popBackStack();
+        } else {
+            super.onBackPressed();
         }
     }
 }
