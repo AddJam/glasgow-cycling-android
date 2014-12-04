@@ -83,12 +83,7 @@ public class WelcomeLast extends Fragment {
         TextView headerText = (TextView) dialog.findViewById(R.id.dialog_header);
         headerText.setText("Glasgow Cycling");
         TextView contentText = (TextView) dialog.findViewById(R.id.dialog_content);
-        contentText.setText("Currently the city has little reliable information on cycle usage. It's therefore difficult" +
-                " to prioritise spend and provide infrastructure where it is truly needed. Each time a user records a route" +
-                " with this app the city will get a clearer picture of the cycling community. With your help we can make Glasgow" +
-                " a cycling city. \n\n To do this we need to collect route data, we would like to wrap this around a useful app" +
-                " to help you record routes and track your usage, this requires a means of authentication. Email addresses and" +
-                " passwords are stored securely and will never be made public.");
+        contentText.setText(getString(R.string.dialog_copy));
 
         Button dialogButton = (Button) dialog.findViewById(R.id.dialog_close);
         // if button is clicked, close the custom dialog

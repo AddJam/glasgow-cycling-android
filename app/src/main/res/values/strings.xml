@@ -31,5 +31,6 @@
     <string name="welcome_two">Track your personal data and discover new routes in your city\n\nTogether we have curated hundreds of routes</string>
     <string name="welcome_three">With your help we can impact the decision making and improve the cycling infrastructure of our city</string>
     <string name="next">Continue</string>
+    <string name="dialog_copy">Currently there is little detailed information on how, when and where cyclists travel in the city. It\'s therefore difficult to prioritise spend and provide infrastructure where it is truly needed. Each time a user records a route with this app the city will get a clearer picture of the cycling community. With your help we can make Glasgow a cycling city.\n\nTo do this we need to collect route data. We think this would be best to do this via a useful app that tracks personal achievement, which requires a means of authentication. Email addresses and passwords are stored securely and will never be made public.\n\nFor more information please visit glasgowcycling.com.</string>
 
 </resources>
