@@ -38,6 +38,7 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -54,6 +55,7 @@ public class AccountSettingsActivity extends Activity {
     @InjectView(R.id.settings_gender_button) Button genderButton;
     @InjectView(R.id.settings_submit_button) Button submitButton;
     @InjectView(R.id.settings_logout_button) Button logoutButton;
+    @InjectView(R.id.progress) SmoothProgressBar progressBar;
 
     private User mUser;
 
@@ -74,7 +76,7 @@ public class AccountSettingsActivity extends Activity {
         emailField.setText(mUser.getEmail());
 
         if (mUser.getProfilePic() != null){
-            byte[] decodedString = Base64.decode(mUser.getProfilePic(), Base64.DEFAULT);
+            byte[] decodedString = Base64.decode(mUser.getProfilePic(), Base64.URL_SAFE|Base64.NO_WRAP);
             Bitmap decodedImage = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             pictureButton.setImageBitmap(decodedImage);
         }
@@ -191,10 +193,44 @@ public class AccountSettingsActivity extends Activity {
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
-                    userSelectedImage = BitmapFactory.decodeStream(imageStream);
+
+                    // Decode to appropriately sized image - saves memory
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inJustDecodeBounds = true;
+                    userSelectedImage = BitmapFactory.decodeStream(imageStream, null, options);
+                    int imageHeight = options.outHeight;
+                    int imageWidth = options.outWidth;
+                    int heightSample = imageHeight / 400;
+                    int widthSample = imageWidth  / 400;
+
+                    if (heightSample < widthSample) {
+                        options.inSampleSize = heightSample;
+                    } else {
+                        options.inSampleSize = widthSample;
+                    }
+
+                    options.inJustDecodeBounds = false;
+
+                    try {
+                        imageStream = getContentResolver().openInputStream(selectedImage);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    userSelectedImage = BitmapFactory.decodeStream(imageStream, null, options);
+
+                    if (userSelectedImage == null) {
+                        Toast.makeText(getBaseContext(),
+                                "Image couldn't be found",
+                                Toast.LENGTH_SHORT)
+                            .show();
+                        return;
+                    }
+
                     if (userSelectedImage.getWidth() > 400 || userSelectedImage.getHeight() > 400){
                         userSelectedImage = Bitmap.createBitmap(userSelectedImage, (userSelectedImage.getWidth() / 2) - 200, (userSelectedImage.getHeight() / 2) - 200, 400, 400);
                     }
+
+                    // Show image
                     Drawable drawableImage = new BitmapDrawable(getResources(), userSelectedImage);
                     pictureButton.setImageDrawable(drawableImage);
                     pictureUpdate = true;
@@ -208,18 +244,18 @@ public class AccountSettingsActivity extends Activity {
         mUser.setGender(genderButton.getText().toString());
         if (pictureUpdate){
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            ((BitmapDrawable)pictureButton.getDrawable()).getBitmap().compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-            byte[] byteArray = byteArrayOutputStream.toByteArray();
-            mUser.setProfilePic(Base64.encodeToString(byteArray, Base64.DEFAULT));
+            Bitmap userImage = ((BitmapDrawable)pictureButton.getDrawable()).getBitmap();
+            if (userImage != null) {
+                userImage.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+                byte[] byteArray = byteArrayOutputStream.toByteArray();
+                String base64img = "data:image/jpeg;base64," + Base64.encodeToString(byteArray, Base64.DEFAULT);
+                base64img = base64img.replaceAll("\n", "");
+                mUser.setProfilePic(base64img);
+            }
         }
 
-        Gson gson = new GsonBuilder()
-                .excludeFieldsWithoutExposeAnnotation()
-                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-                .create();
-        String userJson = gson.toJson(mUser);
-
-        cyclingService.updateDetails(mUser.getUsername(), mUser.getProfilePic(), mUser.getEmail(), mUser.getGender(), new Callback<User>() {
+        progressBar.setVisibility(View.VISIBLE);
+        cyclingService.updateDetails(mUser, new Callback<User>() {
                     @Override
                     public void success(User user, Response response) {
                         Log.d(TAG, "User details updated");
@@ -235,8 +271,13 @@ public class AccountSettingsActivity extends Activity {
                     @Override
                     public void failure(RetrofitError error) {
                         Log.d(TAG, "Failed to update user details");
+                        progressBar.setVisibility(View.GONE);
+                        submitButton.setEnabled(true);
                         activateButtons();
-                        Toast.makeText(getApplicationContext(), "Sorry, failed to update your details", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(),
+                                "Sorry, failed to update your details",
+                                Toast.LENGTH_LONG)
+                            .show();
                     }
                 }
         );

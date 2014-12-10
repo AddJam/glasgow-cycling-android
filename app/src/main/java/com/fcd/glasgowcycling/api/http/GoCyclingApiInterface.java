@@ -76,7 +76,7 @@ public interface GoCyclingApiInterface {
     void getWeather(Callback<Weather> weather);
 
     @PUT("/details.json")
-    void updateDetails(@Query("username") String username, @Query("profile_pic") String profilePic, @Query("email") String email, @Query("gender") String gender, Callback<User> callback);
+    void updateDetails(@Body User user, Callback<User> callback);
 
     @POST("/reset_password.json")
     void resetPassword(@Query("old_password") String oldPassword, @Query("new_password") String newPassword, Callback<AuthModel> callback);

@@ -110,7 +110,8 @@
         <activity
             android:name=".activities.AccountSettingsActivity"
             android:label="@string/title_activity_account_settings"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden">
         </activity>
         <activity
             android:name=".activities.AccountPasswordActivity"
