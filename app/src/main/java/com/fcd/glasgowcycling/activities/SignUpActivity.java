@@ -29,6 +29,7 @@ import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgowcycling.api.requests.SignupRequest;
 import com.fcd.glasgowcycling.api.responses.AuthModel;
 import com.fcd.glasgowcycling.utils.ActionBarFontUtil;
+import com.fcd.glasgowcycling.utils.ImageUtil;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -228,16 +229,16 @@ public class SignUpActivity extends Activity {
             case SELECT_PHOTO:
                 if(resultCode == RESULT_OK){
                     Uri selectedImage = imageReturnedIntent.getData();
-                    InputStream imageStream = null;
-                    try {
-                        imageStream = getContentResolver().openInputStream(selectedImage);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
+                    Bitmap userSelectedImage = ImageUtil.getImage(getBaseContext(), selectedImage, 400, 400);
+
+                    if (userSelectedImage == null) {
+                        Toast.makeText(getBaseContext(),
+                                "Image couldn't be found",
+                                Toast.LENGTH_SHORT)
+                            .show();
+                        return;
                     }
-                    userSelectedImage = BitmapFactory.decodeStream(imageStream);
-                    if (userSelectedImage.getWidth() > 400 || userSelectedImage.getHeight() > 400){
-                        userSelectedImage = Bitmap.createBitmap(userSelectedImage, (userSelectedImage.getWidth() / 2) - 200, (userSelectedImage.getHeight() / 2) - 200, 400, 400);
-                    }
+
                     Drawable drawableImage = new BitmapDrawable(getResources(), userSelectedImage);
                     pictureButton.setImageDrawable(drawableImage);
                 }

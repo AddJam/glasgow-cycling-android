@@ -26,6 +26,7 @@ import com.fcd.glasgowcycling.R;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgowcycling.models.User;
 import com.fcd.glasgowcycling.utils.ActionBarFontUtil;
+import com.fcd.glasgowcycling.utils.ImageUtil;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -76,7 +77,8 @@ public class AccountSettingsActivity extends Activity {
         emailField.setText(mUser.getEmail());
 
         if (mUser.getProfilePic() != null){
-            byte[] decodedString = Base64.decode(mUser.getProfilePic(), Base64.URL_SAFE|Base64.NO_WRAP);
+            String encodedUserImage = mUser.getProfilePic().replace("data:image/jpeg;base64,", "");
+            byte[] decodedString = Base64.decode(encodedUserImage, Base64.NO_WRAP);
             Bitmap decodedImage = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             pictureButton.setImageBitmap(decodedImage);
         }
@@ -186,37 +188,7 @@ public class AccountSettingsActivity extends Activity {
             case SELECT_PHOTO:
                 if(resultCode == RESULT_OK){
                     Uri selectedImage = imageReturnedIntent.getData();
-                    InputStream imageStream = null;
-                    Bitmap userSelectedImage;
-                    try {
-                        imageStream = getContentResolver().openInputStream(selectedImage);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-
-                    // Decode to appropriately sized image - saves memory
-                    BitmapFactory.Options options = new BitmapFactory.Options();
-                    options.inJustDecodeBounds = true;
-                    userSelectedImage = BitmapFactory.decodeStream(imageStream, null, options);
-                    int imageHeight = options.outHeight;
-                    int imageWidth = options.outWidth;
-                    int heightSample = imageHeight / 400;
-                    int widthSample = imageWidth  / 400;
-
-                    if (heightSample < widthSample) {
-                        options.inSampleSize = heightSample;
-                    } else {
-                        options.inSampleSize = widthSample;
-                    }
-
-                    options.inJustDecodeBounds = false;
-
-                    try {
-                        imageStream = getContentResolver().openInputStream(selectedImage);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                    userSelectedImage = BitmapFactory.decodeStream(imageStream, null, options);
+                    Bitmap userSelectedImage = ImageUtil.getImage(getBaseContext(), selectedImage, 400, 400);
 
                     if (userSelectedImage == null) {
                         Toast.makeText(getBaseContext(),
@@ -224,10 +196,6 @@ public class AccountSettingsActivity extends Activity {
                                 Toast.LENGTH_SHORT)
                             .show();
                         return;
-                    }
-
-                    if (userSelectedImage.getWidth() > 400 || userSelectedImage.getHeight() > 400){
-                        userSelectedImage = Bitmap.createBitmap(userSelectedImage, (userSelectedImage.getWidth() / 2) - 200, (userSelectedImage.getHeight() / 2) - 200, 400, 400);
                     }
 
                     // Show image
