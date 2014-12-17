@@ -1,9 +1,14 @@
 package com.fcd.glasgowcycling.models;
 
+import android.graphics.Bitmap;
+import android.util.Base64;
+
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.google.gson.annotations.Expose;
+
+import java.io.ByteArrayOutputStream;
 
 @Table(name = "Users")
 public class User extends Model {
@@ -25,6 +30,9 @@ public class User extends Model {
 
     @Expose @Column(name = "ProfilePic")
     private String profilePic;
+
+    @Column(name = "IsUpdateRequired")
+    private boolean isUpdateRequired;
 
     // Need this for orm
     public User() {
@@ -86,5 +94,22 @@ public class User extends Model {
 
     public void setProfilePic(String profilePic) {
         this.profilePic = profilePic;
+    }
+
+    public void setProfilePic(Bitmap image) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+        byte[] byteArray = byteArrayOutputStream.toByteArray();
+        String base64img = "data:image/jpeg;base64," + Base64.encodeToString(byteArray, Base64.DEFAULT);
+        base64img = base64img.replaceAll("\n", "");
+        setProfilePic(base64img);
+    }
+
+    public boolean isUpdateRequired() {
+        return isUpdateRequired;
+    }
+
+    public void setUpdateRequired(boolean isUpdateRequired) {
+        this.isUpdateRequired = isUpdateRequired;
     }
 }

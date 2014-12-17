@@ -14,7 +14,7 @@
             android:value="GlasgowCycling.db" />
         <meta-data
             android:name="AA_DB_VERSION"
-            android:value="3" />
+            android:value="4" />
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyAFp8nxLgf4YZOcn3U4_Ny9iyYCRAZmwjQ" />

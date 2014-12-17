@@ -230,34 +230,38 @@ public class UserOverviewActivity extends Activity {
     private void getDetails(){
         // Check offline first
         User existingUser = new Select().from(User.class).limit(1).executeSingle();
+        boolean shouldUpdate = true;
         if (existingUser != null) {
             mUser = existingUser;
             populateFields();
+            shouldUpdate = mUser.isUpdateRequired();
         }
 
-        // Load from API
-        cyclingService.details(new Callback<User>() {
+        if (shouldUpdate) {
+            cyclingService.details(new Callback<User>() {
 
-            @Override
-            public void success(User user, Response response) {
-                Log.d(TAG, "retreived user details for " + user.getUserId());
+                @Override
+                public void success(User user, Response response) {
+                    Log.d(TAG, "retreived user details for " + user.getUserId());
 
-                // Delete existing users
-                new Delete().from(User.class).execute();
+                    // Delete existing users
+                    new Delete().from(User.class).execute();
 
-                // Store
-                mUser = user;
-                mUser.getMonth().save();
-                mUser.save();
+                    // Store
+                    mUser = user;
+                    mUser.setUpdateRequired(false);
+                    mUser.getMonth().save();
+                    mUser.save();
 
-                populateFields();
-            }
+                    populateFields();
+                }
 
-            @Override
-            public void failure(RetrofitError error) {
-                Log.d(TAG, "Failed to get user details");
-            }
-        });
+                @Override
+                public void failure(RetrofitError error) {
+                    Log.d(TAG, "Failed to get user details");
+                }
+            });
+        }
     }
 
     private void populateFields(){
@@ -267,9 +271,10 @@ public class UserOverviewActivity extends Activity {
         distanceStat.setText(month.getReadableTime());
         timeStat.setText(month.getReadableDistance());
         if (mUser.getProfilePic() != null){
-            String base64image = mUser.getProfilePic().replace("data:image/jpeg;base64,", "");
+            String base64image = mUser.getProfilePic();
             byte[] decodedString = Base64.decode(base64image, Base64.DEFAULT);
             Bitmap decodedImage = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            Log.d(TAG, "Usr overview image: " + base64image);
             profileImage.setImageBitmap(decodedImage);
         }
     }

@@ -202,6 +202,7 @@ public class AccountSettingsActivity extends Activity {
                     Drawable drawableImage = new BitmapDrawable(getResources(), userSelectedImage);
                     pictureButton.setImageDrawable(drawableImage);
                     pictureUpdate = true;
+                    mUser.setProfilePic(userSelectedImage);
                 }
         }
     }
@@ -210,17 +211,12 @@ public class AccountSettingsActivity extends Activity {
         mUser.setUsername(usernameField.getText().toString());
         mUser.setEmail(emailField.getText().toString());
         mUser.setGender(genderButton.getText().toString());
-        if (pictureUpdate){
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            Bitmap userImage = ((BitmapDrawable)pictureButton.getDrawable()).getBitmap();
-            if (userImage != null) {
-                userImage.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-                byte[] byteArray = byteArrayOutputStream.toByteArray();
-                String base64img = "data:image/jpeg;base64," + Base64.encodeToString(byteArray, Base64.DEFAULT);
-                base64img = base64img.replaceAll("\n", "");
-                mUser.setProfilePic(base64img);
-            }
+        final Bitmap userImage = ((BitmapDrawable)pictureButton.getDrawable()).getBitmap();
+        if (pictureUpdate && userImage != null) {
+            mUser.setProfilePic(userImage);
         }
+
+        Log.d(TAG, "Updating user details, picture is " + mUser.getProfilePic());
 
         progressBar.setVisibility(View.VISIBLE);
         cyclingService.updateDetails(mUser, new Callback<User>() {
@@ -233,6 +229,7 @@ public class AccountSettingsActivity extends Activity {
                         mUser = user;
                         mUser.getMonth().save();
                         mUser.save();
+                        Log.d(TAG, "User details updated, image now " + mUser.getProfilePic());
                         finish();
                     }
 

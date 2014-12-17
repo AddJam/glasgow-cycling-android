@@ -14,12 +14,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.activeandroid.query.Select;
 import com.fcd.glasgowcycling.CyclingApplication;
 import com.fcd.glasgowcycling.R;
 import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgowcycling.api.responses.RouteCaptureResponse;
 import com.fcd.glasgowcycling.models.CapturePoint;
 import com.fcd.glasgowcycling.models.CaptureRoute;
+import com.fcd.glasgowcycling.models.User;
+import com.fcd.glasgowcycling.models.Weather;
 import com.fcd.glasgowcycling.utils.ActionBarFontUtil;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
@@ -282,6 +285,11 @@ public class RouteCaptureActivity extends Activity {
                 }
             });
         }
+
+        User user = new Select().from(User.class).limit(1).executeSingle();
+        user.setUpdateRequired(true);
+        user.save();
+
         finish();
     }
 }
