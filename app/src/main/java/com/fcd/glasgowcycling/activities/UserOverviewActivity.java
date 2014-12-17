@@ -389,7 +389,7 @@ public class UserOverviewActivity extends Activity {
         builder1.setNegativeButton("Cancel",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        finish();
+                        dialog.dismiss();
                     }
                 });
         builder1.setPositiveButton("Download",
