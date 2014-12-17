@@ -46,7 +46,7 @@ public class ImageUtil {
         }
         image = BitmapFactory.decodeStream(imageStream, null, options);
 
-        if (image.getWidth() > targetWidth || image.getHeight() > targetHeight){
+        if (image != null && (image.getWidth() > targetWidth || image.getHeight() > targetHeight)){
             int x = (image.getWidth() / 2) - (targetWidth/2);
             if (x < 0) {
                 x = 0;

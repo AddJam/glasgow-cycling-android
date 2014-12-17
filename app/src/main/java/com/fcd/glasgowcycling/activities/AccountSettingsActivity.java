@@ -192,7 +192,7 @@ public class AccountSettingsActivity extends Activity {
 
                     if (userSelectedImage == null) {
                         Toast.makeText(getBaseContext(),
-                                "Image couldn't be found",
+                                "Image couldn't be loaded",
                                 Toast.LENGTH_SHORT)
                             .show();
                         return;

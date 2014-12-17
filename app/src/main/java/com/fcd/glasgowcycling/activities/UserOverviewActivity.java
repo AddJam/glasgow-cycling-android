@@ -266,10 +266,10 @@ public class UserOverviewActivity extends Activity {
         username.setText(mUser.getUsername());
         distanceStat.setText(month.getReadableTime());
         timeStat.setText(month.getReadableDistance());
-        Bitmap decodedImage;
         if (mUser.getProfilePic() != null){
-            byte[] decodedString = Base64.decode(mUser.getProfilePic(), Base64.DEFAULT);
-            decodedImage = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            String base64image = mUser.getProfilePic().replace("data:image/jpeg;base64,", "");
+            byte[] decodedString = Base64.decode(base64image, Base64.DEFAULT);
+            Bitmap decodedImage = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             profileImage.setImageBitmap(decodedImage);
         }
     }
