@@ -110,7 +110,6 @@ public class LoadingView extends RelativeLayout {
     }
 
     public void setRandomMessage() {
-
         String[] message = new String[12];
         message[0] = "Don't use headphones while cycling";
         message[1] = "Make yourself visible at night. Lights and reflectors are a must";
