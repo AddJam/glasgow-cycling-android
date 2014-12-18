@@ -174,7 +174,7 @@ public class RouteCaptureActivity extends Activity {
                 Geocoder coder = new Geocoder(getApplicationContext());
                 try {
                     List<Address> geoInfo = coder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-                    if (geoInfo.get(0).getAddressLine(1).isEmpty() == false) {
+                    if (geoInfo.size() > 0 && !geoInfo.get(0).getAddressLine(1).isEmpty()) {
                         streetName = geoInfo.get(0).getAddressLine(1);
                     }
                 } catch (IOException e) {
