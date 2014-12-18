@@ -211,7 +211,11 @@ public class AccountSettingsActivity extends Activity {
         mUser.setUsername(usernameField.getText().toString());
         mUser.setEmail(emailField.getText().toString());
         mUser.setGender(genderButton.getText().toString());
-        final Bitmap userImage = ((BitmapDrawable)pictureButton.getDrawable()).getBitmap();
+        BitmapDrawable drawable = (BitmapDrawable) pictureButton.getDrawable();
+        Bitmap userImage = null;
+        if (drawable != null) {
+            userImage = drawable.getBitmap();
+        }
         if (pictureUpdate && userImage != null) {
             mUser.setProfilePic(userImage);
         }
