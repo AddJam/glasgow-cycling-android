@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.activeandroid.query.Delete;
-import com.activeandroid.query.Select;
 import com.fcd.glasgowcycling.CyclingApplication;
 import com.fcd.glasgowcycling.LoadingView;
 import com.fcd.glasgowcycling.R;
@@ -33,8 +32,6 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.utils.XLabels;
 import com.github.mikephil.charting.utils.YLabels;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -85,7 +82,7 @@ public class UserStatsActivity extends Activity {
         loadingView.startAnimating();
         loadingView.setRandomMessage();
 
-        mUser = new Select().from(User.class).limit(1).executeSingle();
+        mUser = ((CyclingApplication) getApplication()).getCurrentUser();
         Month month = mUser.getMonth();
 
         username.setText(mUser.getUsername());

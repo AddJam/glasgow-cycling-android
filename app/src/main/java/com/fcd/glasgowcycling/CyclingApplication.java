@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.query.Delete;
+import com.activeandroid.query.Select;
 import com.fcd.glasgowcycling.activities.SignInActivity;
 import com.fcd.glasgowcycling.api.auth.CyclingAuthenticator;
 import com.fcd.glasgowcycling.api.http.ApiClientModule;
@@ -42,6 +43,15 @@ public class CyclingApplication extends Application {
 
     public void inject(Object target) {
         graph.inject(target);
+    }
+
+    public User getCurrentUser() {
+        User user = new Select().from(User.class).limit(1).executeSingle();
+        if (user == null) {
+            logout();
+            return null;
+        }
+        return user;
     }
 
     public void logout() {
