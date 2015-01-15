@@ -25,7 +25,7 @@ public class CaptureRoute {
 
     }
 
-    public void addRoutePoint(Location location, String streetname){
+    public CapturePoint addRoutePoint(Location location){
         //increment distance and workout avg speed
         double combinedSpeed = 0;
         if (points.size() != 0) {
@@ -56,10 +56,9 @@ public class CaptureRoute {
         newPoint.setHorizontalAccuracy(location.getAccuracy());
         newPoint.setVerticalAccuracy(-1); // iOS gives this Android doesnt, set to minus 1 here
         newPoint.setKph(location.getSpeed());
-        newPoint.setStreet_name(streetname);
 
         points.add(newPoint);
-
+        return newPoint;
     }
 
     public List<CapturePoint> getPoints() {

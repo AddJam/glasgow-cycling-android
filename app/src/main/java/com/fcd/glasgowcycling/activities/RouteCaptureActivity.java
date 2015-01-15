@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -21,6 +22,7 @@ import com.fcd.glasgowcycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgowcycling.api.responses.RouteCaptureResponse;
 import com.fcd.glasgowcycling.models.CapturePoint;
 import com.fcd.glasgowcycling.models.CaptureRoute;
+import com.fcd.glasgowcycling.models.Point;
 import com.fcd.glasgowcycling.models.User;
 import com.fcd.glasgowcycling.models.Weather;
 import com.fcd.glasgowcycling.utils.ActionBarFontUtil;
@@ -168,22 +170,10 @@ public class RouteCaptureActivity extends Activity {
             }
 
             float speed = (float) (location.getSpeed());
-            String streetName = "";
-            if (captureRoute.getDistance() > (mLastGeoDist + 0.1)) {
-                mLastGeoDist = captureRoute.getDistance();
-                Geocoder coder = new Geocoder(getApplicationContext());
-                try {
-                    List<Address> geoInfo = coder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-                    if (geoInfo.size() > 0 && !geoInfo.get(0).getAddressLine(1).isEmpty()) {
-                        streetName = geoInfo.get(0).getAddressLine(1);
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
 
             // add location to CaptureRoute, captureRoute takes care of distance and avg speed
-            captureRoute.addRoutePoint(location, streetName);
+            CapturePoint point = captureRoute.addRoutePoint(location);
+            new GeocodeTask().execute(point);
 
             speedInfo.setText(String.format("%.02f mph", speed * 2.2369362920544));
             avgSpeedInfo.setText(String.format("%.02f mph", captureRoute.getAvgSpeedMiles()));
@@ -291,5 +281,28 @@ public class RouteCaptureActivity extends Activity {
         user.save();
 
         finish();
+    }
+
+    class GeocodeTask extends AsyncTask<CapturePoint, Void, Void> {
+
+        @Override
+        protected Void doInBackground(CapturePoint... points) {
+            for (CapturePoint point : points) {
+                if (captureRoute.getDistance() > (mLastGeoDist + 0.1)) {
+                    mLastGeoDist = captureRoute.getDistance();
+                    Geocoder coder = new Geocoder(getApplicationContext());
+                    try {
+                        List<Address> geoInfo = coder.getFromLocation(point.getLat(), point.getLng(), 1);
+                        if (geoInfo.size() > 0 && !geoInfo.get(0).getAddressLine(1).isEmpty()) {
+                            String streetName = geoInfo.get(0).getAddressLine(1);
+                            point.setStreet_name(streetName);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            return null;
+        }
     }
 }
