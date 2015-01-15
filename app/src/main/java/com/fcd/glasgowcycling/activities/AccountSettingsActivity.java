@@ -71,7 +71,7 @@ public class AccountSettingsActivity extends Activity {
         ButterKnife.inject(this);
         ActionBarFontUtil.setFont(this);
 
-        mUser = ((CyclingApplication)getApplication()).getCurrentUser();
+        mUser = ((CyclingApplication)getApplication()).getCurrentUser(true);
 
         usernameField.setText(mUser.getUsername());
         emailField.setText(mUser.getEmail());

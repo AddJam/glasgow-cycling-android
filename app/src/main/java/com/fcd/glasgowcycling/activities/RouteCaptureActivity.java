@@ -276,7 +276,7 @@ public class RouteCaptureActivity extends Activity {
             });
         }
 
-        User user = ((CyclingApplication)getApplication()).getCurrentUser();
+        User user = ((CyclingApplication)getApplication()).getCurrentUser(true);
         user.setUpdateRequired(true);
         user.save();
 

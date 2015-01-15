@@ -45,9 +45,9 @@ public class CyclingApplication extends Application {
         graph.inject(target);
     }
 
-    public User getCurrentUser() {
+    public User getCurrentUser(boolean logoutIfNull) {
         User user = new Select().from(User.class).limit(1).executeSingle();
-        if (user == null) {
+        if (logoutIfNull && user == null) {
             logout();
             return null;
         }

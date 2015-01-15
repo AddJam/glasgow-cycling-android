@@ -229,7 +229,7 @@ public class UserOverviewActivity extends Activity {
 
     private void getDetails(){
         // Check offline first
-        User existingUser = ((CyclingApplication)getApplication()).getCurrentUser();
+        User existingUser = ((CyclingApplication)getApplication()).getCurrentUser(false);
         boolean shouldUpdate = true;
         if (existingUser != null) {
             mUser = existingUser;

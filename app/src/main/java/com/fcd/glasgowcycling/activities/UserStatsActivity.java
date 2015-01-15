@@ -82,7 +82,7 @@ public class UserStatsActivity extends Activity {
         loadingView.startAnimating();
         loadingView.setRandomMessage();
 
-        mUser = ((CyclingApplication) getApplication()).getCurrentUser();
+        mUser = ((CyclingApplication) getApplication()).getCurrentUser(true);
         Month month = mUser.getMonth();
 
         username.setText(mUser.getUsername());
