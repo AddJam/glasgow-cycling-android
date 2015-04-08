@@ -19,7 +19,7 @@ android {
     compileSdkVersion 20
     buildToolsVersion '20.0.0'
     defaultConfig {
-        applicationId 'com.fcd.glasgowcycling'
+        applicationId 'com.fcd.glasgow_cycling'
         minSdkVersion 14
         targetSdkVersion 20
         versionCode 11
