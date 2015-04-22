@@ -83,6 +83,10 @@ public class UserStatsActivity extends Activity {
         loadingView.setRandomMessage();
 
         mUser = ((CyclingApplication) getApplication()).getCurrentUser(true);
+        if (mUser == null) {
+            finish();
+            return;
+        }
         Month month = mUser.getMonth();
 
         username.setText(mUser.getUsername());
