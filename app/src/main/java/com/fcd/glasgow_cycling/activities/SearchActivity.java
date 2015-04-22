@@ -46,15 +46,29 @@ public class SearchActivity extends RouteListActivity {
             mEmptyMessage = "No routes to " + query;
 
             LatLng userLocation = LocationUtil.getLastKnownLocation(getBaseContext());
+            Toast currentToast = null;
             if (userLocation == null) {
-                Toast.makeText(getBaseContext(),
+                currentToast = Toast.makeText(getBaseContext(),
                         "Could not locate you - finding any route to destination",
-                        Toast.LENGTH_LONG)
-                        .show();
+                        Toast.LENGTH_LONG);
+                currentToast.show();
             }
 
             try {
                 List<Address> geoInfo = mGeoCoder.getFromLocationName(query, 1);
+                if (geoInfo.size() < 1) {
+                    if (currentToast != null) {
+                        currentToast.cancel();
+                    }
+
+                    // No location found
+                    Toast.makeText(getBaseContext(),
+                            "Couldn't find a location with that name",
+                            Toast.LENGTH_LONG)
+                            .show();
+                    return;
+                }
+
                 Address location = geoInfo.get(0);
                 if (location.hasLatitude() && location.hasLongitude()) {
                     Log.d(TAG, "Searching for routes to " + location.getLatitude() + ", " + location.getLongitude());

@@ -67,7 +67,7 @@
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="RouteListActivity" />
+                android:value=".activities.RouteListActivity" />
         </activity>
         <activity
             android:name="com.fcd.glasgow_cycling.activities.SignUpActivity"
