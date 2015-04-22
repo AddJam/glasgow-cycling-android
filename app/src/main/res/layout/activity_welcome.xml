@@ -2,10 +2,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.fcd.glasgowcycling.activities.SignInActivity"
+    tools:context="com.fcd.glasgow_cycling.activities.SignInActivity"
     android:background="@color/jcBlueColor">
 
-    <com.fcd.glasgowcycling.LoadingView
+    <com.fcd.glasgow_cycling.LoadingView
         android:id="@+id/loading_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

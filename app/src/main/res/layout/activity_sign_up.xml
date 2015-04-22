@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.fcd.glasgowcycling.activities.SignUpActivity">
+    tools:context="com.fcd.glasgow_cycling.activities.SignUpActivity">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -132,7 +132,7 @@
             android:background="@color/jcGreenColor"
             android:textColor="@color/jcWhiteColor"
             android:textSize="16sp" />
-        <com.fcd.glasgowcycling.LoadingView
+        <com.fcd.glasgow_cycling.LoadingView
             android:paddingTop="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

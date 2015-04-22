@@ -2,14 +2,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.fcd.glasgowcycling.activities.RouteListActivity">
+    tools:context="com.fcd.glasgow_cycling.activities.RouteListActivity">
 
     <ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-    <com.fcd.glasgowcycling.LoadingView
+    <com.fcd.glasgow_cycling.LoadingView
         android:id="@android:id/empty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

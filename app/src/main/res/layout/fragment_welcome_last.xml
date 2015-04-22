@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/jcBlueColor"
-    tools:context="com.fcd.glasgowcycling.fragments.welcome_four"
+    tools:context="com.fcd.glasgow_cycling.fragments.welcome_four"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin">
 

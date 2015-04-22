@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.fcd.glasgowcycling.activities.SearchActivity" >
+    tools:context="com.fcd.glasgow_cycling.activities.SearchActivity" >
     <item android:id="@+id/search"
         android:title="@string/search"
         android:icon="@drawable/search_icon"

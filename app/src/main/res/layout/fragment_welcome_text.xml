@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.fcd.glasgowcycling.fragments.WelcomeText"
+    tools:context="com.fcd.glasgow_cycling.fragments.WelcomeText"
     android:background="@color/jcBlueColor"
     android:orientation="vertical">
 

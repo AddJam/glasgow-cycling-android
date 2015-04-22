@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.fcd.glasgowcycling"
+    package="com.fcd.glasgow_cycling"
     android:installLocation="internalOnly" >
 
     <application
-        android:name=".CyclingApplication"
+        android:name="com.fcd.glasgow_cycling.CyclingApplication"
         android:allowBackup="true"
         android:icon="@drawable/logo"
         android:label="@string/app_name"
@@ -23,7 +23,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".activities.LaunchActivity"
+            android:name="com.fcd.glasgow_cycling.activities.LaunchActivity"
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,13 +32,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.SignInActivity"
+            android:name="com.fcd.glasgow_cycling.activities.SignInActivity"
             android:label="@string/title_activity_sign_in"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" >
         </activity>
         <activity
-            android:name=".activities.UserOverviewActivity"
+            android:name="com.fcd.glasgow_cycling.activities.UserOverviewActivity"
             android:label="@string/title_activity_user_overview"
             android:screenOrientation="portrait" >
             <meta-data
@@ -46,43 +46,43 @@
                 android:value=".activities.SearchActivity" />
         </activity>
         <activity
-            android:name=".activities.RouteListActivity"
+            android:name="com.fcd.glasgow_cycling.activities.RouteListActivity"
             android:label="@string/title_activity_route_list"
-            android:parentActivityName=".activities.UserOverviewActivity"
+            android:parentActivityName="com.fcd.glasgow_cycling.activities.UserOverviewActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".activities.RouteCaptureActivity"
+            android:name="com.fcd.glasgow_cycling.activities.RouteCaptureActivity"
             android:label="@string/title_activity_route_capture"
-            android:parentActivityName=".activities.UserOverviewActivity"
+            android:parentActivityName="com.fcd.glasgow_cycling.activities.UserOverviewActivity"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.fcd.glasgowcycling.activities.UserOverviewActivity" />
+                android:value="com.fcd.glasgow_cycling.activities.UserOverviewActivity" />
         </activity>
         <activity
-            android:name=".activities.RouteOverviewActivity"
+            android:name="com.fcd.glasgow_cycling.activities.RouteOverviewActivity"
             android:label="@string/title_activity_route_overview"
-            android:parentActivityName=".activities.RouteListActivity"
+            android:parentActivityName="com.fcd.glasgow_cycling.activities.RouteListActivity"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="RouteListActivity" />
         </activity>
         <activity
-            android:name=".activities.SignUpActivity"
+            android:name="com.fcd.glasgow_cycling.activities.SignUpActivity"
             android:label="@string/title_activity_sign_up"
-            android:parentActivityName=".activities.SignInActivity"
+            android:parentActivityName="com.fcd.glasgow_cycling.activities.SignInActivity"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.fcd.glasgowcycling.activities.SignInActivity" />
+                android:value="com.fcd.glasgow_cycling.activities.SignInActivity" />
         </activity>
         <activity
-            android:name=".activities.SearchActivity"
+            android:name="com.fcd.glasgow_cycling.activities.SearchActivity"
             android:label="@string/title_activity_search"
             android:launchMode="singleTop"
-            android:parentActivityName=".activities.UserOverviewActivity"
+            android:parentActivityName="com.fcd.glasgow_cycling.activities.UserOverviewActivity"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.app.searchable"
@@ -94,7 +94,7 @@
         </activity>
 
         <service
-            android:name=".api.auth.AuthenticatorService"
+            android:name="com.fcd.glasgow_cycling.api.auth.AuthenticatorService"
             android:exported="false" >
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
@@ -106,35 +106,35 @@
         </service>
 
         <activity
-            android:name=".activities.AccountSettingsActivity"
+            android:name="com.fcd.glasgow_cycling.activities.AccountSettingsActivity"
             android:label="@string/title_activity_account_settings"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden">
         </activity>
         <activity
-            android:name=".activities.AccountPasswordActivity"
+            android:name="com.fcd.glasgow_cycling.activities.AccountPasswordActivity"
             android:label="@string/title_activity_account_password"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".activities.AccountForgottenActivity"
+            android:name="com.fcd.glasgow_cycling.activities.AccountForgottenActivity"
             android:label="@string/title_activity_account_forgotten"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".activities.CycleMapActivity"
+            android:name="com.fcd.glasgow_cycling.activities.CycleMapActivity"
             android:label="@string/title_activity_cycle_map"
-            android:parentActivityName=".activities.UserOverviewActivity"
+            android:parentActivityName="com.fcd.glasgow_cycling.activities.UserOverviewActivity"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".activities.UserStatsActivity"
+            android:name="com.fcd.glasgow_cycling.activities.UserStatsActivity"
             android:label="@string/title_activity_user_stats"
-            android:parentActivityName=".activities.UserOverviewActivity"
+            android:parentActivityName="com.fcd.glasgow_cycling.activities.UserOverviewActivity"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".activities.WelcomeActivity"
+            android:name="com.fcd.glasgow_cycling.activities.WelcomeActivity"
             android:label="@string/title_activity_welcome"
             android:screenOrientation="portrait">
         </activity>
