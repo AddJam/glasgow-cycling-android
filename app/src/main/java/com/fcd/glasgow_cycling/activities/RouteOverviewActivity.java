@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.fcd.glasgow_cycling.CyclingApplication;
@@ -27,6 +29,7 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -40,6 +43,7 @@ public class RouteOverviewActivity extends Activity {
     @InjectView(R.id.speed) TextView speed;
     @InjectView(R.id.distance) TextView distance;
     private GoogleMap map;
+    @InjectView(R.id.progress) SmoothProgressBar progressBar;
 
     @Inject GoCyclingApiInterface cyclingService;
 
@@ -72,10 +76,12 @@ public class RouteOverviewActivity extends Activity {
 
         // Load route points
         Crashlytics.log(Log.INFO, TAG, "Loading route details");
+        progressBar.setVisibility(View.VISIBLE);
         cyclingService.routeDetails(route.getId(), new Callback<Route>() {
             @Override
             public void success(Route routeDetails, Response response) {
                 Crashlytics.log(Log.INFO, TAG, "Successfully got route details");
+                progressBar.setVisibility(View.GONE);
                 List<Point> points = routeDetails.getPoints();
                 if (points.size() > 1) {
                     map.clear();
@@ -114,6 +120,8 @@ public class RouteOverviewActivity extends Activity {
             @Override
             public void failure(RetrofitError error) {
                 Crashlytics.log(Log.INFO, TAG, "Failed to get route details");
+                progressBar.setVisibility(View.GONE);
+                Toast.makeText(getBaseContext(), "Failed to load route", Toast.LENGTH_LONG).show();
             }
         });
 

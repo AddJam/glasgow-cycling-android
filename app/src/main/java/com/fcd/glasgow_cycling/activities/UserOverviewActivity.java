@@ -53,6 +53,7 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -78,6 +79,8 @@ public class UserOverviewActivity extends Activity {
     @InjectView(R.id.flash_message) View flashMessage;
     @InjectView(R.id.flash_text) TextView flashTextView;
 
+    @InjectView(R.id.progress) SmoothProgressBar progressBar;
+
     //weather
     @InjectView(R.id.temp_info) TextView temperature;
     @InjectView(R.id.precip_info) TextView precipitation;
@@ -92,6 +95,8 @@ public class UserOverviewActivity extends Activity {
 
     private User mUser;
     private Weather mWeather;
+
+    private int numUploading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -174,12 +179,19 @@ public class UserOverviewActivity extends Activity {
         } else {
             hideFlash();
         }
+
+        if (numUploading > 0) {
+            progressBar.setVisibility(View.VISIBLE);
+        } else {
+            progressBar.setVisibility(View.GONE);
+        }
     }
 
     private void updateRoutes() {
         // Get all saved captured routes
         updateRoutesPending();
         List<CaptureRoute> routes = new Select().from(CaptureRoute.class).execute();
+        numUploading = 0;
 
         if (routes.size() > 0) {
             // Upload them
@@ -190,9 +202,13 @@ public class UserOverviewActivity extends Activity {
                 } else {
                     // Submit it
                     captureRoute.setPoints(captureRoute.points());
+                    numUploading++;
+                    updateRoutesPending();
                     cyclingService.route(captureRoute, new Callback<RouteCaptureResponse>() {
                         @Override
                         public void success(RouteCaptureResponse routeCaptureResponse, Response response) {
+                            numUploading--;
+
                             // Now we can discard it
                             captureRoute.delete();
                             mUser.setUpdateRequired(true);
@@ -203,6 +219,7 @@ public class UserOverviewActivity extends Activity {
 
                         @Override
                         public void failure(RetrofitError error) {
+                            numUploading--;
                             Crashlytics.log(Log.INFO, TAG, "Failed to submit route");
 
                             if (error.getResponse() != null) {
@@ -218,9 +235,9 @@ public class UserOverviewActivity extends Activity {
                                 } catch (Exception e) {
                                     Crashlytics.log(Log.DEBUG, TAG, "Exception with route submit error");
                                 }
-
-                                updateRoutesPending();
                             }
+
+                            updateRoutesPending();
                         }
                     });
                 }
