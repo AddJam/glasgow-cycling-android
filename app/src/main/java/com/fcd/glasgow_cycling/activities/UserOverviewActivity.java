@@ -164,7 +164,7 @@ public class UserOverviewActivity extends Activity {
     }
 
     private void updateRoutesPending() {
-        List<CaptureRoute> routes = new Select().from(CaptureRoute.class).execute();
+        List<CaptureRoute> routes = new Select().from(CaptureRoute.class).where("distance >= ?", 500).execute();
 
         if (routes.size() > 0) {
             // Show a message if we have any, until submitted
