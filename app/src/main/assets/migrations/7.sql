@@ -1,0 +1,1 @@
+ALTER TABLE CaptureRoutes ADD COLUMN distance REAL;

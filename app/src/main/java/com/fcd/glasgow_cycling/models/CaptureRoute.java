@@ -3,6 +3,9 @@ package com.fcd.glasgow_cycling.models;
 import android.location.Location;
 import android.util.Log;
 
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
 import com.crashlytics.android.Crashlytics;
 import com.google.gson.annotations.Expose;
 
@@ -12,18 +15,22 @@ import java.util.List;
 /**
  * Created by michaelhayes on 10/07/2014.
  */
-public class CaptureRoute {
+@Table(name = "CaptureRoutes")
+public class CaptureRoute extends Model {
 
     @Expose
     private List<CapturePoint> points = new ArrayList<CapturePoint>();
 
     private long startTime;
+
+    @Column(name = "distance")
     private float distance = 0;
+
     private double avgSpeed;
     private final String TAG = "Capture";
 
     public CaptureRoute(){
-
+        super();
     }
 
     public CapturePoint addRoutePoint(Location location){
@@ -59,6 +66,8 @@ public class CaptureRoute {
         newPoint.setKph(location.getSpeed());
 
         points.add(newPoint);
+
+        newPoint.captureRoute = this;
         return newPoint;
     }
 
@@ -96,5 +105,9 @@ public class CaptureRoute {
 
     public void setAvgSpeed(double avgSpeed) {
         this.avgSpeed = avgSpeed;
+    }
+
+    public List<CapturePoint> points() {
+        return getMany(CapturePoint.class, "CaptureRoute");
     }
 }

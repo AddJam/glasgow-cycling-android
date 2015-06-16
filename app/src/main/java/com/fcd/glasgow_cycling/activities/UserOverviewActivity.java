@@ -1,5 +1,6 @@
 package com.fcd.glasgow_cycling.activities;
 
+import com.fcd.glasgow_cycling.api.responses.RestError;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.SearchManager;
@@ -25,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
@@ -32,6 +34,8 @@ import com.crashlytics.android.Crashlytics;
 import com.fcd.glasgow_cycling.CyclingApplication;
 import com.fcd.glasgow_cycling.R;
 import com.fcd.glasgow_cycling.api.http.GoCyclingApiInterface;
+import com.fcd.glasgow_cycling.api.responses.RouteCaptureResponse;
+import com.fcd.glasgow_cycling.models.CaptureRoute;
 import com.fcd.glasgow_cycling.models.Month;
 import com.fcd.glasgow_cycling.models.User;
 import com.fcd.glasgow_cycling.models.Weather;
@@ -43,6 +47,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
@@ -50,6 +56,7 @@ import butterknife.InjectView;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import retrofit.converter.ConversionException;
 
 public class UserOverviewActivity extends Activity {
     @Inject
@@ -66,6 +73,10 @@ public class UserOverviewActivity extends Activity {
     @InjectView(R.id.user_routes) View userRoutesView;
     @InjectView(R.id.nearby_routes) View nearbyRoutesView;
     @InjectView(R.id.cycle_map) View cycleMapView;
+
+    // Flash
+    @InjectView(R.id.flash_message) View flashMessage;
+    @InjectView(R.id.flash_text) TextView flashTextView;
 
     //weather
     @InjectView(R.id.temp_info) TextView temperature;
@@ -149,6 +160,78 @@ public class UserOverviewActivity extends Activity {
         getDetails();
         getWeather();
         setupMap();
+        updateRoutes();
+    }
+
+    private void updateRoutesPending() {
+        List<CaptureRoute> routes = new Select().from(CaptureRoute.class).execute();
+
+        if (routes.size() > 0) {
+            // Show a message if we have any, until submitted
+            String routeText = routes.size() == 1 ? "route" : "routes";
+            String message = routes.size() + " pending " + routeText;
+            showFlash(message);
+        } else {
+            hideFlash();
+        }
+    }
+
+    private void updateRoutes() {
+        // Get all saved captured routes
+        updateRoutesPending();
+        List<CaptureRoute> routes = new Select().from(CaptureRoute.class).execute();
+
+        if (routes.size() > 0) {
+            // Upload them
+            for (final CaptureRoute captureRoute : routes) {
+                if (captureRoute.getDistance() < 500) {
+                    // Too short!
+                    captureRoute.delete();
+                } else {
+                    // Submit it
+                    captureRoute.setPoints(captureRoute.points());
+                    cyclingService.route(captureRoute, new Callback<RouteCaptureResponse>() {
+                        @Override
+                        public void success(RouteCaptureResponse routeCaptureResponse, Response response) {
+                            // Now we can discard it
+                            captureRoute.delete();
+                            mUser.setUpdateRequired(true);
+                            mUser.save();
+                            updateRoutesPending();
+                            Crashlytics.log(Log.INFO, TAG, "Submitted route successfully, id: " + routeCaptureResponse.getRouteId());
+                        }
+
+                        @Override
+                        public void failure(RetrofitError error) {
+                            Crashlytics.log(Log.INFO, TAG, "Failed to submit route");
+
+                            if (error.getResponse() != null) {
+                                try {
+                                    RestError body = (RestError) error.getBodyAs(RestError.class);
+                                    Toast.makeText(getBaseContext(), "Error submitting route", Toast.LENGTH_LONG).show();
+                                    Crashlytics.log(Log.DEBUG, TAG, "Error submitting route: " + body.error);
+                                    captureRoute.delete();
+                                } catch (Exception e) {
+                                    Crashlytics.log(Log.DEBUG, TAG, "Exception with route submit error");
+                                }
+
+                                updateRoutesPending();
+                            }
+                        }
+                    });
+                }
+            }
+        }
+    }
+
+    private void showFlash(String message) {
+        Log.d(TAG, "Message is " + message);
+        flashMessage.setVisibility(View.VISIBLE);
+        flashTextView.setText(message);
+    }
+
+    private void hideFlash() {
+        flashMessage.setVisibility(View.GONE);
     }
 
     private void setupMap() {
@@ -243,7 +326,7 @@ public class UserOverviewActivity extends Activity {
 
                 @Override
                 public void success(User user, Response response) {
-                    Crashlytics.log(Log.INFO, TAG, "retreived user details for " + user.getUserId());
+                    Crashlytics.log(Log.INFO, TAG, "retrieved user details for " + user.getUserId());
 
                     // Delete existing users
                     new Delete().from(User.class).execute();

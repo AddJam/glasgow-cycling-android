@@ -54,6 +54,9 @@ public class CapturePoint extends Model {
     @Column(name = "StreetName")
     private String street_name;
 
+    @Column(name = "CaptureRoute", onUpdate = Column.ForeignKeyAction.CASCADE, onDelete = Column.ForeignKeyAction.CASCADE)
+    public CaptureRoute captureRoute;
+
     public CapturePoint() {
         super();
     }

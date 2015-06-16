@@ -125,6 +125,20 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+            <LinearLayout
+                android:id="@+id/flash_message"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/jcBlueColor">
+                <TextView
+                    android:id="@+id/flash_text"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/jcWhiteColor"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:textSize="14sp"/>
+            </LinearLayout>
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">

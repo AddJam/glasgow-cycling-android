@@ -257,17 +257,10 @@ public class RouteCaptureActivity extends Activity {
         //if to submit Retrofit post
         if (submit) {
             Crashlytics.log(Log.INFO, TAG, "Submitting route");
-            cyclingService.route(captureRoute, new Callback<RouteCaptureResponse>() {
-                @Override
-                public void success(RouteCaptureResponse routeCaptureResponse, Response response) {
-                    Crashlytics.log(Log.INFO, TAG, "Submitted route successfully, id: " + routeCaptureResponse.getRouteId());
-                }
-
-                @Override
-                public void failure(RetrofitError error) {
-                    Crashlytics.log(Log.INFO, TAG, "Failed to submit route");
-                }
-            });
+            captureRoute.save();
+            for (CapturePoint point : captureRoute.getPoints()) {
+                point.save();
+            }
         } else {
             Crashlytics.log(Log.INFO, TAG, "Cancelling submission of route");
         }

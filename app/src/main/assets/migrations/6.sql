@@ -1,0 +1,1 @@
+ALTER TABLE CapturePoints ADD COLUMN CaptureRoute INTEGER;
