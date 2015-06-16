@@ -22,6 +22,7 @@ import com.fcd.glasgow_cycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgow_cycling.api.responses.RouteCaptureResponse;
 import com.fcd.glasgow_cycling.models.CapturePoint;
 import com.fcd.glasgow_cycling.models.CaptureRoute;
+import com.fcd.glasgow_cycling.models.Month;
 import com.fcd.glasgow_cycling.models.User;
 import com.fcd.glasgow_cycling.utils.ActionBarFontUtil;
 import com.google.android.gms.common.ConnectionResult;
@@ -266,8 +267,12 @@ public class RouteCaptureActivity extends Activity {
         }
 
         User user = ((CyclingApplication)getApplication()).getCurrentUser(true);
-        user.setUpdateRequired(true);
-        user.save();
+        Month month = user.getMonth();
+        double newDistanceKm = (captureRoute.getDistance() / 1000.0f) - 0.3; // - Worst case trim
+        month.setKm(month.getKm() + newDistanceKm);
+
+        int newSeconds = (int) (System.currentTimeMillis() - captureRoute.getStartTime()) / 1000;
+        month.setSeconds(month.getSeconds() + newSeconds);
 
         finish();
     }
