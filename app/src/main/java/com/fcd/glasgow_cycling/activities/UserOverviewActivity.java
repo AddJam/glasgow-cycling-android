@@ -208,9 +208,13 @@ public class UserOverviewActivity extends Activity {
                             if (error.getResponse() != null) {
                                 try {
                                     RestError body = (RestError) error.getBodyAs(RestError.class);
-                                    Toast.makeText(getBaseContext(), "Error submitting route", Toast.LENGTH_LONG).show();
-                                    Crashlytics.log(Log.DEBUG, TAG, "Error submitting route: " + body.error);
-                                    captureRoute.delete();
+                                    Crashlytics.log(Log.DEBUG, TAG, "Error " + error.getResponse().getStatus() + " submitting route:"  + body.error);
+
+                                    if (error.getResponse().getStatus() == 422) {
+                                        // Error was 422 unprocessable entity => problem with route
+                                        Toast.makeText(getBaseContext(), "Error with route, failed to submit", Toast.LENGTH_LONG).show();
+                                        captureRoute.delete();
+                                    }
                                 } catch (Exception e) {
                                     Crashlytics.log(Log.DEBUG, TAG, "Exception with route submit error");
                                 }
