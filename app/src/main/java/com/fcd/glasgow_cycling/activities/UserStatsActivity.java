@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.activeandroid.query.Delete;
+import com.crashlytics.android.Crashlytics;
 import com.fcd.glasgow_cycling.CyclingApplication;
 import com.fcd.glasgow_cycling.LoadingView;
 import com.fcd.glasgow_cycling.R;
@@ -116,11 +117,11 @@ public class UserStatsActivity extends Activity {
     public void getStats(){
         // Load from API
         int numDays = 7;
+        Crashlytics.log(Log.INFO, TAG, "Getting stats");
         cyclingService.getStats(numDays, new Callback<Stats>() {
-
             @Override
             public void success(Stats stats, Response response) {
-                Log.d(TAG, "retreived stats");
+                Crashlytics.log(Log.INFO, TAG, "retrieved stats");
 
                 // Delete existing users
                 new Delete().from(Stats.class).execute();
@@ -148,7 +149,7 @@ public class UserStatsActivity extends Activity {
 
             @Override
             public void failure(RetrofitError error) {
-                Log.d(TAG, "Failed to get stats");
+                Crashlytics.log(Log.INFO, TAG, "Failed to get stats");
                 loadingView.stopAnimating();
                 loadingView.setMessage(" Error getting weekly stats");
             }

@@ -3,6 +3,7 @@ package com.fcd.glasgow_cycling.api.http;
 import android.content.Context;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
 import com.fcd.glasgow_cycling.BuildConfig;
 import com.fcd.glasgow_cycling.CyclingApplication;
 import com.fcd.glasgow_cycling.activities.AccountForgottenActivity;
@@ -70,7 +71,7 @@ public class ApiClientModule {
 
     public ApiClientModule(Context context, CyclingApplication app) {
         if (BuildConfig.LOCAL_MODE) {
-            ENDPOINT = "http://172.20.10.4:3000"; // "http://10.0.2.2:3000" (for simulator)
+            ENDPOINT = "http://192.168.59.3:3000";// (for simulator)
         } else {
             ENDPOINT = "https://glasgowcycling.com/";
         }
@@ -147,12 +148,12 @@ public class ApiClientModule {
         @Override
         public Throwable handleError(RetrofitError cause) {
             if (cause.isNetworkError()) {
-                Log.d(TAG, "Network error making request: " + cause.getUrl());
+                Crashlytics.log(Log.DEBUG, TAG, "Network error making request: " + cause.getUrl());
             } else if (cause.getResponse() == null) {
-                Log.d(TAG, "Error making request");
+                Crashlytics.log(Log.DEBUG, TAG, "Error making request");
             } else if (cause.getResponse().getStatus() == 401) {
                 // Refresh token and try again
-                Log.d(TAG, "Unauthorized error making request, logging out");
+                Crashlytics.log(Log.DEBUG, TAG, "Unauthorized error making request, logging out");
                 mApplication.logout();
             }
             return cause;
@@ -176,14 +177,11 @@ public class ApiClientModule {
                 mAuthModel = sAuthService.refreshToken(refreshToken);
                 mAuthModel.setContext(mContext);
                 mAuthModel.saveTokens();
-                Log.d(TAG, "Refresh token is now " + mAuthModel.getRefreshToken());
-                Log.d(TAG, "Access token is now " + mAuthModel.getUserToken());
 
                 // Switch out auth token in request
                 List<Header> headers = new ArrayList<Header>();
                 for (Header header : request.getHeaders()) {
                     if (header.getName().equals("Authorization")) {
-                        Log.d(TAG, "Replace auth bearer");
                         headers.add(new Header("Authorization", "Bearer " + mAuthModel.getUserToken()));
                     } else {
                         headers.add(header);

@@ -28,6 +28,7 @@ import android.widget.TextView;
 
 import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
+import com.crashlytics.android.Crashlytics;
 import com.fcd.glasgow_cycling.CyclingApplication;
 import com.fcd.glasgow_cycling.R;
 import com.fcd.glasgow_cycling.api.http.GoCyclingApiInterface;
@@ -237,11 +238,12 @@ public class UserOverviewActivity extends Activity {
         }
 
         if (shouldUpdate) {
+            Crashlytics.log(Log.INFO, TAG, "Updating user details");
             cyclingService.details(new Callback<User>() {
 
                 @Override
                 public void success(User user, Response response) {
-                    Log.d(TAG, "retreived user details for " + user.getUserId());
+                    Crashlytics.log(Log.INFO, TAG, "retreived user details for " + user.getUserId());
 
                     // Delete existing users
                     new Delete().from(User.class).execute();
@@ -257,9 +259,11 @@ public class UserOverviewActivity extends Activity {
 
                 @Override
                 public void failure(RetrofitError error) {
-                    Log.d(TAG, "Failed to get user details");
+                    Crashlytics.log(Log.INFO, TAG, "Failed to get user details");
                 }
             });
+        } else {
+            Crashlytics.log(Log.INFO, TAG, "Not updating user details");
         }
     }
 
@@ -273,7 +277,6 @@ public class UserOverviewActivity extends Activity {
             String base64image = mUser.getProfilePic();
             byte[] decodedString = Base64.decode(base64image, Base64.DEFAULT);
             Bitmap decodedImage = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-            Log.d(TAG, "Usr overview image: " + base64image);
             profileImage.setImageBitmap(decodedImage);
         }
     }
@@ -304,7 +307,7 @@ public class UserOverviewActivity extends Activity {
     private class StatsListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            Log.d(TAG, "Stats clicked");
+            Crashlytics.log(Log.INFO, TAG, "Stats clicked");
             startActivity(new Intent(getApplicationContext(), UserStatsActivity.class));
         }
     }
@@ -312,7 +315,7 @@ public class UserOverviewActivity extends Activity {
     private class CaptureListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            Log.d(TAG, "CaptureRoute capture clicked");
+            Crashlytics.log(Log.INFO, TAG, "CaptureRoute capture clicked");
             startActivity(new Intent(getApplicationContext(), RouteCaptureActivity.class));
         }
     }
@@ -330,7 +333,7 @@ public class UserOverviewActivity extends Activity {
         int lastHourMark = currentTime - sinceLastHour;
 
         if (mWeather != null && mWeather.getTime() >= lastHourMark) {
-            Log.d(TAG, "Not updating weather, using cache");
+            Crashlytics.log(Log.DEBUG, TAG, "Not updating weather, using cache");
             return;
         }
 
@@ -339,7 +342,7 @@ public class UserOverviewActivity extends Activity {
 
             @Override
             public void success(Weather weather, Response response) {
-                Log.d(TAG, "retreived weather for period" + weather.getTime());
+                Crashlytics.log(Log.DEBUG, TAG, "retreived weather for period" + weather.getTime());
                 // Delete existing weathers
                 new Delete().from(Weather.class).execute();
 
@@ -353,21 +356,20 @@ public class UserOverviewActivity extends Activity {
 
             @Override
             public void failure(RetrofitError error) {
-                Log.d(TAG, "Failed to get weather");
+                Crashlytics.log(Log.DEBUG, TAG, "Failed to get weather");
                 weatherArea.setVisibility(View.INVISIBLE);
             }
         });
     }
 
     private void setWeather(){
-
         temperature.setText(mWeather.getReadableTemp());
         precipitation.setText(mWeather.getReadablePrecipitationProbability());
         windspeed.setText(mWeather.getReadableWindSpeed());
         weatherSource.setText(mWeather.getSource());
 
         String uri = "@drawable/"+mWeather.getUseableIcon();
-        Log.d(TAG, "Weather drawable " + uri);
+        Crashlytics.log(Log.DEBUG, TAG, "Weather drawable " + uri);
         int imageResource = getResources().getIdentifier(uri, null, getPackageName());
         Drawable icon = getResources().getDrawable(imageResource);
 
@@ -381,6 +383,8 @@ public class UserOverviewActivity extends Activity {
     }
 
     private void noPlayServicesDialog(){
+        Crashlytics.log(Log.DEBUG, TAG, "No play services, showing dialog");
+
         AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
         builder1.setTitle("Google Play Services Required");
         builder1.setMessage("Google Play Services from the Play store is required to record a route. Please download from the Play Store?");

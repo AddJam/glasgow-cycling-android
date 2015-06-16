@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
 import com.fcd.glasgow_cycling.CyclingApplication;
 import com.fcd.glasgow_cycling.R;
 import com.fcd.glasgow_cycling.api.http.GoCyclingApiInterface;
@@ -144,7 +145,7 @@ public class RouteCaptureActivity extends Activity {
 
         @Override
         public void onConnectionFailed(ConnectionResult arg0) {
-            Log.e(TAG, "ConnectionFailed");
+            Crashlytics.log(Log.ERROR, TAG, "Connection failed");
         }
     };
 
@@ -155,13 +156,9 @@ public class RouteCaptureActivity extends Activity {
             LatLng currentLocation = new LatLng(location.getLatitude(),location.getLongitude());
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
 
-            if(location.getSpeed() > 0){
-                mStartedMoving = true;
-            }
-
             long tenSecondsAgo = (System.currentTimeMillis()/1000L)-10;
             boolean inaccurateLocation = location.getAccuracy() > 65 && location.getTime() < tenSecondsAgo;
-            if(!mStartedMoving || inaccurateLocation){
+            if(inaccurateLocation) {
                 return;
             }
 
@@ -206,11 +203,10 @@ public class RouteCaptureActivity extends Activity {
     private class FinishListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            Log.d(TAG, "Finish route capture clicked");
+            Crashlytics.log(Log.INFO, TAG, "Finish route capture clicked");
             if (captureRoute.getDistance() < 500){
                 tooShortDialog();
-            }
-            else {
+            } else {
                 finishCapture(true);
             }
         }
@@ -236,6 +232,7 @@ public class RouteCaptureActivity extends Activity {
     }
 
     private void tooShortDialog(){
+        Crashlytics.log(Log.INFO, TAG, "Route too short");
         AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
         builder1.setTitle("Route must be at least 500m");
         builder1.setMessage("If you stop now this route will not be recorded. Stop capturing this route?");
@@ -259,17 +256,20 @@ public class RouteCaptureActivity extends Activity {
     private void finishCapture(boolean submit){
         //if to submit Retrofit post
         if (submit) {
+            Crashlytics.log(Log.INFO, TAG, "Submitting route");
             cyclingService.route(captureRoute, new Callback<RouteCaptureResponse>() {
                 @Override
                 public void success(RouteCaptureResponse routeCaptureResponse, Response response) {
-                    Log.d(TAG, "Submitted route successfully, id: " + routeCaptureResponse.getRouteId());
+                    Crashlytics.log(Log.INFO, TAG, "Submitted route successfully, id: " + routeCaptureResponse.getRouteId());
                 }
 
                 @Override
                 public void failure(RetrofitError error) {
-                    Log.d(TAG, "Failed to submit route");
+                    Crashlytics.log(Log.INFO, TAG, "Failed to submit route");
                 }
             });
+        } else {
+            Crashlytics.log(Log.INFO, TAG, "Cancelling submission of route");
         }
 
         User user = ((CyclingApplication)getApplication()).getCurrentUser(true);

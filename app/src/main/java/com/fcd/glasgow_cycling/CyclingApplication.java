@@ -9,6 +9,7 @@ import android.util.Log;
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
+import com.crashlytics.android.Crashlytics;
 import com.fcd.glasgow_cycling.activities.SignInActivity;
 import com.fcd.glasgow_cycling.api.auth.CyclingAuthenticator;
 import com.fcd.glasgow_cycling.api.http.ApiClientModule;
@@ -55,7 +56,7 @@ public class CyclingApplication extends Application {
     }
 
     public void logout() {
-        Log.d(TAG, "Logging out");
+        Crashlytics.log(Log.INFO, TAG, "Logging out");
 
         // Remove account
         AccountManager accountManager = AccountManager.get(getApplicationContext());

@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.activeandroid.query.Delete;
+import com.crashlytics.android.Crashlytics;
 import com.fcd.glasgow_cycling.CyclingApplication;
 import com.fcd.glasgow_cycling.R;
 import com.fcd.glasgow_cycling.api.http.GoCyclingApiInterface;
@@ -79,7 +80,7 @@ public class AccountSettingsActivity extends Activity {
         genderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "Gender clicked");
+                Crashlytics.log(Log.INFO, TAG, "Gender clicked");
                 genderPicker();
             }
         });
@@ -87,7 +88,7 @@ public class AccountSettingsActivity extends Activity {
         pictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "Picture button clicked");
+                Crashlytics.log(Log.INFO, TAG, "Picture button clicked");
                 Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
                 photoPickerIntent.setType("image/*");
                 startActivityForResult(photoPickerIntent, SELECT_PHOTO);
@@ -98,7 +99,7 @@ public class AccountSettingsActivity extends Activity {
             @Override
             public void onClick(View v) {
                 deactivateButtons();
-                Log.d(TAG, "Submit settings clicked");
+                Crashlytics.log(Log.INFO, TAG, "Submit settings clicked");
                 //submit settings
                 submitAccountDetails();
             }
@@ -108,7 +109,7 @@ public class AccountSettingsActivity extends Activity {
             @Override
             public void onClick(View v) {
                 deactivateButtons();
-                Log.d(TAG, "Logout clicked");
+                Crashlytics.log(Log.INFO, TAG, "Logout clicked");
                 ((CyclingApplication)getApplication()).logout();
             }
         });
@@ -148,7 +149,6 @@ public class AccountSettingsActivity extends Activity {
         undisclosedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "Undisclosed Gender selected");
                 genderButton.setText("Undisclosed");
                 dialog.dismiss();
             }
@@ -156,7 +156,6 @@ public class AccountSettingsActivity extends Activity {
         femaleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "Female Gender selected");
                 genderButton.setText("Female");
                 dialog.dismiss();
             }
@@ -164,7 +163,6 @@ public class AccountSettingsActivity extends Activity {
         maleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "Male Gender selected");
                 genderButton.setText("Male");
                 dialog.dismiss();
             }
@@ -218,20 +216,19 @@ public class AccountSettingsActivity extends Activity {
         cyclingService.updateDetails(mUser, new Callback<User>() {
                     @Override
                     public void success(User user, Response response) {
-                        Log.d(TAG, "User details updated");
+                        Crashlytics.log(Log.INFO, TAG, "User details updated");
                         new Delete().from(User.class).execute();
 
                         // Store
                         mUser = user;
                         mUser.getMonth().save();
                         mUser.save();
-                        Log.d(TAG, "User details updated, image now " + mUser.getProfilePic());
                         finish();
                     }
 
                     @Override
                     public void failure(RetrofitError error) {
-                        Log.d(TAG, "Failed to update user details");
+                        Crashlytics.log(Log.INFO, TAG, "Failed to update user details");
                         progressBar.setVisibility(View.GONE);
                         submitButton.setEnabled(true);
                         activateButtons();

@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.fcd.glasgow_cycling.CyclingApplication;
 import com.fcd.glasgow_cycling.R;
 import com.fcd.glasgow_cycling.api.http.GoCyclingApiInterface;
@@ -45,7 +46,7 @@ public class AccountForgottenActivity extends Activity {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "Submit email clicked");
+                Crashlytics.log(Log.INFO, TAG, "Submit email clicked");
                 //submit settings
                 submitReset();
                 submitButton.setEnabled(false);
@@ -65,14 +66,14 @@ public class AccountForgottenActivity extends Activity {
              @Override
              public void success(User user, Response response) {
                  Toast.makeText(getApplicationContext(), "Instructions sent to " + user.getEmail(), Toast.LENGTH_LONG).show();
-                 Log.d(TAG, "instructions sent");
+                 Crashlytics.log(Log.INFO, TAG, "Reset instructions sent");
                  finish();
              }
 
              @Override
              public void failure(RetrofitError error) {
                  Toast.makeText(getApplicationContext(), "Hmmm, are you sure you're registered?", Toast.LENGTH_LONG).show();
-                 Log.d(TAG, "unable to send reset instructions");
+                 Crashlytics.log(Log.INFO, TAG, "Unable to send reset instructions");
                  submitButton.setEnabled(true);
              }
          });

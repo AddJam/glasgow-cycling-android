@@ -34,7 +34,7 @@ android {
         }
         debug {
             buildConfigField "boolean", "DEBUG_MODE", "true";
-            buildConfigField "boolean", "LOCAL_MODE", "false";
+            buildConfigField "boolean", "LOCAL_MODE", "true";
         }
     }
     productFlavors {

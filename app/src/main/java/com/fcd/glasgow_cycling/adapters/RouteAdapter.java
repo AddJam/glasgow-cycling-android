@@ -53,7 +53,6 @@ public class RouteAdapter extends ArrayAdapter<Route> {
             return viewInflater.inflate(R.layout.loading_cell, null);
         }
 
-        Log.d(TAG, "Getting view for position " + position);
         View view = convertView;
         ViewHolder holder; // to reference the child views for later actions
 

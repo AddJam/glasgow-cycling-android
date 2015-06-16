@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.crashlytics.android.Crashlytics;
 import com.fcd.glasgow_cycling.CyclingApplication;
 import com.fcd.glasgow_cycling.LoadingView;
 import com.fcd.glasgow_cycling.R;
@@ -62,7 +63,7 @@ public class RouteListActivity extends ListActivity implements AdapterView.OnIte
         routesList.setOnScrollListener(new EndlessScrollListener() {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
-                Log.d(TAG, "Loading page " + page + " total items is " + totalItemsCount);
+                Crashlytics.log(Log.DEBUG, TAG, "Loading page " + page + " total items is " + totalItemsCount);
                 if (!mReachedBottom) {
                     mCurrentPage = page;
                     performSearch();
@@ -94,7 +95,7 @@ public class RouteListActivity extends ListActivity implements AdapterView.OnIte
 
             @Override
             public void onLoad(List<Route> routes) {
-                Log.d(TAG, "Got " + routes.size() + " more routes - total: " + mRoutes.size());
+                Crashlytics.log(Log.DEBUG, TAG, "Got " + routes.size() + " more routes - total: " + mRoutes.size());
 
                 if (routes.size() == 0) {
                     mReachedBottom = true;
@@ -116,7 +117,7 @@ public class RouteListActivity extends ListActivity implements AdapterView.OnIte
 
             @Override
             public void onFailure() {
-                Log.d(TAG, "Failed to get routes");
+                Crashlytics.log(Log.DEBUG, TAG, "Failed to get routes");
                 searchFinished(mErrorMessage);
             }
         };

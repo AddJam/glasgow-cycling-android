@@ -3,6 +3,7 @@ package com.fcd.glasgow_cycling.models;
 import android.location.Location;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.gson.annotations.Expose;
 
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ public class CaptureRoute {
             source.setLatitude(lastPoint.getLat());
             source.setLongitude(lastPoint.getLng());
 
-            Log.d(TAG, "Location with accuracy " + location.getAccuracy() + " and time " + location.getTime() + " and speed " + location.getSpeed());
+            Crashlytics.log(Log.DEBUG, TAG, "Adding location to CaptureRoute with accuracy " + location.getAccuracy() + " and time " + location.getTime() + " and speed " + location.getSpeed());
             distance = distance + source.distanceTo(location);
             combinedSpeed = 0;
             for (int i = 0; i < points.size(); i++) {

@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
 import com.fcd.glasgow_cycling.CyclingApplication;
 import com.fcd.glasgow_cycling.R;
 import com.fcd.glasgow_cycling.api.http.GoCyclingApiInterface;
@@ -54,7 +55,7 @@ public class RouteOverviewActivity extends Activity {
         // Present data
         Bundle bundle = getIntent().getExtras();
         Route route = (Route)bundle.getSerializable("route");
-        Log.d(TAG, "Route is from " + route.getStartName());
+        Crashlytics.log(Log.INFO, TAG, "Overview for route " + route.getId() + " from " + route.getStartName());
 
         ratingBar.setRating(route.getAverages().getRating().floatValue());
         time.setText(route.getAverages().getReadableTime());
@@ -70,10 +71,11 @@ public class RouteOverviewActivity extends Activity {
         map.getUiSettings().setCompassEnabled(true);
 
         // Load route points
+        Crashlytics.log(Log.INFO, TAG, "Loading route details");
         cyclingService.routeDetails(route.getId(), new Callback<Route>() {
             @Override
             public void success(Route routeDetails, Response response) {
-                Log.d(TAG, "Successfully got route details");
+                Crashlytics.log(Log.INFO, TAG, "Successfully got route details");
                 List<Point> points = routeDetails.getPoints();
                 if (points.size() > 1) {
                     map.clear();
@@ -111,7 +113,7 @@ public class RouteOverviewActivity extends Activity {
 
             @Override
             public void failure(RetrofitError error) {
-                Log.d(TAG, "Failed to get route details");
+                Crashlytics.log(Log.INFO, TAG, "Failed to get route details");
             }
         });
 
@@ -120,16 +122,16 @@ public class RouteOverviewActivity extends Activity {
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                Log.d(TAG, "Setting rating to " + rating);
+                Crashlytics.log(Log.DEBUG, TAG, "Rating " + rating + " for route " + routeId);
                 cyclingService.reviewRoute(routeId, (int)rating, new Callback<Route>() {
                     @Override
                     public void success(Route route, Response response) {
-                        Log.d(TAG, "Review successfully submitted");
+                        Crashlytics.log(Log.DEBUG, TAG, "Review successfully submitted");
                     }
 
                     @Override
                     public void failure(RetrofitError error) {
-                        Log.d(TAG, "Review failed to submit");
+                        Crashlytics.log(Log.DEBUG, TAG, "Review failed to submit");
                     }
                 });
             }

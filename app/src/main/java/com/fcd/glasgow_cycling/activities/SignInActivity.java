@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.fcd.glasgow_cycling.CyclingApplication;
 import com.fcd.glasgow_cycling.LoadingView;
 import com.fcd.glasgow_cycling.R;
@@ -60,7 +61,7 @@ public class SignInActivity extends AccountAuthenticatorActivity {
 
         sCyclingService = new ApiClientModule(this, (CyclingApplication)getApplication()).provideAuthClient();
         fromAccountManager = getIntent().getBooleanExtra(ARG_IS_ADDING_NEW_ACCOUNT, false);
-        Log.d(TAG, "From account manager: " + (fromAccountManager ? "YES" : "NO"));
+        Crashlytics.log(Log.DEBUG, TAG, "From account manager: " + (fromAccountManager ? "YES" : "NO"));
 
         mAccountManager = AccountManager.get(this);
 
@@ -81,7 +82,7 @@ public class SignInActivity extends AccountAuthenticatorActivity {
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "Sign In clicked");
+                Crashlytics.log(Log.INFO, TAG, "Sign In clicked");
                 signInButton.setEnabled(false);
                 loadingView.startAnimating();
                 new LoginTask().execute();
@@ -185,13 +186,13 @@ public class SignInActivity extends AccountAuthenticatorActivity {
             try {
                 authModel = sCyclingService.signin(email, password);
             } catch (RetrofitError error) {
-                Log.d(TAG, "Retrofit error");
+                Crashlytics.log(Log.DEBUG, TAG, "Login Task Retrofit error");
                 if (error.isNetworkError()) {
-                    Log.d(TAG, "Network error");
+                    Crashlytics.log(Log.DEBUG, TAG, "Login Task Network error");
                     showToast("Check your connection and try again", Toast.LENGTH_SHORT);
                 } else if (error.getResponse().getStatus() == 401) {
                     // Unauthorized
-                    Log.d(TAG, "Invalid details");
+                    Crashlytics.log(Log.DEBUG, TAG, "Login Task Invalid details, 401");
                     showToast("The details you entered were incorrect", Toast.LENGTH_LONG);
                 } else {
                     showToast("Login failed, try again", Toast.LENGTH_SHORT);
@@ -199,6 +200,7 @@ public class SignInActivity extends AccountAuthenticatorActivity {
                 loginFailed();
                 return null;
             }
+
             if (authModel != null) {
                 String authToken = authModel.getUserToken();
                 String refreshToken = authModel.getRefreshToken();
@@ -210,7 +212,7 @@ public class SignInActivity extends AccountAuthenticatorActivity {
                 res.putExtra(PARAM_USER_PASS, password);
                 return res;
             } else {
-                Log.d(TAG, "Login failed");
+                Crashlytics.log(Log.DEBUG, TAG, "Login failed, no auth model");
                 showToast("Failed to login", Toast.LENGTH_SHORT);
                 loginFailed();
                 return null;
