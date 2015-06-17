@@ -154,6 +154,7 @@ public class RouteCaptureActivity extends Activity {
 
         @Override
         public void onLocationChanged(Location location) {
+
             LatLng currentLocation = new LatLng(location.getLatitude(),location.getLongitude());
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
 
@@ -275,6 +276,7 @@ public class RouteCaptureActivity extends Activity {
             Crashlytics.log(Log.INFO, TAG, "Cancelling submission of route");
         }
 
+        mLocationClient.removeLocationUpdates(mLocationListener);
         finish();
     }
 
