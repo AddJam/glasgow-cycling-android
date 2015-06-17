@@ -257,22 +257,23 @@ public class RouteCaptureActivity extends Activity {
     private void finishCapture(boolean submit){
         //if to submit Retrofit post
         if (submit) {
-            Crashlytics.log(Log.INFO, TAG, "Submitting route");
+            Crashlytics.log(Log.INFO, TAG, "Saving route for submission");
             captureRoute.save();
             for (CapturePoint point : captureRoute.getPoints()) {
                 point.save();
             }
+
+            User user = ((CyclingApplication)getApplication()).getCurrentUser(true);
+            Month month = user.getMonth();
+            double newDistanceKm = (captureRoute.getDistance() / 1000.0f) - 0.3; // - Worst case trim
+            month.setKm(month.getKm() + newDistanceKm);
+
+            int newSeconds = (int) (System.currentTimeMillis() - captureRoute.getStartTime()) / 1000;
+            month.setSeconds(month.getSeconds() + newSeconds);
+
         } else {
             Crashlytics.log(Log.INFO, TAG, "Cancelling submission of route");
         }
-
-        User user = ((CyclingApplication)getApplication()).getCurrentUser(true);
-        Month month = user.getMonth();
-        double newDistanceKm = (captureRoute.getDistance() / 1000.0f) - 0.3; // - Worst case trim
-        month.setKm(month.getKm() + newDistanceKm);
-
-        int newSeconds = (int) (System.currentTimeMillis() - captureRoute.getStartTime()) / 1000;
-        month.setSeconds(month.getSeconds() + newSeconds);
 
         finish();
     }

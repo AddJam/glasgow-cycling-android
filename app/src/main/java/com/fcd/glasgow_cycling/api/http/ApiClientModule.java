@@ -71,7 +71,7 @@ public class ApiClientModule {
 
     public ApiClientModule(Context context, CyclingApplication app) {
         if (BuildConfig.LOCAL_MODE) {
-            ENDPOINT = "http://192.168.59.3:3000";// (for simulator)
+            ENDPOINT = "http://192.168.56.1:3000";// (for simulator)
         } else {
             ENDPOINT = "https://glasgowcycling.com/";
         }
