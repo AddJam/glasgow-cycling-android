@@ -260,9 +260,6 @@ public class RouteCaptureActivity extends Activity {
         if (submit) {
             Crashlytics.log(Log.INFO, TAG, "Saving route for submission");
             captureRoute.save();
-            for (CapturePoint point : captureRoute.getPoints()) {
-                point.save();
-            }
 
             User user = ((CyclingApplication)getApplication()).getCurrentUser(true);
             Month month = user.getMonth();

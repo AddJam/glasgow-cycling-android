@@ -68,6 +68,7 @@ public class CaptureRoute extends Model {
         points.add(newPoint);
 
         newPoint.captureRoute = this;
+        newPoint.save();
         return newPoint;
     }
 
