@@ -82,6 +82,7 @@ public class RouteCaptureActivity extends Activity {
         mLocationClient = new LocationClient(this, mConnectionCallbacks, mConnectionFailedListener);
         mLocationClient.connect();
         captureRoute.setStartTime(System.currentTimeMillis());
+        captureRoute.save();
 
         // Show map
         map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
@@ -269,8 +270,11 @@ public class RouteCaptureActivity extends Activity {
             int newSeconds = (int) (System.currentTimeMillis() - captureRoute.getStartTime()) / 1000;
             month.setSeconds(month.getSeconds() + newSeconds);
 
+            month.save();
+
         } else {
             Crashlytics.log(Log.INFO, TAG, "Cancelling submission of route");
+            captureRoute.delete();
         }
 
         mLocationClient.removeLocationUpdates(mLocationListener);
