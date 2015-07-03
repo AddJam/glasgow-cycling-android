@@ -26,6 +26,7 @@ import com.fcd.glasgow_cycling.R;
 import com.fcd.glasgow_cycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgow_cycling.models.User;
 import com.fcd.glasgow_cycling.utils.ActionBarFontUtil;
+import com.fcd.glasgow_cycling.utils.AddJam;
 import com.fcd.glasgow_cycling.utils.ImageUtil;
 
 import javax.inject.Inject;
@@ -80,7 +81,7 @@ public class AccountSettingsActivity extends Activity {
         genderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Crashlytics.log(Log.INFO, TAG, "Gender clicked");
+                AddJam.log(Log.INFO, TAG, "Gender clicked");
                 genderPicker();
             }
         });
@@ -88,7 +89,7 @@ public class AccountSettingsActivity extends Activity {
         pictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Crashlytics.log(Log.INFO, TAG, "Picture button clicked");
+                AddJam.log(Log.INFO, TAG, "Picture button clicked");
                 Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
                 photoPickerIntent.setType("image/*");
                 startActivityForResult(photoPickerIntent, SELECT_PHOTO);
@@ -99,7 +100,7 @@ public class AccountSettingsActivity extends Activity {
             @Override
             public void onClick(View v) {
                 deactivateButtons();
-                Crashlytics.log(Log.INFO, TAG, "Submit settings clicked");
+                AddJam.log(Log.INFO, TAG, "Submit settings clicked");
                 //submit settings
                 submitAccountDetails();
             }
@@ -109,7 +110,7 @@ public class AccountSettingsActivity extends Activity {
             @Override
             public void onClick(View v) {
                 deactivateButtons();
-                Crashlytics.log(Log.INFO, TAG, "Logout clicked");
+                AddJam.log(Log.INFO, TAG, "Logout clicked");
                 ((CyclingApplication)getApplication()).logout();
             }
         });
@@ -216,7 +217,7 @@ public class AccountSettingsActivity extends Activity {
         cyclingService.updateDetails(mUser, new Callback<User>() {
                     @Override
                     public void success(User user, Response response) {
-                        Crashlytics.log(Log.INFO, TAG, "User details updated");
+                        AddJam.log(Log.INFO, TAG, "User details updated");
                         new Delete().from(User.class).execute();
 
                         // Store
@@ -228,7 +229,7 @@ public class AccountSettingsActivity extends Activity {
 
                     @Override
                     public void failure(RetrofitError error) {
-                        Crashlytics.log(Log.INFO, TAG, "Failed to update user details");
+                        AddJam.log(Log.INFO, TAG, "Failed to update user details");
                         progressBar.setVisibility(View.GONE);
                         submitButton.setEnabled(true);
                         activateButtons();

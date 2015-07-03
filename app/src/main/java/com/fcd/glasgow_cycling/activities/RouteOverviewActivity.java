@@ -16,6 +16,7 @@ import com.fcd.glasgow_cycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgow_cycling.models.Point;
 import com.fcd.glasgow_cycling.models.Route;
 import com.fcd.glasgow_cycling.utils.ActionBarFontUtil;
+import com.fcd.glasgow_cycling.utils.AddJam;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -59,7 +60,7 @@ public class RouteOverviewActivity extends Activity {
         // Present data
         Bundle bundle = getIntent().getExtras();
         Route route = (Route)bundle.getSerializable("route");
-        Crashlytics.log(Log.INFO, TAG, "Overview for route " + route.getId() + " from " + route.getStartName());
+        AddJam.log(Log.INFO, TAG, "Overview for route " + route.getId() + " from " + route.getStartName());
 
         ratingBar.setRating(route.getAverages().getRating().floatValue());
         time.setText(route.getAverages().getReadableTime());
@@ -75,12 +76,12 @@ public class RouteOverviewActivity extends Activity {
         map.getUiSettings().setCompassEnabled(true);
 
         // Load route points
-        Crashlytics.log(Log.INFO, TAG, "Loading route details");
+        AddJam.log(Log.INFO, TAG, "Loading route details");
         progressBar.setVisibility(View.VISIBLE);
         cyclingService.routeDetails(route.getId(), new Callback<Route>() {
             @Override
             public void success(Route routeDetails, Response response) {
-                Crashlytics.log(Log.INFO, TAG, "Successfully got route details");
+                AddJam.log(Log.INFO, TAG, "Successfully got route details");
                 progressBar.setVisibility(View.GONE);
                 List<Point> points = routeDetails.getPoints();
                 if (points.size() > 1) {
@@ -119,7 +120,7 @@ public class RouteOverviewActivity extends Activity {
 
             @Override
             public void failure(RetrofitError error) {
-                Crashlytics.log(Log.INFO, TAG, "Failed to get route details");
+                AddJam.log(Log.INFO, TAG, "Failed to get route details");
                 progressBar.setVisibility(View.GONE);
                 Toast.makeText(getBaseContext(), "Failed to load route", Toast.LENGTH_LONG).show();
             }
@@ -130,16 +131,16 @@ public class RouteOverviewActivity extends Activity {
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                Crashlytics.log(Log.DEBUG, TAG, "Rating " + rating + " for route " + routeId);
+                AddJam.log(Log.DEBUG, TAG, "Rating " + rating + " for route " + routeId);
                 cyclingService.reviewRoute(routeId, (int)rating, new Callback<Route>() {
                     @Override
                     public void success(Route route, Response response) {
-                        Crashlytics.log(Log.DEBUG, TAG, "Review successfully submitted");
+                        AddJam.log(Log.DEBUG, TAG, "Review successfully submitted");
                     }
 
                     @Override
                     public void failure(RetrofitError error) {
-                        Crashlytics.log(Log.DEBUG, TAG, "Review failed to submit");
+                        AddJam.log(Log.DEBUG, TAG, "Review failed to submit");
                     }
                 });
             }

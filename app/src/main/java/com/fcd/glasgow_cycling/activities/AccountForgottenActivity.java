@@ -8,12 +8,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.crashlytics.android.Crashlytics;
 import com.fcd.glasgow_cycling.CyclingApplication;
 import com.fcd.glasgow_cycling.R;
 import com.fcd.glasgow_cycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgow_cycling.models.User;
 import com.fcd.glasgow_cycling.utils.ActionBarFontUtil;
+import com.fcd.glasgow_cycling.utils.AddJam;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -46,7 +46,7 @@ public class AccountForgottenActivity extends Activity {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Crashlytics.log(Log.INFO, TAG, "Submit email clicked");
+                AddJam.log(Log.INFO, TAG, "Submit email clicked");
                 //submit settings
                 submitReset();
                 submitButton.setEnabled(false);
@@ -66,14 +66,14 @@ public class AccountForgottenActivity extends Activity {
              @Override
              public void success(User user, Response response) {
                  Toast.makeText(getApplicationContext(), "Instructions sent to " + user.getEmail(), Toast.LENGTH_LONG).show();
-                 Crashlytics.log(Log.INFO, TAG, "Reset instructions sent");
+                 AddJam.log(Log.INFO, TAG, "Reset instructions sent");
                  finish();
              }
 
              @Override
              public void failure(RetrofitError error) {
                  Toast.makeText(getApplicationContext(), "Hmmm, are you sure you're registered?", Toast.LENGTH_LONG).show();
-                 Crashlytics.log(Log.INFO, TAG, "Unable to send reset instructions");
+                 AddJam.log(Log.INFO, TAG, "Unable to send reset instructions");
                  submitButton.setEnabled(true);
              }
          });

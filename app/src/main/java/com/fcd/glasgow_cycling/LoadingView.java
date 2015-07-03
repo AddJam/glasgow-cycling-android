@@ -109,7 +109,7 @@ public class LoadingView extends RelativeLayout {
     }
 
     public void setRandomMessage() {
-        String[] message = new String[12];
+        String[] message = new String[13];
         message[0] = "Don't use headphones while cycling";
         message[1] = "Make yourself visible at night. Lights and reflectors are a must";
         message[2] = "Cycling is the third most popular recreational activity in the UK";
@@ -122,6 +122,7 @@ public class LoadingView extends RelativeLayout {
         message[9] = "We can make Glasgow a Cycling City";
         message[10] = "Check out glasgowcycling.com";
         message[11] = "Follow @OpenGlasgow for updates";
+        message[12] = "You can use the app at the same time as other trackers like Strava";
 
         Random rand = new Random();
         int i = rand.nextInt(11);

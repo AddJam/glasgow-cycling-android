@@ -20,6 +20,7 @@ import com.fcd.glasgow_cycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgow_cycling.api.routes.RouteSearch;
 import com.fcd.glasgow_cycling.models.Route;
 import com.fcd.glasgow_cycling.utils.ActionBarFontUtil;
+import com.fcd.glasgow_cycling.utils.AddJam;
 import com.fcd.glasgow_cycling.utils.EndlessScrollListener;
 
 import java.util.ArrayList;
@@ -63,7 +64,7 @@ public class RouteListActivity extends ListActivity implements AdapterView.OnIte
         routesList.setOnScrollListener(new EndlessScrollListener() {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
-                Crashlytics.log(Log.DEBUG, TAG, "Loading page " + page + " total items is " + totalItemsCount);
+                AddJam.log(Log.DEBUG, TAG, "Loading page " + page + " total items is " + totalItemsCount);
                 if (!mReachedBottom) {
                     mCurrentPage = page;
                     performSearch();
@@ -95,7 +96,7 @@ public class RouteListActivity extends ListActivity implements AdapterView.OnIte
 
             @Override
             public void onLoad(List<Route> routes) {
-                Crashlytics.log(Log.DEBUG, TAG, "Got " + routes.size() + " more routes - total: " + mRoutes.size());
+                AddJam.log(Log.DEBUG, TAG, "Got " + routes.size() + " more routes - total: " + mRoutes.size());
 
                 if (routes.size() == 0) {
                     mReachedBottom = true;
@@ -117,7 +118,7 @@ public class RouteListActivity extends ListActivity implements AdapterView.OnIte
 
             @Override
             public void onFailure() {
-                Crashlytics.log(Log.DEBUG, TAG, "Failed to get routes");
+                AddJam.log(Log.DEBUG, TAG, "Failed to get routes");
                 searchFinished(mErrorMessage);
             }
         };

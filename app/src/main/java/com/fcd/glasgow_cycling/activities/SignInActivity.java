@@ -27,6 +27,7 @@ import com.fcd.glasgow_cycling.api.http.ApiClientModule;
 import com.fcd.glasgow_cycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgow_cycling.api.responses.AuthModel;
 import com.fcd.glasgow_cycling.utils.ActionBarFontUtil;
+import com.fcd.glasgow_cycling.utils.AddJam;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -61,7 +62,7 @@ public class SignInActivity extends AccountAuthenticatorActivity {
 
         sCyclingService = new ApiClientModule(this, (CyclingApplication)getApplication()).provideAuthClient();
         fromAccountManager = getIntent().getBooleanExtra(ARG_IS_ADDING_NEW_ACCOUNT, false);
-        Crashlytics.log(Log.DEBUG, TAG, "From account manager: " + (fromAccountManager ? "YES" : "NO"));
+        AddJam.log(Log.DEBUG, TAG, "From account manager: " + (fromAccountManager ? "YES" : "NO"));
 
         mAccountManager = AccountManager.get(this);
 
@@ -82,7 +83,7 @@ public class SignInActivity extends AccountAuthenticatorActivity {
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Crashlytics.log(Log.INFO, TAG, "Sign In clicked");
+                AddJam.log(Log.INFO, TAG, "Sign In clicked");
                 signInButton.setEnabled(false);
                 loadingView.startAnimating();
                 new LoginTask().execute();
@@ -186,13 +187,13 @@ public class SignInActivity extends AccountAuthenticatorActivity {
             try {
                 authModel = sCyclingService.signin(email, password);
             } catch (RetrofitError error) {
-                Crashlytics.log(Log.DEBUG, TAG, "Login Task Retrofit error");
+                AddJam.log(Log.DEBUG, TAG, "Login Task Retrofit error");
                 if (error.isNetworkError()) {
-                    Crashlytics.log(Log.DEBUG, TAG, "Login Task Network error");
+                    AddJam.log(Log.DEBUG, TAG, "Login Task Network error");
                     showToast("Check your connection and try again", Toast.LENGTH_SHORT);
                 } else if (error.getResponse().getStatus() == 401) {
                     // Unauthorized
-                    Crashlytics.log(Log.DEBUG, TAG, "Login Task Invalid details, 401");
+                    AddJam.log(Log.DEBUG, TAG, "Login Task Invalid details, 401");
                     showToast("The details you entered were incorrect", Toast.LENGTH_LONG);
                 } else {
                     showToast("Login failed, try again", Toast.LENGTH_SHORT);
@@ -212,7 +213,7 @@ public class SignInActivity extends AccountAuthenticatorActivity {
                 res.putExtra(PARAM_USER_PASS, password);
                 return res;
             } else {
-                Crashlytics.log(Log.DEBUG, TAG, "Login failed, no auth model");
+                AddJam.log(Log.DEBUG, TAG, "Login failed, no auth model");
                 showToast("Failed to login", Toast.LENGTH_SHORT);
                 loginFailed();
                 return null;

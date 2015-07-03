@@ -15,6 +15,7 @@ import com.fcd.glasgow_cycling.api.auth.CyclingAuthenticator;
 import com.fcd.glasgow_cycling.api.http.ApiClientModule;
 import com.fcd.glasgow_cycling.models.Month;
 import com.fcd.glasgow_cycling.models.User;
+import com.fcd.glasgow_cycling.utils.AddJam;
 
 import dagger.ObjectGraph;
 
@@ -56,7 +57,7 @@ public class CyclingApplication extends Application {
     }
 
     public void logout() {
-        Crashlytics.log(Log.INFO, TAG, "Logging out");
+        AddJam.log(Log.INFO, TAG, "Logging out");
 
         // Remove account
         AccountManager accountManager = AccountManager.get(getApplicationContext());

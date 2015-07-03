@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.crashlytics.android.Crashlytics;
 import com.fcd.glasgow_cycling.R;
 import com.fcd.glasgow_cycling.utils.ActionBarFontUtil;
+import com.fcd.glasgow_cycling.utils.AddJam;
 import com.fcd.glasgow_cycling.utils.LocationUtil;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -72,7 +73,7 @@ public class SearchActivity extends RouteListActivity {
 
                 Address location = geoInfo.get(0);
                 if (location.hasLatitude() && location.hasLongitude()) {
-                    Crashlytics.log(Log.INFO, TAG, "Searching for routes to " + location.getLatitude() + ", " + location.getLongitude());
+                    AddJam.log(Log.INFO, TAG, "Searching for routes to " + location.getLatitude() + ", " + location.getLongitude());
                     Bundle searchQuery = new Bundle();
                     if (userLocation != null) {
                         searchQuery.putFloat("source_lat", (float) userLocation.latitude);

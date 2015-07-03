@@ -25,6 +25,7 @@ import com.fcd.glasgow_cycling.models.CaptureRoute;
 import com.fcd.glasgow_cycling.models.Month;
 import com.fcd.glasgow_cycling.models.User;
 import com.fcd.glasgow_cycling.utils.ActionBarFontUtil;
+import com.fcd.glasgow_cycling.utils.AddJam;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationClient;
@@ -147,7 +148,7 @@ public class RouteCaptureActivity extends Activity {
 
         @Override
         public void onConnectionFailed(ConnectionResult arg0) {
-            Crashlytics.log(Log.ERROR, TAG, "Connection failed");
+            AddJam.log(Log.ERROR, TAG, "Connection failed");
         }
     };
 
@@ -206,7 +207,7 @@ public class RouteCaptureActivity extends Activity {
     private class FinishListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            Crashlytics.log(Log.INFO, TAG, "Finish route capture clicked");
+            AddJam.log(Log.INFO, TAG, "Finish route capture clicked");
             if (captureRoute.getDistance() < 500){
                 tooShortDialog();
             } else {
@@ -235,7 +236,7 @@ public class RouteCaptureActivity extends Activity {
     }
 
     private void tooShortDialog(){
-        Crashlytics.log(Log.INFO, TAG, "Route too short");
+        AddJam.log(Log.INFO, TAG, "Route too short");
         AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
         builder1.setTitle("Route must be at least 500m");
         builder1.setMessage("If you stop now this route will not be recorded. Stop capturing this route?");
@@ -259,7 +260,7 @@ public class RouteCaptureActivity extends Activity {
     private void finishCapture(boolean submit){
         //if to submit Retrofit post
         if (submit) {
-            Crashlytics.log(Log.INFO, TAG, "Saving route for submission");
+            AddJam.log(Log.INFO, TAG, "Saving route for submission");
             captureRoute.save();
 
             User user = ((CyclingApplication)getApplication()).getCurrentUser(true);
@@ -273,8 +274,9 @@ public class RouteCaptureActivity extends Activity {
             month.save();
 
         } else {
-            Crashlytics.log(Log.INFO, TAG, "Cancelling submission of route");
+
             captureRoute.delete();
+            AddJam.log(Log.INFO, TAG, "Cancelling submission of route");
         }
 
         mLocationClient.removeLocationUpdates(mLocationListener);

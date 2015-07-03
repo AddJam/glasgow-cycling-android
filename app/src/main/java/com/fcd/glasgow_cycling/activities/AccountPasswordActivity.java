@@ -15,6 +15,7 @@ import com.fcd.glasgow_cycling.api.http.ApiClientModule;
 import com.fcd.glasgow_cycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgow_cycling.api.responses.AuthModel;
 import com.fcd.glasgow_cycling.utils.ActionBarFontUtil;
+import com.fcd.glasgow_cycling.utils.AddJam;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -43,7 +44,7 @@ public class AccountPasswordActivity extends Activity {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Crashlytics.log(Log.INFO, TAG, "Password submission clicked");
+                AddJam.log(Log.INFO, TAG, "Password submission clicked");
                 submitButton.setEnabled(false);
                 submitAccountDetails();
             }
@@ -60,28 +61,28 @@ public class AccountPasswordActivity extends Activity {
         if (!newPassword.equals(repeatPassword)){
             Toast.makeText(getApplicationContext(),"New password fields do not match", Toast.LENGTH_LONG).show();
             submitButton.setEnabled(true);
-            Crashlytics.log(Log.INFO, TAG, "Passwords don't match");
+            AddJam.log(Log.INFO, TAG, "Passwords don't match");
             return;
         }
 
         if (newPassword.equals(currentPassword)){
             Toast.makeText(getApplicationContext(),"Your old password and new password are the same", Toast.LENGTH_LONG).show();
             submitButton.setEnabled(true);
-            Crashlytics.log(Log.INFO, TAG, "New and old password are the same");
+            AddJam.log(Log.INFO, TAG, "New and old password are the same");
             return;
         }
 
         if (newPassword.length() < 8){
             Toast.makeText(getApplicationContext(),"Password must be longer than 8 characters", Toast.LENGTH_LONG).show();
             submitButton.setEnabled(true);
-            Crashlytics.log(Log.INFO, TAG, "New password too short");
+            AddJam.log(Log.INFO, TAG, "New password too short");
             return;
         }
 
         cyclingService.resetPassword(currentPassword,newPassword, new Callback<AuthModel>() {
             @Override
             public void success(AuthModel authModel, Response response) {
-                Crashlytics.log(Log.INFO, TAG, "Successfully updated password");
+                AddJam.log(Log.INFO, TAG, "Successfully updated password");
                 finish();
             }
 
@@ -89,7 +90,7 @@ public class AccountPasswordActivity extends Activity {
             public void failure(RetrofitError error) {
                 Toast.makeText(getApplicationContext(),"Unable to reset password, ensure current password is correct", Toast.LENGTH_LONG).show();
                 submitButton.setEnabled(true);
-                Crashlytics.log(Log.INFO, TAG, "Failed to update password");
+                AddJam.log(Log.INFO, TAG, "Failed to update password");
             }
         });
     }

@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 import com.fcd.glasgow_cycling.api.auth.CyclingAuthenticator;
+import com.fcd.glasgow_cycling.utils.AddJam;
 import com.google.gson.annotations.Expose;
 
 /**
@@ -48,7 +49,7 @@ public class AuthModel {
             String refreshToken = accountManager.peekAuthToken(userAccount, CyclingAuthenticator.KEY_REFRESH_TOKEN);
             setUserToken(authToken);
             setRefreshToken(refreshToken);
-            Crashlytics.log(Log.DEBUG, TAG, "User tokens initialized");
+            AddJam.log(Log.DEBUG, TAG, "User tokens initialized");
         }
     }
 

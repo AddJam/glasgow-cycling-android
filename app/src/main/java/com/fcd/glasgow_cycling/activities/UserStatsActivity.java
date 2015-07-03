@@ -23,6 +23,7 @@ import com.fcd.glasgow_cycling.models.Overall;
 import com.fcd.glasgow_cycling.models.Stats;
 import com.fcd.glasgow_cycling.models.User;
 import com.fcd.glasgow_cycling.utils.ActionBarFontUtil;
+import com.fcd.glasgow_cycling.utils.AddJam;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.BarData;
@@ -117,11 +118,11 @@ public class UserStatsActivity extends Activity {
     public void getStats(){
         // Load from API
         int numDays = 7;
-        Crashlytics.log(Log.INFO, TAG, "Getting stats");
+        AddJam.log(Log.INFO, TAG, "Getting stats");
         cyclingService.getStats(numDays, new Callback<Stats>() {
             @Override
             public void success(Stats stats, Response response) {
-                Crashlytics.log(Log.INFO, TAG, "retrieved stats");
+                AddJam.log(Log.INFO, TAG, "retrieved stats");
 
                 // Delete existing users
                 new Delete().from(Stats.class).execute();
@@ -149,7 +150,7 @@ public class UserStatsActivity extends Activity {
 
             @Override
             public void failure(RetrofitError error) {
-                Crashlytics.log(Log.INFO, TAG, "Failed to get stats");
+                AddJam.log(Log.INFO, TAG, "Failed to get stats");
                 loadingView.stopAnimating();
                 loadingView.setMessage(" Error getting weekly stats");
             }

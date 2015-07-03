@@ -20,6 +20,7 @@ import com.fcd.glasgow_cycling.activities.UserOverviewActivity;
 import com.fcd.glasgow_cycling.activities.UserStatsActivity;
 import com.fcd.glasgow_cycling.api.responses.AuthModel;
 import com.fcd.glasgow_cycling.api.routes.RouteSearch;
+import com.fcd.glasgow_cycling.utils.AddJam;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -148,12 +149,12 @@ public class ApiClientModule {
         @Override
         public Throwable handleError(RetrofitError cause) {
             if (cause.isNetworkError()) {
-                Crashlytics.log(Log.DEBUG, TAG, "Network error making request: " + cause.getUrl());
+                AddJam.log(Log.DEBUG, TAG, "Network error making request: " + cause.getUrl());
             } else if (cause.getResponse() == null) {
-                Crashlytics.log(Log.DEBUG, TAG, "Error making request");
+                AddJam.log(Log.DEBUG, TAG, "Error making request");
             } else if (cause.getResponse().getStatus() == 401) {
                 // Refresh token and try again
-                Crashlytics.log(Log.DEBUG, TAG, "Unauthorized error making request, logging out");
+                AddJam.log(Log.DEBUG, TAG, "Unauthorized error making request, logging out");
                 mApplication.logout();
             }
             return cause;

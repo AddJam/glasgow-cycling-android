@@ -29,6 +29,7 @@ import com.fcd.glasgow_cycling.api.http.GoCyclingApiInterface;
 import com.fcd.glasgow_cycling.api.requests.SignupRequest;
 import com.fcd.glasgow_cycling.api.responses.AuthModel;
 import com.fcd.glasgow_cycling.utils.ActionBarFontUtil;
+import com.fcd.glasgow_cycling.utils.AddJam;
 import com.fcd.glasgow_cycling.utils.ImageUtil;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -97,7 +98,7 @@ public class SignUpActivity extends Activity {
         genderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Crashlytics.log(Log.DEBUG, TAG, "Gender clicked");
+                AddJam.log(Log.DEBUG, TAG, "Gender clicked");
                 genderPicker();
             }
         });
@@ -105,7 +106,7 @@ public class SignUpActivity extends Activity {
         yearOfBirthButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Crashlytics.log(Log.DEBUG, TAG, "Year of Birth clicked");
+                AddJam.log(Log.DEBUG, TAG, "Year of Birth clicked");
                 yearPicker();
             }
         });
@@ -113,7 +114,7 @@ public class SignUpActivity extends Activity {
         pictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Crashlytics.log(Log.DEBUG, TAG, "Picture button clicked");
+                AddJam.log(Log.DEBUG, TAG, "Picture button clicked");
                 Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
                 photoPickerIntent.setType("image/*");
                 startActivityForResult(photoPickerIntent, SELECT_PHOTO);
@@ -124,7 +125,7 @@ public class SignUpActivity extends Activity {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Crashlytics.log(Log.DEBUG, TAG, "Submit sign up clicked");
+                AddJam.log(Log.DEBUG, TAG, "Submit sign up clicked");
                 // Dismiss keyboard
                 InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                 if(imm.isAcceptingText()) { // verify if the soft keyboard is open
@@ -208,7 +209,7 @@ public class SignUpActivity extends Activity {
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Crashlytics.log(Log.INFO, TAG, "Year of birth selected");
+                AddJam.log(Log.INFO, TAG, "Year of birth selected");
                 dialog.dismiss();
             }
         });
@@ -277,13 +278,13 @@ public class SignUpActivity extends Activity {
         }
         AuthModel authModel;
 
-        Crashlytics.log(Log.INFO, TAG, "Submitting signup");
+        AddJam.log(Log.INFO, TAG, "Submitting signup");
 
         cyclingService.signup(new SignupRequest(email, username, password, gender, yearOfBirth, profilePic),
                 new Callback<AuthModel>() {
             @Override
             public void success(AuthModel authModel, Response response) {
-                Crashlytics.log(Log.INFO, TAG, "Submitted signup successfully");
+                AddJam.log(Log.INFO, TAG, "Submitted signup successfully");
                 endLoading();
                 final Account account = new Account(email, CyclingAuthenticator.ACCOUNT_TYPE);
                 // Creating the account on the device and setting the auth token we got
@@ -300,14 +301,14 @@ public class SignUpActivity extends Activity {
 
             @Override
             public void failure(RetrofitError error) {
-                Crashlytics.log(Log.INFO, TAG, "Retrofit error submitting signup");
+                AddJam.log(Log.INFO, TAG, "Retrofit error submitting signup");
 
                 if (error.isNetworkError()) {
-                    Crashlytics.log(Log.DEBUG, TAG, "It's a network error");
+                    AddJam.log(Log.DEBUG, TAG, "It's a network error");
                     showToast("Check your connection and try again", Toast.LENGTH_SHORT);
                 } else if (error.getResponse().getStatus() == 401) {
                     // Unauthorized
-                    Crashlytics.log(Log.DEBUG, TAG, "Invalid details... during signup");
+                    AddJam.log(Log.DEBUG, TAG, "Invalid details... during signup");
                 } else {
                     // Get raw JSON
                     BufferedReader reader = null;
@@ -342,10 +343,10 @@ public class SignUpActivity extends Activity {
                         String errorMessage = ((String)entry.getKey()) + " " + ((String)entryError);
 
                         showToast("Error: " + errorMessage, Toast.LENGTH_LONG);
-                        Crashlytics.log(Log.DEBUG, TAG, errorMessage);
+                        AddJam.log(Log.DEBUG, TAG, errorMessage);
                     } else {
                         showToast("Sign up failed - are you already signed up?", Toast.LENGTH_LONG);
-                        Crashlytics.log(Log.DEBUG, TAG, "Signup failed with no error message returned");
+                        AddJam.log(Log.DEBUG, TAG, "Signup failed with no error message returned");
                     }
                 }
                 signupFailed();

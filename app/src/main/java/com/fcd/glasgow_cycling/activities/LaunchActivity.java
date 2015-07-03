@@ -8,6 +8,7 @@ import android.os.Bundle;
 import com.crashlytics.android.Crashlytics;
 import com.fcd.glasgow_cycling.BuildConfig;
 import com.fcd.glasgow_cycling.utils.ActionBarFontUtil;
+import io.fabric.sdk.android.Fabric;
 
 public class LaunchActivity extends Activity {
 
@@ -18,7 +19,7 @@ public class LaunchActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (!BuildConfig.DEBUG_MODE) {
-            Crashlytics.start(this);
+            Fabric.with(this, new Crashlytics());
         }
         ActionBarFontUtil.setFont(this);
 

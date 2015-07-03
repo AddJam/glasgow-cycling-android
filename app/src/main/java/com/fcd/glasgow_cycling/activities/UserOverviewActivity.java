@@ -40,6 +40,7 @@ import com.fcd.glasgow_cycling.models.Month;
 import com.fcd.glasgow_cycling.models.User;
 import com.fcd.glasgow_cycling.models.Weather;
 import com.fcd.glasgow_cycling.utils.ActionBarFontUtil;
+import com.fcd.glasgow_cycling.utils.AddJam;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -54,6 +55,7 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
+import io.fabric.sdk.android.Fabric;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -158,6 +160,8 @@ public class UserOverviewActivity extends Activity {
         captureButton.setTypeface(semiBoldFont);
         distanceStat.setTypeface(regularFont);
         timeStat.setTypeface(regularFont);
+
+        throw new RuntimeException("This is a crash");
     }
 
     protected void onResume() {
@@ -214,18 +218,18 @@ public class UserOverviewActivity extends Activity {
                             mUser.setUpdateRequired(true);
                             mUser.save();
                             updateRoutesPending();
-                            Crashlytics.log(Log.INFO, TAG, "Submitted route successfully, id: " + routeCaptureResponse.getRouteId());
+                            AddJam.log(Log.INFO, TAG, "Submitted route successfully, id: " + routeCaptureResponse.getRouteId());
                         }
 
                         @Override
                         public void failure(RetrofitError error) {
                             numUploading--;
-                            Crashlytics.log(Log.INFO, TAG, "Failed to submit route");
+                            AddJam.log(Log.INFO, TAG, "Failed to submit route");
 
                             if (error.getResponse() != null) {
                                 try {
                                     RestError body = (RestError) error.getBodyAs(RestError.class);
-                                    Crashlytics.log(Log.DEBUG, TAG, "Error " + error.getResponse().getStatus() + " submitting route:"  + body.error);
+                                    AddJam.log(Log.DEBUG, TAG, "Error " + error.getResponse().getStatus() + " submitting route:"  + body.error);
 
                                     if (error.getResponse().getStatus() == 422) {
                                         // Error was 422 unprocessable entity => problem with route
@@ -233,7 +237,7 @@ public class UserOverviewActivity extends Activity {
                                         captureRoute.delete();
                                     }
                                 } catch (Exception e) {
-                                    Crashlytics.log(Log.DEBUG, TAG, "Exception with route submit error");
+                                    AddJam.log(Log.DEBUG, TAG, "Exception with route submit error");
                                 }
                             }
 
@@ -342,12 +346,12 @@ public class UserOverviewActivity extends Activity {
         }
 
         if (shouldUpdate) {
-            Crashlytics.log(Log.INFO, TAG, "Updating user details");
+            AddJam.log(Log.INFO, TAG, "Updating user details");
             cyclingService.details(new Callback<User>() {
 
                 @Override
                 public void success(User user, Response response) {
-                    Crashlytics.log(Log.INFO, TAG, "retrieved user details for " + user.getUserId());
+                    AddJam.log(Log.INFO, TAG, "retrieved user details for " + user.getUserId());
 
                     // Delete existing users
                     new Delete().from(User.class).execute();
@@ -363,11 +367,11 @@ public class UserOverviewActivity extends Activity {
 
                 @Override
                 public void failure(RetrofitError error) {
-                    Crashlytics.log(Log.INFO, TAG, "Failed to get user details");
+                    AddJam.log(Log.INFO, TAG, "Failed to get user details");
                 }
             });
         } else {
-            Crashlytics.log(Log.INFO, TAG, "Not updating user details");
+            AddJam.log(Log.INFO, TAG, "Not updating user details");
         }
     }
 
@@ -411,7 +415,7 @@ public class UserOverviewActivity extends Activity {
     private class StatsListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            Crashlytics.log(Log.INFO, TAG, "Stats clicked");
+            AddJam.log(Log.INFO, TAG, "Stats clicked");
             startActivity(new Intent(getApplicationContext(), UserStatsActivity.class));
         }
     }
@@ -419,7 +423,7 @@ public class UserOverviewActivity extends Activity {
     private class CaptureListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            Crashlytics.log(Log.INFO, TAG, "CaptureRoute capture clicked");
+            AddJam.log(Log.INFO, TAG, "CaptureRoute capture clicked");
             startActivity(new Intent(getApplicationContext(), RouteCaptureActivity.class));
         }
     }
@@ -437,7 +441,7 @@ public class UserOverviewActivity extends Activity {
         int lastHourMark = currentTime - sinceLastHour;
 
         if (mWeather != null && mWeather.getTime() >= lastHourMark) {
-            Crashlytics.log(Log.DEBUG, TAG, "Not updating weather, using cache");
+            AddJam.log(Log.DEBUG, TAG, "Not updating weather, using cache");
             return;
         }
 
@@ -446,7 +450,7 @@ public class UserOverviewActivity extends Activity {
 
             @Override
             public void success(Weather weather, Response response) {
-                Crashlytics.log(Log.DEBUG, TAG, "retreived weather for period" + weather.getTime());
+                AddJam.log(Log.DEBUG, TAG, "retreived weather for period" + weather.getTime());
                 // Delete existing weathers
                 new Delete().from(Weather.class).execute();
 
@@ -460,7 +464,7 @@ public class UserOverviewActivity extends Activity {
 
             @Override
             public void failure(RetrofitError error) {
-                Crashlytics.log(Log.DEBUG, TAG, "Failed to get weather");
+                AddJam.log(Log.DEBUG, TAG, "Failed to get weather");
                 weatherArea.setVisibility(View.INVISIBLE);
             }
         });
@@ -473,7 +477,7 @@ public class UserOverviewActivity extends Activity {
         weatherSource.setText(mWeather.getSource());
 
         String uri = "@drawable/"+mWeather.getUseableIcon();
-        Crashlytics.log(Log.DEBUG, TAG, "Weather drawable " + uri);
+        AddJam.log(Log.DEBUG, TAG, "Weather drawable " + uri);
         int imageResource = getResources().getIdentifier(uri, null, getPackageName());
         Drawable icon = getResources().getDrawable(imageResource);
 
@@ -487,7 +491,7 @@ public class UserOverviewActivity extends Activity {
     }
 
     private void noPlayServicesDialog(){
-        Crashlytics.log(Log.DEBUG, TAG, "No play services, showing dialog");
+        AddJam.log(Log.DEBUG, TAG, "No play services, showing dialog");
 
         AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
         builder1.setTitle("Google Play Services Required");
