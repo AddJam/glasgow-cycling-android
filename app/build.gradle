@@ -22,8 +22,8 @@ android {
         applicationId 'com.fcd.glasgow_cycling'
         minSdkVersion 14
         targetSdkVersion 20
-        versionCode 12
-        versionName '1.0.6'
+        versionCode 13
+        versionName '1.0.7'
     }
     buildTypes {
         release {

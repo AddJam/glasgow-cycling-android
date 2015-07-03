@@ -18,6 +18,7 @@ import com.fcd.glasgow_cycling.models.User;
 import com.fcd.glasgow_cycling.utils.AddJam;
 
 import dagger.ObjectGraph;
+import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by chrissloey on 02/07/2014.
@@ -30,6 +31,7 @@ public class CyclingApplication extends Application {
     public void onCreate() {
         super.onCreate();
         ActiveAndroid.initialize(this);
+        Fabric.with(this, new Crashlytics());
         graph = ObjectGraph.create(getModules());
     }
 

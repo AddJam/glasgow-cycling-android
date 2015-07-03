@@ -18,9 +18,6 @@ public class LaunchActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (!BuildConfig.DEBUG_MODE) {
-            Fabric.with(this, new Crashlytics());
-        }
         ActionBarFontUtil.setFont(this);
 
         mAccountManager = AccountManager.get(this);

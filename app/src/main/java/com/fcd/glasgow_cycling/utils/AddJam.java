@@ -12,7 +12,7 @@ import io.fabric.sdk.android.Fabric;
  */
 public class AddJam {
     public static void log(int priority, String tag, String message) {
-        if (BuildConfig.DEBUG_MODE || Fabric.isInitialized() == false) {
+        if (BuildConfig.DEBUG_MODE) {
             Log.println(priority, tag, message);
         } else {
             Crashlytics.getInstance().core.log(priority, tag, message);
