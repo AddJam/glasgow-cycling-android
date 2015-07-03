@@ -160,8 +160,6 @@ public class UserOverviewActivity extends Activity {
         captureButton.setTypeface(semiBoldFont);
         distanceStat.setTypeface(regularFont);
         timeStat.setTypeface(regularFont);
-
-        throw new RuntimeException("This is a crash");
     }
 
     protected void onResume() {
